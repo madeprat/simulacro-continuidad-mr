@@ -351,11 +351,20 @@ function initThree() {
 
   window.addEventListener('resize', () => {
     if (renderer.xr.isPresenting) return;
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
+    fitCamera();
     renderer.setSize(window.innerWidth, window.innerHeight);
   });
   renderer.setAnimationLoop(loop);
+}
+
+// Modo escritorio: en pantallas verticales (móvil) se garantiza ~80° de campo horizontal,
+// para ver el Panel de Crisis y las preguntas sin tener que girar constantemente.
+function fitCamera() {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.fov = camera.aspect < 1
+    ? THREE.MathUtils.radToDeg(2 * Math.atan(Math.tan(THREE.MathUtils.degToRad(40)) / camera.aspect))
+    : 70;
+  camera.updateProjectionMatrix();
 }
 
 function onControllerConnected(c, source) {
@@ -488,7 +497,8 @@ function placeHud() {
   const onFront = stepPanel.mesh.visible && stepPanel.mesh.userData.anchor === 'FRONT';
   m.position.copy(front);
   // Encima del panel frontal, o bajo la línea de mirada si el foco está en TV/puerta/mesa.
-  m.position.y += onFront ? stepPanel.heightM / 2 + hudPanel.heightM / 2 + 0.04 : -0.45;
+  const below = S.mode === 'desktop' && window.innerWidth < window.innerHeight; // móvil en vertical: HUD debajo
+  m.position.y += onFront ? (below ? -1 : 1) * (stepPanel.heightM / 2 + hudPanel.heightM / 2 + 0.04) : -0.45;
   m.rotation.set(0, 0, 0);
   facing(m, getHead().pos);
   m.visible = true;
@@ -571,10 +581,17 @@ function startDesktop() {
   renderer.domElement.classList.add('desktop');
   scene.background = new THREE.Color(0x0b1020);
   camera.position.set(0, 1.6, 0); camera.rotation.set(0, 0, 0);
+  fitCamera();
   for (const c of CALIBRATION) S.anchors[c.id] = defaultAnchor(c.id);
   // En escritorio la zona de lectura va a la derecha para no tapar el Panel de Crisis.
-  { const { pos, fwd, right } = getHead(); S.anchors.FRONT = pos.clone().addScaledVector(fwd, 1.3).addScaledVector(right, 0.95).setY(pos.y - 0.15); }
+  { const { pos, fwd, right } = getHead();
+    // En vertical (móvil) las preguntas van centradas, cerca y por debajo del Panel de Crisis.
+    S.anchors.FRONT = window.innerWidth < window.innerHeight
+      ? pos.clone().addScaledVector(fwd, 0.95).setY(pos.y - 0.55)
+      : pos.clone().addScaledVector(fwd, 1.3).addScaledVector(right, 0.95).setY(pos.y - 0.15); }
   buildDesktopProps();
+  // En pantalla (sin realidad mixta) la interfaz se dibuja siempre por delante de la sala simulada.
+  for (const p of [stepPanel, hudPanel, ...copilotPanels]) { p.material.depthTest = false; p.mesh.renderOrder = 30; }
   enterReady();
 }
 
