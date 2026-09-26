@@ -141,6 +141,8 @@ function describe(e) {
     case 'panel_disaster': return `Panel: condición de desastre (${e.loss_total} €)`;
     case 'panel_comm_marked': return `Panel: comunicación ${e.comm_id} marcada como notificada`;
     case 'panel_committee_convened': return 'Panel: convocatoria al comité';
+    case 'panel_sync': return `Panel actualizado por ${e.from} (${e.action})`;
+    case 'sync_joined': return `${e.role} se conecta a la sala`;
     default: return e.type;
   }
 }

@@ -6,6 +6,7 @@ import { voice } from './voice.js';
 import { loadPackIndex, loadPack, buildSteps } from './pack.js';
 import { Session, loadCheckpoint, checkpointKey, download, ENGINE_VERSION } from './session.js';
 import { loadCopilotData, roundState, computeSnapshot, widgetSpecs } from './copilot-view.js';
+import { SyncHub, syncLabel } from './sync.js';
 
 const $ = (id) => document.getElementById(id);
 const V3 = THREE.Vector3;
@@ -33,6 +34,7 @@ const S = {
   ui: {}, audio: null, ringTimer: null, lastHudSecond: -1,
   copilot: { data: null, round: null, st: null, startedReal: 0, visible: false, lastSecond: -1 },
   crisis: null, depth: false,
+  sync: null, remoteAnswers: {},
 };
 
 /* ─────────────────────────── Pantallas DOM ─────────────────────────── */
@@ -137,6 +139,80 @@ function renderBrief() {
   $('opt-resume').checked = !!cp;
   $('opt-voice').checked = voice.enabled;
   show('screen-brief');
+  if ($('opt-sync').checked) startSync(); else stopSync();
+}
+
+/* ─────────────────────────── Sincronización entre visores ─────────────────────────── */
+
+function startSync() {
+  const room = `${S.pack.manifest.exercise_id}-${S.sessionId}`;
+  if (S.sync && S.sync.room && S.sync.role === S.role && S.syncRoom === room) return;
+  stopSync();
+  const transport = new URLSearchParams(location.search).get('sync') === 'local' ? 'local' : 'peer';
+  S.syncRoom = room;
+  S.remoteAnswers = {};
+  S.sync = new SyncHub({ room, role: S.role, transport });
+  const refresh = () => {
+    $('sync-status').textContent = syncLabel(S.sync);
+    if (S.phase === 'run') updateHud(true);
+  };
+  S.sync.addEventListener('status', refresh);
+  S.sync.addEventListener('peers', refresh);
+  S.sync.addEventListener('join', (e) => {
+    if (S.session && S.phase !== 'idle') S.session.log('sync_joined', { role: e.detail.role });
+    // Quien llega recibe el estado actual del Panel de Crisis.
+    if (S.crisis && S.crisis.changedAt) S.sync.send('panel', { state: S.crisis.getShared(), action: 'estado' });
+    if (S.session) for (const rec of Object.values(S.session.data.decisions)) {
+      if (rec.answer_source === 'own') S.sync.send('answer', { decision_id: rec.decision_id, answer: rec.answer, round_id: rec.round_id });
+    }
+  });
+  S.sync.addEventListener('message', (e) => onSyncMessage(e.detail));
+  S.sync.start();
+  refresh();
+}
+
+function stopSync() {
+  if (S.sync) S.sync.stop();
+  S.sync = null;
+  S.syncRoom = null;
+  if ($('sync-status')) $('sync-status').textContent = 'Sin sincronizar';
+}
+
+function syncSend(type, data) {
+  if (S.sync && S.sync.status !== 'off' && S.sync.status !== 'error') S.sync.send(type, data);
+}
+
+function onSyncMessage(msg) {
+  const { type, from, data } = msg;
+  if (type === 'panel' && S.crisis) {
+    if (S.crisis.applyShared(data.state, from, data.action)) {
+      if (S.session && (S.phase === 'run' || S.phase === 'menu')) S.session.log('panel_sync', { from, action: data.action });
+      updateCopilot(true);
+      if (S.phase === 'run' && ['analyze', 'close', 'convene'].includes(data.action)) {
+        voice.say(`${from} ${({ analyze: 'ha analizado el impacto', close: 'ha cerrado el incidente', convene: 'ha convocado al comité' })[data.action]}.`);
+      }
+    }
+  } else if (type === 'answer') {
+    S.remoteAnswers[data.decision_id] = { answer: data.answer, from };
+    const step = S.ui && S.ui.step;
+    if (S.phase === 'run' && step && step.kind === 'decision' && step.decision.id === data.decision_id && step.decision.role !== S.role) {
+      const already = S.session.data.decisions[data.decision_id];
+      if (!already || already.answer !== data.answer) {
+        S.ui.selected = data.answer;
+        S.ui.fromSync = from;
+        renderDecision();
+        beep(1100, 0.1);
+        voice.say(`${from} ha respondido ${data.answer}.`);
+      }
+    }
+  }
+}
+
+function stepLabel(i) {
+  const st = S.steps[i];
+  if (!st) return '';
+  if (st.kind === 'end') return 'final';
+  return `ronda ${st.round.number}` + (st.kind === 'decision' ? ` · ${st.decision.id}` : '');
 }
 
 function prepareSession() {
@@ -191,6 +267,7 @@ function renderSummary() {
 
 function wireButtons() {
   $('btn-back-setup').addEventListener('click', () => show('screen-setup'));
+  $('opt-sync').addEventListener('change', (e) => (e.target.checked ? startSync() : stopSync()));
   $('btn-enter-xr').addEventListener('click', () => { prepareSession(); startXR(); });
   $('btn-enter-desktop').addEventListener('click', () => { prepareSession(); startDesktop(); });
   $('btn-brief-summary').addEventListener('click', () => {
@@ -328,6 +405,7 @@ function ensureCrisis() {
   if (S.crisis || !S.copilot.data || !world) return;
   S.crisis = new CrisisPanel({
     data: S.copilot.data,
+    onChange: (action) => syncSend('panel', { state: S.crisis.getShared(), action }),
     onEvent: (type, payload) => {
       if (S.session && (S.phase === 'run' || S.phase === 'menu')) {
         const r = S.steps[S.session.stepIndex] && S.steps[S.session.stepIndex].round;
@@ -666,6 +744,7 @@ function runStep(index) {
   S.ui = { step, open: false, selected: null };
   const sess = S.session;
   voice.stop();
+  if (S.sync) S.sync.setPresence({ step: index, label: stepLabel(index) });
   syncCopilotRound(step.round);
   if (S.crisis && (step.kind === 'round_intro' || !S.crisis.mesh.visible)) placeCrisis();
 
@@ -710,6 +789,8 @@ function runStep(index) {
     voice.say((step.decision.role === S.role ? 'Te toca decidir. ' : `Decide ${step.decision.role}. `) + step.decision.question);
     const prev = sess.data.decisions[step.decision.id];
     S.ui.selected = prev ? prev.answer : null;
+    const remote = S.remoteAnswers[step.decision.id];
+    if (!prev && remote && step.decision.role !== S.role) { S.ui.selected = remote.answer; S.ui.fromSync = remote.from; }
     renderDecision();
     beep(520, 0.12); beep(780, 0.12, 0.12);
   } else if (step.kind === 'round_end') {
@@ -763,14 +844,18 @@ function renderDecision() {
   const d = S.ui.step.decision;
   const mine = d.role === S.role;
   const sel = S.ui.selected;
+  const remote = S.remoteAnswers[d.id];
+  const synced = !mine && !!sel && !!S.ui.fromSync && remote && remote.answer === sel;
   stepPanel.set({
     accent: mine ? THEME.lime : THEME.blue,
     kicker: `${d.id} · Decide ${d.role}${mine ? ' · TU TURNO' : ''}`,
     title: d.question,
     note: mine
       ? 'Te toca: elige, anuncia la letra en voz alta y confirma.'
-      : `Decide ${roleName(d.role)}. Espera su anuncio y registra la letra.`,
-    noteColor: mine ? THEME.lime : THEME.amber,
+      : synced
+        ? `Recibido de ${S.ui.fromSync}: ${sel}. Confirma para registrarla (o elige otra si lo anunciado fue distinto).`
+        : `Decide ${roleName(d.role)}. Espera su anuncio y registra la letra.`,
+    noteColor: mine || synced ? THEME.lime : THEME.amber,
     answers: d.answers.map((a) => ({ id: a.id, text: a.text, state: sel === a.id ? 'selected' : '' })),
     buttons: [sel
       ? { id: 'decision:confirm', label: mine ? `Confirmar ${sel}` : `Registrar ${sel} (observada)`, primary: true }
@@ -794,6 +879,13 @@ function showDecisionResult(rec) {
 
 /* ─────────────────────────── HUD y menú ─────────────────────────── */
 
+function hudSync() {
+  if (!S.sync || S.sync.status === 'off') return '';
+  if (S.sync.status === 'error') return ' · 🔗 sin conexión';
+  const roles = S.sync.roles();
+  return roles.length ? ` · 🔗 ${roles.join(' ')}` : ' · 🔗 esperando';
+}
+
 function updateHud(force = false) {
   if (!S.session || S.phase !== 'run') return;
   const sec = S.session.elapsedSeconds();
@@ -804,7 +896,7 @@ function updateHud(force = false) {
   const clock = new Date(sec * 1000).toISOString().substring(11, 19);
   hudPanel.set({
     accent: THEME.border,
-    kicker: `${S.role} · ${r ? `Ronda ${r.number}/${S.pack.rounds.length} · ${r.crisis_time}` : 'Fin'}`,
+    kicker: `${S.role} · ${r ? `Ronda ${r.number}/${S.pack.rounds.length} · ${r.crisis_time}` : 'Fin'}${hudSync()}`,
     title: `⏱ ${clock}`,
     buttons: [{ id: 'menu', label: 'Menú' }, { id: 'copilot', label: S.copilot.visible ? 'Resumen ◉' : 'Resumen ○' }, { id: 'voice', label: voice.enabled ? 'Voz ◉' : 'Voz ○' }],
   });
@@ -819,7 +911,8 @@ function syncCopilotRound(round) {
   S.copilot.round = round;
   S.copilot.st = roundState(round);
   S.copilot.startedReal = Date.now();
-  if (S.crisis && round.copilot) S.crisis.setRoundBaseline(S.copilot.st, `la ronda ${round.number}`);
+  // Si otro visor ya puso el panel en esta ronda (sincronización), se respeta su estado.
+  if (S.crisis && round.copilot && S.crisis.roundId !== round.id) S.crisis.setRoundBaseline(S.copilot.st, `la ronda ${round.number}`, round.id);
   updateCopilot(true);
 }
 
@@ -861,6 +954,18 @@ function placeCopilot() {
   }
 }
 
+function syncGotoButtons(i) {
+  if (!S.sync) return [];
+  const seen = new Set();
+  const out = [];
+  for (const p of S.sync.peers.values()) {
+    if (p.step == null || p.step === i || seen.has(p.role)) continue;
+    seen.add(p.role);
+    out.push({ id: `menu:goto:${p.step}`, label: `🔗 Ir a donde está ${p.role} (${p.label})` });
+  }
+  return out.slice(0, 2);
+}
+
 function openMenu() {
   S.phase = 'menu';
   stopRing();
@@ -877,6 +982,7 @@ function openMenu() {
       { id: 'menu:next', label: 'Paso siguiente ▶', disabled: i >= S.steps.length - 1 },
       { id: 'menu:prevRound', label: '◀◀ Inicio de ronda anterior' },
       { id: 'menu:nextRound', label: 'Inicio de ronda siguiente ▶▶' },
+      ...syncGotoButtons(i),
       { id: 'menu:recalibrate', label: 'Recalibrar sala' },
       { id: 'menu:exit', label: 'Salir (la sesión queda guardada)' },
     ],
@@ -922,6 +1028,7 @@ function handleAction(id) {
   if (id.startsWith('menu:')) {
     const i = sess.stepIndex;
     S.phase = 'run';
+    if (id.startsWith('menu:goto:')) { goTo(parseInt(id.slice(10), 10), 'sync_navigation'); return; }
     switch (id) {
       case 'menu:close': runStepResume(); return;
       case 'menu:prev': goTo(i - 1, 'manual_navigation'); return;
@@ -954,7 +1061,11 @@ function handleAction(id) {
     S.ui.selected = id.slice(7); renderDecision(); return;
   }
   if (id === 'decision:confirm' && S.ui.selected) {
-    const rec = sess.decisionAnswered(step.round, step.decision, S.ui.selected);
+    const remote = S.remoteAnswers[step.decision.id];
+    const mineNow = step.decision.role === S.role;
+    const extra = !mineNow && remote && remote.answer === S.ui.selected ? { sync_from: remote.from } : {};
+    const rec = sess.decisionAnswered(step.round, step.decision, S.ui.selected, extra);
+    if (mineNow) syncSend('answer', { decision_id: step.decision.id, answer: rec.answer, round_id: step.round.id });
     showDecisionResult(rec);
   }
 }
