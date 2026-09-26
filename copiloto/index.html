@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <link rel="icon" href="data:,">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Copiloto de Continuidad</title>
+  <meta name="theme-color" content="#071121">
+  <link rel="stylesheet" href="css/copiloto.css">
+  <link rel="stylesheet" href="css/pagina.css">
+</head>
+<body>
+<main class="cp-page">
+<div id="copiloto" class="copiloto-shell">
+    <div class="cc-stage-context">
+        <div class="cc-chip cc-chip--status" id="cp-last-activation-chip">Sin activaciones recientes</div>
+        <div id="cp-scan-status" class="cc-chip">Cargando catálogo de servicios…</div>
+        <div id="cp-incident-status-chip" class="cc-chip">Sin incidente activo</div>
+    </div>
+
+    <div id="cp-room-strip" class="cc-room-strip" hidden>
+        <div class="cc-room-strip__status" id="cp-room-strip-status">Seguimiento activo</div>
+        <div class="cc-room-strip__metric"><span>⏱</span><strong id="cp-room-strip-clock">00:00</strong></div>
+        <div class="cc-room-strip__metric"><span>€</span><strong id="cp-room-strip-loss">0,00 €</strong></div>
+        <div class="cc-room-strip__meta" id="cp-room-strip-meta">Incidente compartido para usuarios autorizados</div>
+    </div>
+
+    <div id="cp-view-notice" class="cc-view-notice" hidden></div>
+
+    <nav class="cc-tabs" aria-label="Secciones" role="tablist">
+        <button type="button" class="cc-tab is-active" data-tab="activation" role="tab" aria-selected="true">
+            <span class="cp-tab-icon">⚡</span><span class="cp-tab-label">Activación</span>
+        </button>
+        <button type="button" class="cc-tab" data-tab="impact" disabled role="tab" aria-selected="false">
+            <span class="cp-tab-icon">📊</span><span class="cp-tab-label">Impacto</span>
+        </button>
+        <button type="button" class="cc-tab" data-tab="level" disabled role="tab" aria-selected="false">
+            <span class="cp-tab-icon">🎯</span><span class="cp-tab-label">Nivel</span>
+        </button>
+        <button type="button" class="cc-tab" data-tab="services" disabled role="tab" aria-selected="false">
+            <span class="cp-tab-icon">🧭</span><span class="cp-tab-label">Servicios RTO</span>
+        </button>
+        <button type="button" class="cc-tab" data-tab="committee" disabled role="tab" aria-selected="false">
+            <span class="cp-tab-icon">👥</span><span class="cp-tab-label">Comité</span>
+        </button>
+        <button type="button" class="cc-tab" data-tab="comunicaciones" role="tab" aria-selected="false">
+            <span class="cp-tab-icon">📡</span><span class="cp-tab-label">Comunicaciones</span>
+        </button>
+        <button type="button" class="cc-tab" data-tab="history" role="tab" aria-selected="false">
+            <span class="cp-tab-icon">🗂</span><span class="cp-tab-label">Historial</span>
+        </button>
+    </nav>
+
+    <section class="cc-view is-active" data-view="activation" role="tabpanel">
+        <!-- 3 columnas al mismo nivel: escenarios | botón | estrategias -->
+        <div class="cp-act-main-grid">
+
+            <!-- Col 1: selección de escenarios -->
+            <section class="cc-panel cc-panel--stage cp-act-panel--scenarios">
+                <div class="cc-panel-head">
+                    <span class="cc-kicker">Paso 1 · Declarar situación</span>
+                    <h2>¿Qué está pasando?</h2>
+                    <p>Selecciona el escenario o combinación activa.</p>
+                </div>
+                <div id="cp-activation-notice" class="cc-inline-notice" hidden></div>
+                <div id="cp-scenarios-grid" class="cc-scenarios-grid"></div>
+                <div class="cc-stage-footer cc-stage-footer--single">
+                    <div id="cp-pattern-preview" class="cc-pattern-preview">
+                        <span class="cp-pattern-hint">Selecciona uno o más escenarios para continuar.</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Col 2: botón protagonista —— ocupa toda la altura -->
+            <div class="cp-act-panel--cta">
+                <div class="cp-act-cta-inner" style="height:100%">
+                    <button type="button" id="cp-activate-btn" class="cc-scan-core cc-scan-core--cta" disabled>
+                        <span class="cc-scan-core-ring"></span>
+                        <span class="cc-kicker" style="font-size:9px;letter-spacing:.14em;color:rgba(219,242,102,.45);margin-bottom:4px">Paso 2</span>
+                        <span class="cc-scan-core-text cp-btn-text">Analizar<br>impacto</span>
+                        <span class="cc-scan-core-sub">Calcula nivel y<br>estrategias activables</span>
+                        <span style="display:block;width:40px;height:1px;background:rgba(219,242,102,.2);margin:4px auto"></span>
+                        <span style="font-size:9px;color:rgba(148,163,184,.45);letter-spacing:.06em">Selecciona escenarios primero</span>
+                    </button>
+                    <!-- ── Ajuste de hora de inicio de indisponibilidad ── -->
+                    <div class="cp-onset-box" id="cp-onset-box">
+                        <div class="cp-onset-box__head">
+                            <span class="cc-kicker" style="font-size:9px;letter-spacing:.12em;color:rgba(219,242,102,.6)">⏱ Hora real de inicio</span>
+                            <p style="font-size:10px;color:rgba(148,163,184,.7);margin:2px 0 6px">¿El incidente comenzó antes? Ajusta el reloj del análisis.</p>
+                        </div>
+                        <div class="cp-onset-box__row">
+                            <input type="datetime-local" id="cp-onset-input" class="cp-onset-input" step="60" />
+                            <button type="button" id="cp-onset-apply-btn" class="cc-btn cc-btn--lime cp-onset-apply-btn" disabled>Aplicar</button>
+                        </div>
+                        <div id="cp-onset-status" class="cp-onset-status" hidden></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Col 3: estrategias activables -->
+            <section class="cc-panel cc-panel--stage cp-act-panel--strategies">
+                <div class="cc-panel-head">
+                    <span class="cc-kicker">Estrategias activables</span>
+                    <h2>Por escenario</h2>
+                    <p>Se iluminan al seleccionar el escenario que las activa.</p>
+                </div>
+                <div id="cp-activation-strategies">
+                    <div class="cc-command-empty" style="font-size:11px">Selecciona escenarios para ver estrategias.</div>
+                </div>
+                <a href="docs/estrategia-recuperacion.html" target="_blank" rel="noopener" class="cp-strategy-doc-link" style="margin-top:auto;padding-top:12px;display:inline-flex">📄 Ver documento de estrategias</a>
+            </section>
+
+        </div>
+    </section>
+
+    <section class="cc-view" data-view="impact" role="tabpanel">
+        <div id="cp-desastre-alert" class="cp-desastre-alert" hidden></div>
+
+        <!-- Fila 1: KPIs compactos -->
+        <div id="cp-impact-kpis" class="cc-kpi-grid cc-kpi-grid--top"></div>
+
+        <!-- Fila 2: mapa | panel lateral fijo -->
+        <div class="cc-impact-dashboard">
+
+            <!-- Columna izquierda: constelación -->
+            <div class="cc-impact-map-col">
+                <div class="cc-panel cc-panel--impact" id="cp-mode2-panel">
+                    <div class="cc-impact-head">
+                        <div>
+                            <span class="cc-kicker">Impact Scan</span>
+                            <h2 id="cp-impact-headline">Servicios bajo presión</h2>
+                        </div>
+                        <div class="cc-impact-sub" id="cp-impact-subline">Analiza para iniciar.</div>
+                    </div>
+                    <div class="cc-constellation-shell">
+                        <div id="cp-impact-constellation" class="cc-constellation"></div>
+                        <!-- leyenda -->
+                        <div class="cc-constellation-legend">
+                            <span class="cc-legend-item cc-legend-item--ok">Dentro de RTO</span>
+                            <span class="cc-legend-item cc-legend-item--warn">RTO en riesgo (&gt;75%)</span>
+                            <span class="cc-legend-item cc-legend-item--danger">RTO superado</span>
+                            <span class="cc-legend-item cc-legend-item--critical">MTPD superado</span>
+                            <span class="cc-legend-item cc-legend-item--size">Tamaño = pérdida/hora</span>
+                        </div>
+                        <div id="cp-constellation-summary" class="cc-constellation-summary" hidden></div>
+                        <div id="cp-svc-overlay" class="cp-svc-overlay" hidden aria-modal="true" role="dialog" aria-label="Detalle del servicio">
+                            <div class="cp-svc-overlay__backdrop" id="cp-svc-backdrop"></div>
+                            <div id="cp-impact-drawer" class="cc-impact-drawer cp-svc-overlay__panel">
+                                <button type="button" class="cp-svc-overlay__close" id="cp-svc-close" aria-label="Cerrar">✕</button>
+                                <div class="cc-command-empty">Selecciona un servicio para ver su detalle.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Columna derecha: reloj + nivel + estrategias -->
+            <aside class="cc-impact-side-col">
+
+                <!-- Reloj y acciones -->
+                <div class="cc-pressure-card">
+                    <span class="cc-kicker">Reloj de seguimiento</span>
+                    <div id="cp-live-clock" class="cc-pressure-time">00:00</div>
+                    <div id="cp-live-clock-tone" class="cc-pressure-tone">En observación</div>
+                    <div class="cc-pressure-loss-wrap">
+                        <span class="cc-pressure-loss-label">Pérdida acumulada estimada</span>
+                        <strong id="cp-perdida-total" class="cc-pressure-loss">0,00 €</strong>
+                        <small class="cc-pressure-threshold">Umbral de escalada: <span id="cp-threshold-loss-label"></span></small>
+                    </div>
+                    <div class="cc-state-actions">
+                        <button type="button" id="cp-contain-btn" class="cc-btn cc-btn--ghost" disabled>Pausar seguimiento</button>
+                        <button type="button" id="cp-resume-btn" class="cc-btn cc-btn--ghost" disabled>Reanudar seguimiento</button>
+                        <button type="button" id="cp-close-btn" class="cc-btn cc-btn--ghost" disabled>Cerrar incidente</button>
+                    </div>
+                </div>
+
+                <div class="cc-panel cc-panel--impact-note">
+                    <div class="cc-panel-head">
+                        <span class="cc-kicker">Lectura rápida</span>
+                        <h2 style="font-size:18px;margin:4px 0 0">Siguiente decisión</h2>
+                    </div>
+                    <div class="cc-command-empty">Consulta la pestaña <strong>Nivel</strong> para ver la gravedad consolidada del incidente.</div>
+                    <div class="cp-impact-next-step">
+                        <button type="button" class="cc-btn cc-btn--primary cp-impact-next-step__btn" data-go-tab="level">Abrir pestaña Nivel</button>
+                    </div>
+                </div>
+
+            </aside>
+        </div>
+    </section>
+
+
+    <section class="cc-view" data-view="level" role="tabpanel">
+        <div class="cc-level-layout">
+            <section class="cc-panel cc-level-card">
+                <div class="cc-panel-head">
+                    <span class="cc-kicker">Gravedad del incidente</span>
+                    <h2 style="font-size:18px;margin:4px 0 0">Nivel de gravedad</h2>
+                </div>
+                <div id="cp-level-wrap" class="cc-level-wrap">
+                    <div class="cc-command-empty">Analiza el incidente para calcular el nivel.</div>
+                </div>
+                <div style="margin-top:14px;text-align:right">
+                    <button type="button" id="cp-level-help-btn" class="cc-btn cc-btn--ghost" style="font-size:12px;padding:5px 14px">¿Cómo se calcula este nivel?</button>
+                </div>
+
+                <!-- Modal ayuda cálculo de nivel -->
+                <div id="cp-level-modal" style="display:none;position:fixed;inset:0;z-index:9999;align-items:center;justify-content:center;background:rgba(13,27,62,.80);padding:20px">
+                    <div style="background:#0f1f45;border:1px solid rgba(85,132,206,.4);border-radius:18px;max-width:560px;width:100%;padding:28px;color:#e2e8f0;font-family:Manrope,Arial,sans-serif;max-height:82vh;overflow-y:auto;position:relative">
+                        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
+                            <strong style="font-size:15px;color:#DBF266">Cómo se calcula el nivel de gravedad</strong>
+                            <button id="cp-level-modal-close" type="button" style="background:none;border:1px solid rgba(85,132,206,.4);border-radius:6px;color:#e2e8f0;font-size:18px;cursor:pointer;line-height:1;padding:2px 8px;flex-shrink:0">×</button>
+                        </div>
+                        <p style="font-size:13px;color:#94a3b8;margin:0 0 16px">El nivel se calcula sumando una puntuación base más incrementos según la gravedad del impacto real sobre servicios. El resultado final se traduce en N1, N2 o N3.</p>
+                        <table style="width:100%;font-size:12px;border-collapse:collapse;margin-bottom:16px">
+                            <thead><tr style="border-bottom:1px solid rgba(85,132,206,.35)"><th style="text-align:left;padding:6px 8px;color:#DBF266">Condición</th><th style="text-align:right;padding:6px 8px;color:#DBF266">Puntos</th></tr></thead>
+                            <tbody style="color:#cbd5e1">
+                                <tr><td style="padding:5px 8px">Nivel base del escenario (catálogo de escenarios)</td><td style="text-align:right;padding:5px 8px">1 o 2</td></tr>
+                                <tr style="background:rgba(255,255,255,.04)"><td style="padding:5px 8px">≥ 3 servicios afectados</td><td style="text-align:right;padding:5px 8px">+0.5</td></tr>
+                                <tr><td style="padding:5px 8px">≥ 8 servicios afectados</td><td style="text-align:right;padding:5px 8px">+0.5</td></tr>
+                                <tr style="background:rgba(255,255,255,.04)"><td style="padding:5px 8px">≥ 15 servicios afectados</td><td style="text-align:right;padding:5px 8px">+0.5</td></tr>
+                                <tr><td style="padding:5px 8px">RTO más exigente ≤ 4 horas</td><td style="text-align:right;padding:5px 8px">+0.5</td></tr>
+                                <tr style="background:rgba(255,255,255,.04)"><td style="padding:5px 8px">RTO más exigente ≤ 2 horas</td><td style="text-align:right;padding:5px 8px">+0.5</td></tr>
+                                <tr><td style="padding:5px 8px">Pérdida/hora ≥ 1.500 €</td><td style="text-align:right;padding:5px 8px">+0.5</td></tr>
+                                <tr style="background:rgba(255,255,255,.04)"><td style="padding:5px 8px">Pérdida/hora ≥ 5.000 €</td><td style="text-align:right;padding:5px 8px">+0.5</td></tr>
+                                <tr><td style="padding:5px 8px">≥ 1 servicio crítico afectado</td><td style="text-align:right;padding:5px 8px">+0.5</td></tr>
+                                <tr style="background:rgba(255,255,255,.04)"><td style="padding:5px 8px">≥ 4 servicios críticos afectados</td><td style="text-align:right;padding:5px 8px">+0.5</td></tr>
+                                <tr><td style="padding:5px 8px">Escenario tipo hostil / proveedor / personas</td><td style="text-align:right;padding:5px 8px">+0.5</td></tr>
+                            </tbody>
+                        </table>
+                        <div style="border-top:1px solid rgba(85,132,206,.3);padding-top:12px;margin-bottom:14px">
+                            <p style="font-size:12px;color:#e2e8f0;margin:0 0 6px"><strong style="color:#DBF266">Umbrales:</strong> Puntuación &lt; 2.5 → N1 · ≥ 2.5 → N2 · ≥ 4 → N3</p>
+                            <p style="font-size:12px;color:#ff9b9b;margin:0 0 4px"><strong>Escalada automática a N3</strong> si se cumple cualquiera de estas condiciones:</p><ul style="font-size:12px;color:#ffb3b3;margin:4px 0 0 16px;padding:0"><li>Se declara <strong>Categoría 3</strong> en algún escenario activo (la gravedad del incidente justifica activar el comité)</li><li>Se supera el MTPD de algún servicio</li><li>La pérdida acumulada supera el umbral configurado por el RCN</li></ul>
+                        </div>
+                        <div style="background:rgba(219,242,102,.08);border:1px solid rgba(219,242,102,.2);border-radius:10px;padding:14px;font-size:12px">
+                            <strong style="color:#DBF266;display:block;margin-bottom:8px">Ejemplo práctico</strong>
+                            <p style="margin:0 0 6px;color:#e2e8f0">Escenario E3 (base N2, sistemas) + 9 servicios afectados + RTO mínimo 3 h + pérdida/hora 2.200 €:</p>
+                            <p style="margin:0;color:#94a3b8">2 (base) + 0.5 (≥3 svc) + 0.5 (≥8 svc) + 0.5 (RTO ≤4h) + 0.5 (pérdida ≥1.500€) = <strong style="color:#DBF266">4.0 → N3 · Escalar a comité</strong></p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </section>
+
+    <section class="cc-view" data-view="services" role="tabpanel">
+        <section class="cc-panel cc-panel--services">
+            <div class="cc-side-head">
+                <span class="cc-kicker">Servicios priorizados</span>
+                <h3>Lista operativa ordenada por RTO</h3>
+            </div>
+            <div class="cc-services-tools">
+                <a class="cc-action-link" href="catalogo.html" target="_blank" rel="noopener">Abrir catálogo de servicios</a>
+            </div>
+            <div id="cp-services-priority" class="cc-service-rail cc-service-rail--stacked">
+                <div class="cc-command-empty">Analiza el incidente para ver los servicios priorizados.</div>
+            </div>
+        </section>
+    </section>
+
+    <section class="cc-view" data-view="committee" role="tabpanel">
+        <section class="cc-panel cc-panel--committee" id="cp-mode3-panel">
+            <div class="cc-committee-layout">
+                <div class="cc-committee-main">
+                    <div class="cc-side-head cc-side-head--spread">
+                        <div>
+                            <span class="cc-kicker">Modo 3 · Comité</span>
+                            <h3>Preparar activación del comité</h3>
+                        </div>
+                        <div id="cp-ficha-lock-status" class="cc-lock-chip">Bloqueada hasta condición de desastre</div>
+                    </div>
+                    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:4px">
+                        <button type="button" id="cp-ficha-btn" class="cc-btn cc-btn--primary" disabled>⬇ Generar ficha de activación</button>
+                    </div>
+                    <div id="cp-ficha-container" hidden></div>
+                </div>
+                <aside class="cc-panel cc-panel--mesa">
+                    <div class="cc-side-head">
+                        <span class="cc-kicker">Mesa de mando</span>
+                        <h3>Contactos y documentos</h3>
+                    </div>
+                    <div id="cp-command-center" class="cc-command-center">
+                        <div class="cc-command-empty">Analiza el incidente para ver los contactos.</div>
+                    </div>
+                </aside>
+            </div>
+        </section>
+    </section>
+
+    <section class="cc-view" data-view="history" role="tabpanel">
+        <section class="cc-panel cc-panel--history">
+            <div class="cc-side-head cc-side-head--spread">
+                <div>
+                    <span class="cc-kicker">Historial</span>
+                    <h3>Registro de activaciones</h3>
+                    <p>Activaciones, resoluciones y cierres del equipo autorizado.</p>
+                </div>
+                <button type="button" id="cp-history-export-btn" class="cc-btn cc-btn--ghost cp-history-export-btn" style="display:none">
+                    ↓ Exportar CSV
+                </button>
+            </div>
+            <div id="cp-history-wrap" class="cc-history-wrap">
+                <div class="cc-command-empty">Cargando historial…</div>
+            </div>
+        </section>
+    </section>
+
+    <!-- ══ PESTAÑA COMUNICACIONES ══════════════════════════════════════════ -->
+    <section class="cc-view" data-view="comunicaciones" role="tabpanel">
+        <div class="cp-comms-shell">
+
+            <!-- Selector de contexto — solo 3 opciones operativas -->
+            <div class="cp-comms-context-bar">
+                <span class="cp-comms-context-bar__label">¿En qué situación estás?</span>
+                <div class="cp-comms-context-bar__options" id="cp-comms-ctx-group" role="group" aria-label="Selecciona el contexto del incidente">
+                    <button type="button" class="cp-comms-ctx-btn is-active" data-ctx="seguridad" aria-pressed="true">Incidente de seguridad</button>
+                    <button type="button" class="cp-comms-ctx-btn" data-ctx="publico" aria-pressed="false">Afecta a cliente público</button>
+                    <button type="button" class="cp-comms-ctx-btn" data-ctx="privacidad" aria-pressed="false">Datos personales en riesgo</button>
+                </div>
+                <p id="cp-comms-elapsed-note" class="cp-comms-elapsed-note"></p>
+            </div>
+
+            <!-- Respuesta a pregunta 1: ¿Aplica alguna comunicación? -->
+            <div id="cp-comms-answer1" class="cp-comms-answer" hidden></div>
+
+            <!-- Cuenta atrás RGPD 72h -->
+            <div id="cp-comms-urgency-alert" class="cp-comms-urgency-alert" hidden></div>
+
+            <!-- Timeline horizontal — pregunta 2 y 3: ¿Cuáles? ¿Cuáles van antes? -->
+            <div id="cp-comms-empty" class="cp-comms-empty" hidden></div>
+            <div id="cp-comms-timeline-wrap" class="cp-comms-timeline-wrap" hidden>
+                <div id="cp-comms-timeline" class="cp-comms-timeline-h" role="list"></div>
+            </div>
+
+            <!-- Ficha operativa desplegable — pregunta 4: correo -->
+            <div id="cp-comms-ficha-wrap" class="cp-comms-ficha-wrap" hidden>
+                <button type="button" id="cp-comms-ficha-toggle" class="cp-comms-ficha-toggle" aria-expanded="false">
+                    <span>Ver ficha operativa del hito seleccionado</span>
+                    <span class="cp-comms-ficha-toggle__arrow">▸</span>
+                </button>
+                <div id="cp-comms-ficha" class="cp-comms-ficha" hidden></div>
+            </div>
+
+        </div>
+    </section>
+    </section>
+</div>
+</main>
+<script type="module" src="js/main.js"></script>
+</body>
+</html>

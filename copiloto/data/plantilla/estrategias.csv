@@ -1,0 +1,23 @@
+escenario,id,codigo,nombre,descripcion
+E1,3001,EST01,EST01-Localización alternativa,"Teletrabajo, otras instalaciones, salas de respaldo u hoteles."
+E1,3002,EST02,EST02-Refuerzo con otras áreas,Dedicación de personal de otras áreas a las actividades interrumpidas.
+E1,3003,EST03,EST03-Escalado al equipo de gestión de incidentes,Escalado y decisión del equipo de gestión de incidentes de primer nivel.
+E1,3004,EST04,EST04-No hacer nada,Solo para actividades no críticas y bajo criterio expreso; debe evaluarse y descartarse explícitamente.
+E2,3002,EST02,EST02-Refuerzo con otras áreas,Dedicación de personal de otras áreas a las actividades interrumpidas.
+E2,3003,EST03,EST03-Escalado al equipo de gestión de incidentes,Escalado y decisión del equipo de gestión de incidentes de primer nivel.
+E2,3006,EST06,EST06-Subcontratación alternativa,Cobertura temporal o sustitución externa de capacidad.
+E3,3001,EST01,EST01-Localización alternativa,"Teletrabajo, otras instalaciones, salas de respaldo u hoteles."
+E3,3002,EST02,EST02-Refuerzo con otras áreas,Dedicación de personal de otras áreas a las actividades interrumpidas.
+E3,3003,EST03,EST03-Escalado al equipo de gestión de incidentes,Escalado y decisión del equipo de gestión de incidentes de primer nivel.
+E3,3004,EST04,EST04-No hacer nada,Solo para actividades no críticas y bajo criterio expreso; debe evaluarse y descartarse explícitamente.
+E3,3005,EST05,EST05-Recuperación tecnológica,Recuperación de la infraestructura tecnológica y/o activación del plan de recuperación (DRP).
+E4,3002,EST02,EST02-Refuerzo con otras áreas,Dedicación de personal de otras áreas a las actividades interrumpidas.
+E4,3003,EST03,EST03-Escalado al equipo de gestión de incidentes,Escalado y decisión del equipo de gestión de incidentes de primer nivel.
+E4,3007,EST07,EST07-Teletrabajo desde domicilio,Cambio temporal del modelo de prestación para sostener la operación.
+E5,3004,EST04,EST04-No hacer nada,Solo para actividades no críticas y bajo criterio expreso; debe evaluarse y descartarse explícitamente.
+E5,3005,EST05,EST05-Recuperación tecnológica,Recuperación de la infraestructura tecnológica y/o activación del plan de recuperación (DRP).
+E6,3003,EST03,EST03-Escalado al equipo de gestión de incidentes,Escalado y decisión del equipo de gestión de incidentes de primer nivel.
+E6,3005,EST05,EST05-Recuperación tecnológica,Recuperación de la infraestructura tecnológica y/o activación del plan de recuperación (DRP).
+E6,3008,EST08,EST08-Recuperación reforzada,Recuperación tecnológica reforzada para escenario hostil: reconstrucción desde imagen validada en red segregada.
+E7,3003,EST03,EST03-Escalado al equipo de gestión de incidentes,Escalado y decisión del equipo de gestión de incidentes de primer nivel.
+E7,3006,EST06,EST06-Subcontratación alternativa,Cobertura temporal o sustitución externa de capacidad.

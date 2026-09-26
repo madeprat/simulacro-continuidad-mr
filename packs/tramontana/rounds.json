@@ -1,0 +1,1138 @@
+{
+  "rounds": [
+    {
+      "id": "R01",
+      "number": 1,
+      "title": "Detección y declaración",
+      "crisis_time": "T+0",
+      "copilot": {
+        "clock": "D0 07:05",
+        "scenarios": {}
+      },
+      "events": [
+        {
+          "id": "R01-E1",
+          "type": "ALERT",
+          "anchor": "FRONT",
+          "title": "SOC · 06:42 h",
+          "text": "El turno de noche del SOC detecta que «ATENEA» ha lanzado durante los últimos 40 minutos una campaña de tareas masiva no planificada sobre 61 clientes, ejecutada con una cuenta de servicio legítima de la plataforma."
+        },
+        {
+          "id": "R01-E2",
+          "type": "MESSAGE",
+          "anchor": "TABLE",
+          "source": "Monitorización interna",
+          "title": "SIEM degradado",
+          "text": "Al mismo tiempo, la consola del SIEM interno responde con lentitud extrema y varias fuentes de log propias han dejado de ingestar."
+        },
+        {
+          "id": "R01-E3",
+          "type": "DOCUMENT",
+          "anchor": "TABLE",
+          "source": "Herramienta de ticketing",
+          "title": "Incidencia abierta",
+          "text": "El analista de guardia abre una incidencia de severidad media y la deja en cola para el relevo de las 08:00."
+        },
+        {
+          "id": "R01-E4",
+          "type": "PHONE",
+          "anchor": "TABLE",
+          "source": "Convocatoria",
+          "title": "07:05 h",
+          "text": "El equipo de crisis es convocado."
+        }
+      ],
+      "panel_actions": [
+        {
+          "id": "R01-A1",
+          "when": "before",
+          "tab": "⚡ Activación",
+          "text": "Abrid el Panel de Crisis en la pestaña Activación y revisad los escenarios disponibles y el recuadro «Hora real de inicio». Aún no declaréis nada."
+        },
+        {
+          "id": "R01-A2",
+          "when": "after",
+          "tab": "⚡ Activación",
+          "text": "Aplicad en el panel lo decidido: escenarios seleccionados, hora real de inicio (Aplicar) y pulsad «Analizar impacto»."
+        }
+      ],
+      "decisions": [
+        {
+          "id": "D1",
+          "role": "R2",
+          "question": "¿Qué declaras en el panel a las 07:05?",
+          "answers": [
+            {
+              "id": "A",
+              "text": "Ningún escenario todavía: hasta que el forense confirme el vector no hay base para declarar nada."
+            },
+            {
+              "id": "B",
+              "text": "E3 en su nivel más bajo, justificado por la degradación del SIEM y la pérdida de ingesta; E6 se anuncia como hipótesis y se recalculará al confirmarse."
+            },
+            {
+              "id": "C",
+              "text": "E3 y E6 en el nivel máximo: ante la duda, siempre lo más alto."
+            },
+            {
+              "id": "D",
+              "text": "Solo E6: una ejecución masiva no planificada ya es una acción hostil."
+            }
+          ]
+        },
+        {
+          "id": "D2",
+          "role": "R2",
+          "question": "El panel permite ajustar la fecha y hora de inicio del incidente. ¿Qué haces?",
+          "answers": [
+            {
+              "id": "A",
+              "text": "Dejarla como está: el análisis empieza cuando se pulsa el botón."
+            },
+            {
+              "id": "B",
+              "text": "Fijarla a las 06:42, que es cuando el SOC detectó la anomalía."
+            },
+            {
+              "id": "C",
+              "text": "Buscar en la telemetría el primer indicio real y fijar esa hora, aunque esté varias horas antes de la detección."
+            },
+            {
+              "id": "D",
+              "text": "Fijarla a las 00:00 del día en curso para no quedarse corto."
+            }
+          ]
+        },
+        {
+          "id": "D3",
+          "role": "R1",
+          "question": "¿Quién declara la situación y con qué grado de certeza?",
+          "answers": [
+            {
+              "id": "A",
+              "text": "Nadie, hasta que el forense confirme el vector."
+            },
+            {
+              "id": "B",
+              "text": "El analista de guardia, que es quien lo ha visto."
+            },
+            {
+              "id": "C",
+              "text": "R1 o, si no es localizable en el plazo previsto por dos canales, el suplente nominado; sobre sospecha razonable, dejando constancia de hora, declarante y base."
+            },
+            {
+              "id": "D",
+              "text": "El comité en su primera reunión, por consenso."
+            }
+          ]
+        },
+        {
+          "id": "D4",
+          "role": "R3",
+          "question": "¿Hay que comunicar algo en este momento?",
+          "answers": [
+            {
+              "id": "A",
+              "text": "No hay obligación todavía. Se abre el registro del incidente, se preparan los borradores y se tiene lista la matriz de contactos y de obligaciones."
+            },
+            {
+              "id": "B",
+              "text": "Notificar de inmediato a la AEPD para no arriesgar el plazo."
+            },
+            {
+              "id": "C",
+              "text": "Enviar ya un comunicado a los 214 clientes."
+            },
+            {
+              "id": "D",
+              "text": "Nada: hasta que el comité no se constituya, cumplimiento no actúa."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "R02",
+      "number": 2,
+      "title": "Escalado y nivel de gravedad",
+      "crisis_time": "T+28 min",
+      "copilot": {
+        "clock": "D0 07:33",
+        "declared": "D0 07:08",
+        "onset": "D0 06:02",
+        "scenarios": {
+          "E3": 1,
+          "E6": 1
+        }
+      },
+      "events": [
+        {
+          "id": "R02-E1",
+          "type": "PHONE",
+          "anchor": "TABLE",
+          "source": "Cliente · Organismo público ENS Alta",
+          "title": "Llamada entrante",
+          "text": "Sus servidores están siendo cifrados y su equipo afirma que el proceso lo lanzó el agente de la Compañía."
+        },
+        {
+          "id": "R02-E2",
+          "type": "ALERT",
+          "anchor": "FRONT",
+          "title": "+20 min",
+          "text": "En veinte minutos llaman dos clientes más con el mismo cuadro."
+        },
+        {
+          "id": "R02-E3",
+          "type": "DOCUMENT",
+          "anchor": "TABLE",
+          "source": "Forense",
+          "title": "Informe forense preliminar",
+          "text": "Se confirma que se distribuyó un binario firmado con un certificado de la Compañía."
+        }
+      ],
+      "panel_actions": [
+        {
+          "id": "R02-A1",
+          "when": "before",
+          "tab": "🎯 Nivel",
+          "text": "Revisad en el panel las pestañas Impacto y Nivel: nivel de gravedad, puntos, servicios afectados, RTO más exigente y pérdida estimada."
+        }
+      ],
+      "decisions": [
+        {
+          "id": "D5",
+          "role": "R2",
+          "question": "R1 te pide que le expliques el nivel en treinta segundos. ¿Qué le dices?",
+          "answers": [
+            {
+              "id": "A",
+              "text": "Que el panel marca N3."
+            },
+            {
+              "id": "B",
+              "text": "Que estamos en rojo y hay que activar el comité ya."
+            },
+            {
+              "id": "C",
+              "text": "El nivel alcanzado, sobre qué base de escenario se calcula, cuántos servicios están afectados, cuál es el RTO más exigente, cuál la pérdida estimada por hora, y qué criterios de escalada automática se han disparado."
+            },
+            {
+              "id": "D",
+              "text": "Que llevamos más de 150.000 € de pérdida acumulada."
+            }
+          ]
+        },
+        {
+          "id": "D6",
+          "role": "R1",
+          "question": "El panel indica que se recomienda activar el comité de continuidad. ¿Con eso está escalado?",
+          "answers": [
+            {
+              "id": "A",
+              "text": "Sí: con la recomendación en pantalla el comité queda activado."
+            },
+            {
+              "id": "B",
+              "text": "No. La recomendación es un cálculo; la escalada es un acto de autoridad que declaras y registras con hora y base, aunque coincida con lo que dice el panel."
+            },
+            {
+              "id": "C",
+              "text": "No, y hay que esperar a que la pérdida acumulada doble el umbral para no activar en falso."
+            },
+            {
+              "id": "D",
+              "text": "No: la decisión se traslada al CEO."
+            }
+          ]
+        },
+        {
+          "id": "D7",
+          "role": "R3",
+          "question": "Un cliente está siendo cifrado ahora mismo. ¿Cuál es tu primera comunicación?",
+          "answers": [
+            {
+              "id": "A",
+              "text": "Confirmar que tenemos conocimiento, que hay equipo asignado, quién es su interlocutor único y a qué hora exacta recibirá la siguiente actualización, con recomendaciones de contención inmediata; sin atribuir causa ni confirmar el vector."
+            },
+            {
+              "id": "B",
+              "text": "Explicarle que el origen es un agente de la Compañía y disculparse."
+            },
+            {
+              "id": "C",
+              "text": "Esperar al informe forense antes de llamarle."
+            },
+            {
+              "id": "D",
+              "text": "Remitirle a su comercial de cuenta."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "R03",
+      "number": 3,
+      "title": "Activación del plan y comité",
+      "crisis_time": "T+45 min",
+      "copilot": {
+        "clock": "D0 07:50",
+        "declared": "D0 07:08",
+        "onset": "D0 06:02",
+        "scenarios": {
+          "E3": 1,
+          "E6": 2
+        }
+      },
+      "events": [
+        {
+          "id": "R03-E1",
+          "type": "ALERT",
+          "anchor": "FRONT",
+          "title": "Compromiso confirmado",
+          "text": "Se confirma el compromiso de la cuenta de servicio de «ATENEA». Se desconoce todavía el alcance completo."
+        },
+        {
+          "id": "R03-E2",
+          "type": "MESSAGE",
+          "anchor": "TABLE",
+          "source": "Sistemas corporativos",
+          "title": "Directorio corporativo",
+          "text": "El directorio corporativo responde de forma errática."
+        }
+      ],
+      "panel_actions": [
+        {
+          "id": "R03-A1",
+          "when": "before",
+          "tab": "👥 Comité",
+          "text": "Abrid la pestaña Comité del panel y revisad la convocatoria y la mesa de mando (contactos y documentos)."
+        }
+      ],
+      "decisions": [
+        {
+          "id": "D8",
+          "role": "R1",
+          "question": "Activas el plan. ¿Qué implica en los primeros treinta minutos?",
+          "answers": [
+            {
+              "id": "A",
+              "text": "Generar e imprimir la ficha de activación del panel."
+            },
+            {
+              "id": "B",
+              "text": "Convocar al comité y esperar a que llegue."
+            },
+            {
+              "id": "C",
+              "text": "Comunicar la situación a todos los clientes."
+            },
+            {
+              "id": "D",
+              "text": "Declaración registrada con hora, alcance y nivel; convocatoria con punto de reunión primario y alternativo; paso a canales de comunicación alternativos difundido; congelación de cambios y despliegues; bitácora única con secretario nominado; activación de retainer forense y jurídico; preaviso a la aseguradora; portavoz único designado."
+            }
+          ]
+        },
+        {
+          "id": "D9",
+          "role": "R3",
+          "question": "Convocas al comité. ¿Cómo lo constituyes?",
+          "answers": [
+            {
+              "id": "A",
+              "text": "Convocando a todos los directores para que nadie quede excluido."
+            },
+            {
+              "id": "B",
+              "text": "Núcleo reducido con quórum definido que permita decidir con ausencias, suplentes nominados con la misma autoridad, secretario con bitácora de decisiones, cadencia de reuniones fijada de antemano y separación entre el comité que decide y la célula técnica que ejecuta."
+            },
+            {
+              "id": "C",
+              "text": "Solo con los titulares: sin ellos no se decide."
+            },
+            {
+              "id": "D",
+              "text": "Por correo, y se empieza cuando confirmen todos."
+            }
+          ]
+        },
+        {
+          "id": "D10",
+          "role": "R2",
+          "question": "Vas a pulsar «ENVIAR CONVOCATORIA AL COMITÉ». ¿Qué haces?",
+          "answers": [
+            {
+              "id": "A",
+              "text": "Pulsarlo y esperar las confirmaciones."
+            },
+            {
+              "id": "B",
+              "text": "No usarlo en ningún caso."
+            },
+            {
+              "id": "C",
+              "text": "Usarlo, pero duplicando por un canal fuera de banda preconfigurado, con una forma de que los destinatarios verifiquen que la convocatoria es legítima, y confirmando activamente la recepción."
+            },
+            {
+              "id": "D",
+              "text": "Enviarlo a la lista de distribución general para asegurar cobertura."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "R04",
+      "number": 4,
+      "title": "Autoridad y estrategias",
+      "crisis_time": "T+1 h 30",
+      "copilot": {
+        "clock": "D0 08:35",
+        "declared": "D0 07:08",
+        "onset": "D0 06:02",
+        "scenarios": {
+          "E3": 2,
+          "E6": 3
+        }
+      },
+      "events": [
+        {
+          "id": "R04-E1",
+          "type": "ALERT",
+          "anchor": "DOOR",
+          "source": "Seguridad física",
+          "title": "Control de accesos caído",
+          "text": "El control de accesos físicos de la sede está integrado con el directorio comprometido: las tarjetas han dejado de funcionar y seguridad no puede validar identidades. Se plantea desalojar."
+        },
+        {
+          "id": "R04-E2",
+          "type": "INFO_CARD",
+          "anchor": "TABLE",
+          "source": "Propuesta de R2",
+          "title": "Cortar «ATENEA»",
+          "text": "R2 propone cortar «ATENEA» por completo. Eso detendría al atacante, pero dejaría sin servicio gestionado a 168 clientes, doce de ellos con RTO de 2 h y obligaciones de ENS y de operador esencial."
+        }
+      ],
+      "panel_actions": [
+        {
+          "id": "R04-A1",
+          "when": "before",
+          "tab": "⚡ Activación",
+          "text": "Revisad en el panel las estrategias activables por escenario (columna derecha de Activación)."
+        }
+      ],
+      "decisions": [
+        {
+          "id": "D11",
+          "role": "R1",
+          "question": "¿Se corta «ATENEA»?",
+          "answers": [
+            {
+              "id": "A",
+              "text": "Sí, corte total inmediato: la contención es prioritaria sobre todo lo demás."
+            },
+            {
+              "id": "B",
+              "text": "No hasta tener el forense: dejar a 168 clientes sin servicio es inaceptable."
+            },
+            {
+              "id": "C",
+              "text": "Lo decide R2, porque es una medida técnica."
+            },
+            {
+              "id": "D",
+              "text": "Decides tú un corte segmentado —parar ejecución y despliegue manteniendo ingesta y capacidad de alerta—, empezando por los clientes con indicio de afectación, con el modo degradado definido antes de ejecutarlo, comunicación a los afectados antes o simultáneamente, criterios de reversión fijados y la decisión registrada."
+            }
+          ]
+        },
+        {
+          "id": "D12",
+          "role": "R2",
+          "question": "Sobre el panel de estrategias activables, ¿qué es cierto?",
+          "answers": [
+            {
+              "id": "A",
+              "text": "Muestra todas las estrategias disponibles en la organización."
+            },
+            {
+              "id": "B",
+              "text": "Solo ilumina las asociadas a los escenarios activos, de modo que declarar de menos deja opciones invisibles; y «EST04 · No Hacer Nada» es una opción que hay que evaluar y descartar explícitamente, no ignorar."
+            },
+            {
+              "id": "C",
+              "text": "«EST04 · No Hacer Nada» está por error en el catálogo y debe ignorarse."
+            },
+            {
+              "id": "D",
+              "text": "Si la estrategia que necesitas no aparece iluminada, no puede aplicarse."
+            }
+          ]
+        },
+        {
+          "id": "D13",
+          "role": "R3",
+          "question": "¿Cuándo y cómo se comunica el corte a los clientes afectados?",
+          "answers": [
+            {
+              "id": "A",
+              "text": "Después, cuando se sepa cuánto va a durar."
+            },
+            {
+              "id": "B",
+              "text": "Antes o simultáneamente al corte, con alcance, duración estimada y qué deben hacer entretanto, priorizando a quienes tienen indicio de afectación."
+            },
+            {
+              "id": "C",
+              "text": "Solo a los doce clientes con RTO de 2 h."
+            },
+            {
+              "id": "D",
+              "text": "Publicándolo en la web para que cada cliente lo consulte."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "R05",
+      "number": 5,
+      "title": "Comunicaciones internas y externas",
+      "crisis_time": "T+3 h",
+      "copilot": {
+        "clock": "D0 10:05",
+        "declared": "D0 07:08",
+        "onset": "D0 06:02",
+        "scenarios": {
+          "E1": 2,
+          "E3": 2,
+          "E6": 3
+        }
+      },
+      "events": [
+        {
+          "id": "R05-E1",
+          "type": "PHONE",
+          "anchor": "DOOR",
+          "source": "Periodista · medio económico nacional",
+          "title": "Consulta de prensa",
+          "text": "Pregunta por «un incidente que afecta a clientes de la Compañía»."
+        },
+        {
+          "id": "R05-E2",
+          "type": "MESSAGE",
+          "anchor": "DOOR",
+          "source": "LinkedIn · empleado",
+          "title": "Publicación en redes",
+          "text": "«día largo por delante en el SOC»"
+        },
+        {
+          "id": "R05-E3",
+          "type": "DOCUMENT",
+          "anchor": "TABLE",
+          "source": "Organismo público afectado",
+          "title": "Consulta por escrito",
+          "text": "Pregunta si debe notificar al CCN-CERT y si la Compañía ya lo ha hecho."
+        }
+      ],
+      "panel_actions": [
+        {
+          "id": "R05-A1",
+          "when": "before",
+          "tab": "📡 Comunicaciones",
+          "text": "Abrid la pestaña Comunicaciones: incidente de seguridad, datos personales en riesgo y cuenta atrás RGPD 72 h."
+        }
+      ],
+      "decisions": [
+        {
+          "id": "D14",
+          "role": "R3",
+          "question": "El panel devuelve la lista de comunicaciones obligatorias. ¿Qué haces con ella?",
+          "answers": [
+            {
+              "id": "A",
+              "text": "Ejecutar los hitos que muestra y dar por cubierto el cumplimiento."
+            },
+            {
+              "id": "B",
+              "text": "Esperar al informe forense antes de notificar nada."
+            },
+            {
+              "id": "C",
+              "text": "Ejecutarlos y añadir lo que la pestaña no contempla: las obligaciones que recaen sobre la Compañía como proveedor de servicios gestionados por derecho propio, las cláusulas contractuales de los clientes privados —a menudo más exigentes que la norma—, los empleados, los medios y la aseguradora."
+            },
+            {
+              "id": "D",
+              "text": "Delegar todas las notificaciones en los clientes afectados."
+            }
+          ]
+        },
+        {
+          "id": "D15",
+          "role": "R3",
+          "question": "El panel distingue «si somos encargados» y «si somos responsables». ¿Cómo se resuelve aquí?",
+          "answers": [
+            {
+              "id": "A",
+              "text": "La Compañía es responsable de todo lo que ocurre en su plataforma y notifica ella a la AEPD en nombre de todos los clientes."
+            },
+            {
+              "id": "B",
+              "text": "La Compañía es encargada en todo caso y por tanto no notifica nunca a la AEPD."
+            },
+            {
+              "id": "C",
+              "text": "Posición doble y simultánea: responsable de sus propios datos —72 h a la AEPD y comunicación a los interesados si hay alto riesgo— y encargada de los datos de sus clientes —notificar sin dilación indebida al cliente, que es quien decide y notifica—. Se determina cliente por cliente."
+            },
+            {
+              "id": "D",
+              "text": "Depende de lo que diga cada contrato; con contrato firmado el RGPD no añade obligaciones."
+            }
+          ]
+        },
+        {
+          "id": "D16",
+          "role": "R2",
+          "question": "El contador de 72 horas del panel, ¿desde cuándo cuenta?",
+          "answers": [
+            {
+              "id": "A",
+              "text": "Desde que el forense confirma la brecha."
+            },
+            {
+              "id": "B",
+              "text": "Desde que se tiene conocimiento de la brecha, aunque el alcance no esté confirmado."
+            },
+            {
+              "id": "C",
+              "text": "Desde que se activa el comité de continuidad."
+            },
+            {
+              "id": "D",
+              "text": "Desde que el cliente lo solicita formalmente."
+            }
+          ]
+        },
+        {
+          "id": "D17",
+          "role": "R1",
+          "question": "¿Autorizas el mensaje externo? ¿Con qué contenido?",
+          "answers": [
+            {
+              "id": "A",
+              "text": "No se dice nada hasta tener todos los datos confirmados."
+            },
+            {
+              "id": "B",
+              "text": "Declaración en un plazo corto y preestablecido: hay un incidente, hay respuesta activa, la prioridad son los clientes, se colabora con las autoridades y habrá actualización; sin cifras no confirmadas, sin atribución, sin vector técnico y sin plazos de recuperación. Portavoz único y coordinación previa con jurídico y aseguradora."
+            },
+            {
+              "id": "C",
+              "text": "Se da el número de clientes afectados para transmitir transparencia."
+            },
+            {
+              "id": "D",
+              "text": "Cada responsable de servicio responde a los medios sobre su ámbito."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "R06",
+      "number": 6,
+      "title": "Disponibilidad de la información",
+      "crisis_time": "T+4 h",
+      "copilot": {
+        "clock": "D0 11:05",
+        "declared": "D0 07:08",
+        "onset": "D0 06:02",
+        "scenarios": {
+          "E1": 2,
+          "E3": 2,
+          "E6": 3
+        }
+      },
+      "events": [
+        {
+          "id": "R06-E1",
+          "type": "DOCUMENT",
+          "anchor": "TABLE",
+          "source": "Comité de crisis",
+          "title": "Solicitud del comité",
+          "text": "El comité solicita:\n• el listado de clientes con conectividad activa desde «ATENEA»;\n• el mapa de dependencias."
+        },
+        {
+          "id": "R06-E2",
+          "type": "INFO_CARD",
+          "anchor": "FRONT",
+          "title": "Pregunta en la sala",
+          "text": "Durante la discusión alguien plantea qué ocurriría si el propio Panel de Crisis dejara de estar disponible."
+        }
+      ],
+      "panel_actions": [
+        {
+          "id": "R06-A1",
+          "when": "before",
+          "tab": "👥 Comité",
+          "text": "Localizad en el panel (Mesa de mando · Contactos y documentos) la información solicitada por el comité. Anotad cuánto tardáis."
+        }
+      ],
+      "decisions": [
+        {
+          "id": "D18",
+          "role": "R2",
+          "question": "Si el escenario alcanza al propio panel, ¿cómo sigue dirigiendo la crisis el comité?",
+          "answers": [
+            {
+              "id": "A",
+              "text": "Se detiene la gestión hasta recuperarlo."
+            },
+            {
+              "id": "B",
+              "text": "Se reconstruye la información desde la CMDB corporativa."
+            },
+            {
+              "id": "C",
+              "text": "Con la copia fuera de banda del conjunto mínimo —escenarios y estrategias, catálogo de servicios con RTO/MTPD y responsables, directorio de crisis, plan de gestión de incidentes—, fuera del dominio afectado y con fecha de actualización verificable; la ficha de activación impresa cumple parte de esa función."
+            },
+            {
+              "id": "D",
+              "text": "Se pide al proveedor que lo restaure con prioridad máxima."
+            }
+          ]
+        },
+        {
+          "id": "D19",
+          "role": "R1",
+          "question": "El dato que necesitas para decidir no está completo. ¿Qué haces?",
+          "answers": [
+            {
+              "id": "A",
+              "text": "Esperar a tenerlo completo antes de decidir."
+            },
+            {
+              "id": "B",
+              "text": "Decidir con lo disponible, etiquetando en la bitácora qué es dato confirmado, qué preliminar y qué no verificado, y fijando cuándo se revisa la decisión."
+            },
+            {
+              "id": "C",
+              "text": "Decidir y presentarlo todo como confirmado, para no transmitir inseguridad al equipo."
+            },
+            {
+              "id": "D",
+              "text": "Delegar la decisión en quien tenga el dato."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "R07",
+      "number": 7,
+      "title": "Actividades prioritarias y estrategias",
+      "crisis_time": "T+6 h",
+      "copilot": {
+        "clock": "D0 13:05",
+        "declared": "D0 07:08",
+        "onset": "D0 06:02",
+        "scenarios": {
+          "E1": 2,
+          "E2": 2,
+          "E3": 3,
+          "E6": 3
+        }
+      },
+      "events": [
+        {
+          "id": "R07-E1",
+          "type": "INFO_CARD",
+          "anchor": "FRONT",
+          "title": "Situación a T+6 h",
+          "text": "• La plataforma está aislada.\n• 168 clientes permanecen sin servicio gestionado en modo habitual.\n• 27 clientes han abierto reclamación formal por SLA."
+        },
+        {
+          "id": "R07-E2",
+          "type": "ALERT",
+          "anchor": "FRONT",
+          "title": "Personas",
+          "text": "El equipo de guardia de la sede remota lleva once horas seguidas trabajando. El responsable de la plataforma lleva tres horas ilocalizable."
+        }
+      ],
+      "panel_actions": [
+        {
+          "id": "R07-A1",
+          "when": "before",
+          "tab": "🧭 Servicios RTO",
+          "text": "Abrid la pestaña Servicios RTO: lista operativa ordenada por RTO. Identificad RTO/MTPD superados e impacto reputacional."
+        }
+      ],
+      "decisions": [
+        {
+          "id": "D20",
+          "role": "R1",
+          "question": "Tienes personal para atender tres servicios en paralelo. ¿Cuáles?",
+          "answers": [
+            {
+              "id": "A",
+              "text": "Los tres de mayor pérdida por hora."
+            },
+            {
+              "id": "B",
+              "text": "Los tres de RTO más corto."
+            },
+            {
+              "id": "C",
+              "text": "Los que han superado MTPD con impacto reputacional crítico; después la obligación legal —operadores esenciales y ENS Alta—; después el RTO contractual comprometido. El volumen de negocio, el último criterio."
+            },
+            {
+              "id": "D",
+              "text": "Los de los clientes que han presentado reclamación formal."
+            }
+          ]
+        },
+        {
+          "id": "D21",
+          "role": "R3",
+          "question": "Hay un servicio que pierde una cantidad casi irrelevante por hora y aun así el panel lo marca con impacto reputacional alto. ¿Se aplaza?",
+          "answers": [
+            {
+              "id": "A",
+              "text": "Sí, siempre: una pérdida de esa magnitud es irrelevante frente al resto."
+            },
+            {
+              "id": "B",
+              "text": "No, nunca: la reputación va siempre por delante del dinero."
+            },
+            {
+              "id": "C",
+              "text": "Se decide enunciando qué eje pesa más y por qué —visibilidad externa del servicio, compromiso público o contractual, reversibilidad del daño—; y si se aplaza, se define qué se hace mientras tanto para contener el daño reputacional, que no es lo mismo que recuperar el servicio."
+            },
+            {
+              "id": "D",
+              "text": "Lo decide el responsable de ese servicio."
+            }
+          ]
+        },
+        {
+          "id": "D22",
+          "role": "R2",
+          "question": "Define el modo degradado del SOC.",
+          "answers": [
+            {
+              "id": "A",
+              "text": "Suspender el servicio hasta recuperar la plataforma."
+            },
+            {
+              "id": "B",
+              "text": "Monitorización manual sobre las consolas nativas del cliente con accesos temporales registrados; alcance reducido a los casos de uso críticos y comunicado; reasignación de personal desde los servicios con MTPD holgado; turnos de crisis con relevo obligatorio; e instancia limpia reconstruida desde imagen validada en red segregada."
+            },
+            {
+              "id": "C",
+              "text": "Pedir a los clientes que se automonitoricen durante la contingencia."
+            },
+            {
+              "id": "D",
+              "text": "Mantener el alcance completo con el mismo equipo haciendo horas extra."
+            }
+          ]
+        },
+        {
+          "id": "D23",
+          "role": "R3",
+          "question": "Hay servicios que ya han superado su ventana comprometida. ¿Qué haces?",
+          "answers": [
+            {
+              "id": "A",
+              "text": "No comunicarlo hasta que el cliente lo reclame."
+            },
+            {
+              "id": "B",
+              "text": "Comunicarlo de forma proactiva y documentada con una nueva estimación realista, activar la gestión de penalizaciones y la póliza, cuantificar la pérdida y registrarlo como entrada al SGI si el compromiso resulta inalcanzable con las estrategias actuales."
+            },
+            {
+              "id": "C",
+              "text": "Invocar fuerza mayor de inmediato en todos los contratos afectados."
+            },
+            {
+              "id": "D",
+              "text": "Ofrecer descuentos para evitar que la reclamación prospere."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "R08",
+      "number": 8,
+      "title": "Coordinación con TI, proveedores y terceros",
+      "crisis_time": "T+18 h",
+      "copilot": {
+        "clock": "D1 01:05",
+        "declared": "D0 07:08",
+        "onset": "D0 06:02",
+        "scenarios": {
+          "E1": 1,
+          "E2": 2,
+          "E3": 3,
+          "E6": 3,
+          "E7": 2
+        }
+      },
+      "events": [
+        {
+          "id": "R08-E1",
+          "type": "MESSAGE",
+          "anchor": "TABLE",
+          "source": "Proveedor cloud",
+          "title": "Autorización de logs",
+          "text": "Reclama autorización formal para entregar logs, con 24 h antes de la rotación."
+        },
+        {
+          "id": "R08-E2",
+          "type": "MESSAGE",
+          "anchor": "TABLE",
+          "source": "Retainer forense",
+          "title": "Retraso",
+          "text": "Su equipo llegará en 48 h debido a saturación."
+        },
+        {
+          "id": "R08-E3",
+          "type": "MESSAGE",
+          "anchor": "TABLE",
+          "source": "Aseguradora",
+          "title": "Condición de cobertura",
+          "text": "Condiciona la cobertura a la aprobación previa del perito para cualquier reconstrucción."
+        },
+        {
+          "id": "R08-E4",
+          "type": "MESSAGE",
+          "anchor": "TABLE",
+          "source": "Fabricante del EDR",
+          "title": "Aviso del fabricante",
+          "text": "Exige una declaración escrita para emitir su propio aviso."
+        },
+        {
+          "id": "R08-E5",
+          "type": "ALERT",
+          "anchor": "DOOR",
+          "source": "Portal del grupo de ransomware",
+          "title": "Filtración",
+          "text": "El grupo de ransomware publica en su portal un listado con 40 nombres de clientes."
+        }
+      ],
+      "panel_actions": [
+        {
+          "id": "R08-A1",
+          "when": "before",
+          "tab": "👥 Comité",
+          "text": "Revisad en el panel los contactos de terceros (Mesa de mando) y el estado de Comunicaciones."
+        }
+      ],
+      "decisions": [
+        {
+          "id": "D24",
+          "role": "R2",
+          "question": "¿En qué orden coordinas con los terceros?",
+          "answers": [
+            {
+              "id": "A",
+              "text": "Forense primero, y el resto después."
+            },
+            {
+              "id": "B",
+              "text": "Fabricante primero, para sacar cuanto antes el aviso conjunto."
+            },
+            {
+              "id": "C",
+              "text": "Proveedor cloud primero, porque la ventana de rotación de logs es irreversible; después aseguradora y perito, porque condicionan la cobertura de la reconstrucción; después forense, escalando el SLA del retainer y activando en paralelo un proveedor alternativo; y fabricante, coordinando contenido y momento del aviso."
+            },
+            {
+              "id": "D",
+              "text": "Todos a la vez y con la misma información."
+            }
+          ]
+        },
+        {
+          "id": "D25",
+          "role": "R3",
+          "question": "Se han publicado 40 nombres de clientes y muchos aún no estaban informados. ¿Qué haces en los próximos sesenta minutos?",
+          "answers": [
+            {
+              "id": "A",
+              "text": "Desmentir públicamente el listado."
+            },
+            {
+              "id": "B",
+              "text": "Confirmar el listado para transmitir transparencia."
+            },
+            {
+              "id": "C",
+              "text": "Contactar directamente y en paralelo con los 40, priorizando por criticidad, y también con los no listados que van a preguntar; actualizar el mensaje público; no confirmar ni desmentir el listado del atacante como fuente fiable; y reforzar el canal de atención con guion y personas formadas."
+            },
+            {
+              "id": "D",
+              "text": "Esperar a que los clientes llamen y responder caso por caso."
+            }
+          ]
+        },
+        {
+          "id": "D26",
+          "role": "R1",
+          "question": "Se plantea una eventual interlocución con el atacante. ¿Quién lo autoriza?",
+          "answers": [
+            {
+              "id": "A",
+              "text": "R2 junto con el equipo forense."
+            },
+            {
+              "id": "B",
+              "text": "No se contempla en ningún caso."
+            },
+            {
+              "id": "C",
+              "text": "El órgano de gobierno, con asesoramiento jurídico y de la aseguradora, aplicando la postura previamente definida en el plan; y si se decide, la ejecuta un negociador especializado, no la Compañía."
+            },
+            {
+              "id": "D",
+              "text": "El cliente afectado, que es quien sufre el cifrado."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "R09",
+      "number": 9,
+      "title": "Retorno a la operación normal",
+      "crisis_time": "Día 7",
+      "copilot": {
+        "clock": "D6 07:05",
+        "declared": "D0 07:08",
+        "onset": "D0 06:02",
+        "scenarios": {
+          "E3": 1,
+          "E6": 1,
+          "E7": 1
+        }
+      },
+      "events": [
+        {
+          "id": "R09-E1",
+          "type": "INFO_CARD",
+          "anchor": "FRONT",
+          "title": "Día 7",
+          "text": "La instancia limpia atiende ya a 140 clientes."
+        },
+        {
+          "id": "R09-E2",
+          "type": "DOCUMENT",
+          "anchor": "TABLE",
+          "source": "Forense",
+          "title": "Informe de erradicación",
+          "text": "El forense confirma la erradicación en el perímetro reconstruido, pero mantiene una vía de acceso sin explicar."
+        },
+        {
+          "id": "R09-E3",
+          "type": "PHONE",
+          "anchor": "TABLE",
+          "source": "Comercial y clientes",
+          "title": "Presión para normalizar",
+          "text": "Comercial y varios clientes presionan para normalizar completamente el servicio."
+        },
+        {
+          "id": "R09-E4",
+          "type": "MESSAGE",
+          "anchor": "DOOR",
+          "source": "Dirección",
+          "title": "Consejo del lunes",
+          "text": "Dirección quiere cerrar la crisis antes del consejo del lunes."
+        }
+      ],
+      "panel_actions": [
+        {
+          "id": "R09-A1",
+          "when": "before",
+          "tab": "📊 Impacto",
+          "text": "Revisad en el panel el reloj de seguimiento y la pérdida acumulada (pestaña Impacto). No pulséis todavía «Cerrar incidente»."
+        },
+        {
+          "id": "R09-A2",
+          "when": "after",
+          "tab": "⚡ Activación",
+          "text": "Aplicad en el panel lo decidido: desmarcad los escenarios resueltos, pulsad «Recalcular impacto» y, solo si procede, «Cerrar incidente» (pestaña Impacto)."
+        }
+      ],
+      "decisions": [
+        {
+          "id": "D27",
+          "role": "R1",
+          "question": "¿Se declara el retorno a la operación normal?",
+          "answers": [
+            {
+              "id": "A",
+              "text": "Sí: hay erradicación confirmada en el perímetro reconstruido y la presión comercial es alta."
+            },
+            {
+              "id": "B",
+              "text": "No mientras haya una vía de acceso sin explicar. Se exige erradicación verificada de forma independiente, rotación completa de credenciales y certificados, reconstrucción desde imagen validada anterior a la fecha de compromiso, monitorización reforzada durante un periodo definido y decisión formal registrada."
+            },
+            {
+              "id": "C",
+              "text": "Se declara para los 140 clientes ya operativos y se mantiene la crisis solo para el resto, sin más condiciones."
+            },
+            {
+              "id": "D",
+              "text": "Lo decide el equipo forense."
+            }
+          ]
+        },
+        {
+          "id": "D28",
+          "role": "R2",
+          "question": "¿Qué significa pulsar «CERRAR INCIDENTE»?",
+          "answers": [
+            {
+              "id": "A",
+              "text": "Que la crisis y las obligaciones asociadas quedan cerradas."
+            },
+            {
+              "id": "B",
+              "text": "Que se cierra el seguimiento del cálculo y se consolida el histórico. No cierra la crisis ni las obligaciones. Antes hay que desactivar los escenarios ya resueltos y contar con la decisión registrada de R1."
+            },
+            {
+              "id": "C",
+              "text": "Que se detiene la acumulación de pérdidas, por lo que conviene pulsarlo al final de cada jornada."
+            },
+            {
+              "id": "D",
+              "text": "Que cualquiera que vea el incidente resuelto puede darlo por terminado."
+            }
+          ]
+        },
+        {
+          "id": "D29",
+          "role": "R3",
+          "question": "¿Qué pasa a operación ordinaria y qué queda abierto?",
+          "answers": [
+            {
+              "id": "A",
+              "text": "Nada queda abierto: cerrado el incidente, todo vuelve a la operación ordinaria."
+            },
+            {
+              "id": "B",
+              "text": "Transicionan la operación del servicio, la gestión de accesos y el mantenimiento de la nueva plataforma. Quedan abiertos la investigación forense, el informe final al regulador, los expedientes con clientes y aseguradora, el plan de remediación estructural, el seguimiento reforzado y las reclamaciones, con traspaso formal en acta y responsable nominado por frente."
+            },
+            {
+              "id": "C",
+              "text": "Solo queda pendiente el informe interno de lecciones aprendidas."
+            },
+            {
+              "id": "D",
+              "text": "Queda todo abierto hasta que el regulador cierre su expediente."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

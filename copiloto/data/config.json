@@ -1,0 +1,134 @@
+{
+  "lead_name": "Responsable de Continuidad",
+  "lead_role": "Coordinación inicial de continuidad",
+  "lead_email": "continuidad@compania.example",
+  "operator_label": "Operador del panel",
+  "umbral_perdida_eur": 5000,
+  "umbral_criticos_mtpd": 1,
+  "umbral_prob_pct": 75,
+  "history_limit": 20,
+  "links": {
+    "team_directory": "docs/directorio-equipo.html",
+    "continuity_plan": "docs/plan-gestion-incidentes.html",
+    "estrategia_recuperacion": "docs/estrategia-recuperacion.html"
+  },
+  "sheets": {
+    "servicios": "",
+    "escenarios": "",
+    "estrategias": ""
+  },
+  "scenarios": {
+    "E1": {
+      "title": "Imposibilidad de acceso físico al puesto de trabajo",
+      "short": "Imposibilidad de acceso físico al puesto de trabajo",
+      "icon": "🏢",
+      "pattern": "Disrupción física con necesidad de recolocar capacidad operativa.",
+      "strategies": [
+        "EST01",
+        "EST02",
+        "EST03",
+        "EST04"
+      ]
+    },
+    "E2": {
+      "title": "Ausencia de personal clave",
+      "short": "Ausencia de personal clave",
+      "icon": "👥",
+      "pattern": "Riesgo de cuello de botella humano en actividades críticas.",
+      "strategies": [
+        "EST02",
+        "EST03",
+        "EST06"
+      ]
+    },
+    "E3": {
+      "title": "Incapacidad de acceso a los sistemas de información",
+      "short": "Incapacidad de acceso a los sistemas de información",
+      "icon": "🖥️",
+      "pattern": "Bloqueo tecnológico con presión directa sobre tiempo y datos.",
+      "strategies": [
+        "EST01",
+        "EST02",
+        "EST03",
+        "EST04",
+        "EST05"
+      ]
+    },
+    "E4": {
+      "title": "Incapacidad de desplazamiento a las instalaciones",
+      "short": "Incapacidad de desplazamiento a las instalaciones",
+      "icon": "🚧",
+      "pattern": "Restricción logística con necesidad de operar en remoto o en alternativo.",
+      "strategies": [
+        "EST07",
+        "EST02",
+        "EST03"
+      ]
+    },
+    "E5": {
+      "title": "Error en los sistemas",
+      "short": "Error en los sistemas",
+      "icon": "⚙️",
+      "pattern": "Fallo técnico con foco en recuperación de infraestructura.",
+      "strategies": [
+        "EST05",
+        "EST04"
+      ]
+    },
+    "E6": {
+      "title": "Acción hostil",
+      "short": "Acción hostil",
+      "icon": "🛡️",
+      "pattern": "Amenaza hostil con necesidad de gobierno temprano y recuperación robusta.",
+      "strategies": [
+        "EST05",
+        "EST08",
+        "EST03"
+      ]
+    },
+    "E7": {
+      "title": "Indisponibilidad de proveedores críticos",
+      "short": "Indisponibilidad de proveedores críticos",
+      "icon": "🔗",
+      "pattern": "Dependencia externa comprometiendo la continuidad del servicio.",
+      "strategies": [
+        "EST03",
+        "EST06"
+      ]
+    }
+  },
+  "strategies": {
+    "EST01": {
+      "title": "Localización alternativa",
+      "detail": "Teletrabajo, otras instalaciones, salas de respaldo u hoteles."
+    },
+    "EST02": {
+      "title": "Refuerzo con otras áreas",
+      "detail": "Dedicación de personal de otras áreas a las actividades interrumpidas."
+    },
+    "EST03": {
+      "title": "Escalado al equipo de gestión de incidentes",
+      "detail": "Escalado y decisión del equipo de gestión de incidentes de primer nivel."
+    },
+    "EST04": {
+      "title": "No hacer nada",
+      "detail": "Solo para actividades no críticas y bajo criterio expreso; debe evaluarse y descartarse explícitamente."
+    },
+    "EST05": {
+      "title": "Recuperación tecnológica",
+      "detail": "Recuperación de la infraestructura tecnológica y/o activación del plan de recuperación (DRP)."
+    },
+    "EST06": {
+      "title": "Subcontratación alternativa",
+      "detail": "Cobertura temporal o sustitución externa de capacidad."
+    },
+    "EST07": {
+      "title": "Teletrabajo desde domicilio",
+      "detail": "Cambio temporal del modelo de prestación para sostener la operación."
+    },
+    "EST08": {
+      "title": "Recuperación reforzada",
+      "detail": "Recuperación tecnológica reforzada para escenario hostil: reconstrucción desde imagen validada en red segregada."
+    }
+  }
+}

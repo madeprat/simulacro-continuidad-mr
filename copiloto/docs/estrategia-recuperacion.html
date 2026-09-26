@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="es">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Estrategia de recuperación</title><link rel="stylesheet" href="doc.css"></head>
+<body>
+<main>
+  <p class="kicker">Documento de ejemplo · uso en simulacros</p>
+  <h1>Estrategia de recuperación</h1>
+  <p class="note">Documento ficticio. Las estrategias y su relación con los escenarios salen del catálogo del copiloto.</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Código</th><th>Estrategia</th><th>Detalle</th><th>Escenarios</th></tr></thead>
+      <tbody id="filas"></tbody>
+    </table>
+  </div>
+</main>
+<script type="module">
+  import { loadDataset } from '../js/data.js';
+  import { uniqueStrategies } from '../js/core.js';
+  const ds = await loadDataset('../data/');
+  const list = uniqueStrategies({}, { scenarioRows: ds.scenarios, estrategias: ds.estrategias, config: ds.config });
+  document.getElementById('filas').replaceChildren(...list.map((s) => {
+    const tr = document.createElement('tr');
+    for (const c of [s.code, s.title, s.descripcion || s.detail, s.scenarios.join(', ')]) { const td = document.createElement('td'); td.textContent = c; tr.append(td); }
+    return tr;
+  }));
+</script>
+</body>
+</html>

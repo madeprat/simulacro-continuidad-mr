@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <link rel="icon" href="data:,">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Catálogo de servicios</title>
+  <link rel="stylesheet" href="docs/doc.css">
+</head>
+<body>
+<main>
+  <p class="kicker">Copiloto de Continuidad · datos ficticios</p>
+  <h1>Catálogo de servicios</h1>
+  <p id="fuente" class="muted"></p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Código</th><th>Servicio</th><th>RTO</th><th>RPO</th><th>MTPD</th><th>€/h</th><th>Impacto</th><th>E1</th><th>E2</th><th>E3</th><th>E4</th><th>E5</th><th>E6</th><th>E7</th><th>Responsable</th></tr></thead>
+      <tbody id="filas"></tbody>
+    </table>
+  </div>
+</main>
+<script type="module">
+  import { loadDataset } from './js/data.js';
+  import { probPct } from './js/core.js';
+  const ds = await loadDataset();
+  document.getElementById('fuente').textContent = `${ds.services.length} servicios · ${ds.source}`;
+  const rows = ds.services.map((s) => {
+    const tr = document.createElement('tr');
+    const cells = [s.codigo, s.nombre, s.rto + ' h', s.rpo + ' h', s.mtpd + ' h', s.perdidah, s.impactoreputacional,
+      ...[1, 2, 3, 4, 5, 6, 7].map((n) => probPct(s['e' + n]) + '%'), s.n_responsable];
+    for (const c of cells) { const td = document.createElement('td'); td.textContent = c; tr.append(td); }
+    return tr;
+  });
+  document.getElementById('filas').replaceChildren(...rows);
+</script>
+</body>
+</html>

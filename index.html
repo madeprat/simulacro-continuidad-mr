@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <link rel="icon" href="data:,">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulacro de Continuidad MR</title>
+  <meta name="theme-color" content="#0b1020">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+  <div id="stage"></div>
+
+  <!-- 1 · Pack, sesión y rol -->
+  <main id="screen-setup" class="screen" hidden>
+    <header>
+      <p class="kicker">Simulacro ISO 22301 · Realidad mixta</p>
+      <h1>Preparar visor</h1>
+    </header>
+    <form id="setup-form" class="card">
+      <label class="field">
+        <span>Pack de ejercicio</span>
+        <select id="pack-select"></select>
+      </label>
+      <p id="pack-status" class="status"></p>
+      <ul id="pack-errors" class="errors"></ul>
+
+      <label class="field">
+        <span>Código de sesión (el mismo en los tres visores)</span>
+        <input id="session-id" autocomplete="off" required pattern="[A-Za-z0-9._\-]{1,40}">
+      </label>
+
+      <fieldset class="field">
+        <legend>Rol de este visor</legend>
+        <div id="roles" class="roles"></div>
+      </fieldset>
+
+      <label class="field">
+        <span>Alias del participante (opcional)</span>
+        <input id="participant" autocomplete="off" maxlength="60">
+      </label>
+
+      <p id="setup-error" class="error"></p>
+      <button id="btn-setup" type="submit" class="primary">Continuar</button>
+    </form>
+    <p id="xr-status" class="hint"></p>
+    <nav class="links">
+      <a href="copiloto/">Copiloto de Continuidad (versión web)</a>
+      <a href="copiloto/?ejercicio">Copiloto en modo ejercicio</a>
+      <a href="debrief/">Debrief: consolidar registros</a>
+    </nav>
+    <footer>Motor <span id="engine-version"></span> · funciona sin conexión una vez cargado</footer>
+  </main>
+
+  <!-- 2 · Briefing del rol -->
+  <main id="screen-brief" class="screen" hidden>
+    <header>
+      <p class="kicker" id="brief-session"></p>
+      <h1 id="brief-role"></h1>
+    </header>
+    <section class="card">
+      <h2>Funciones</h2>
+      <ul id="brief-functions"></ul>
+      <h2>Reglas</h2>
+      <ul id="brief-rules"></ul>
+      <p id="brief-intro" class="hint"></p>
+    </section>
+    <section id="brief-resume" class="card resume" hidden>
+      <p id="resume-info"></p>
+      <label class="check"><input type="checkbox" id="opt-resume"> Reanudar la sesión guardada (si lo desmarcas se archiva y empieza de cero)</label>
+      <button id="btn-brief-summary" type="button">Ver resumen y exportar lo guardado</button>
+    </section>
+    <section class="card options">
+      <label class="check"><input type="checkbox" id="opt-depth" checked> Oclusión con objetos reales (Quest 3: las personas y los muebles tapan los paneles)</label>
+      <label class="check"><input type="checkbox" id="opt-voice" checked> Voz narradora (lee alertas, llamadas y preguntas)</label>
+    </section>
+    <div class="actions">
+      <button id="btn-enter-xr" type="button" class="primary">Entrar en realidad mixta</button>
+      <button id="btn-enter-desktop" type="button">Modo escritorio (pruebas)</button>
+      <button id="btn-back-setup" type="button" class="link">← Cambiar sesión o rol</button>
+    </div>
+    <p class="hint">Al entrar: calibra la pared del Panel de Crisis, la puerta, la mesa y la zona de lectura; después espera la orden del facilitador y pulsa COMENZAR.</p>
+  </main>
+
+  <!-- 3 · Ejecución (RA o escritorio) -->
+  <div id="screen-xr" class="screen overlay" hidden>
+    <p id="desktop-help" class="desktop-help" hidden>Modo escritorio · arrastra para mirar alrededor · clic en los paneles para interactuar</p>
+  </div>
+
+  <!-- 4 · Resumen y exportación -->
+  <main id="screen-summary" class="screen" hidden>
+    <header>
+      <p class="kicker" id="sum-state"></p>
+      <h1 id="sum-title"></h1>
+    </header>
+    <section id="sum-stats" class="stats"></section>
+    <div class="actions">
+      <button id="btn-json" type="button" class="primary">Descargar JSON</button>
+      <button id="btn-csv" type="button">Descargar CSV</button>
+    </div>
+    <section class="card">
+      <h2>Decisiones</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Ronda</th><th>Decisión</th><th>Rol</th><th>Resp.</th><th>Origen</th><th>Tiempo</th></tr></thead>
+          <tbody id="sum-rows"></tbody>
+        </table>
+      </div>
+    </section>
+    <div class="actions">
+      <button id="btn-resume-xr" type="button">Volver al ejercicio</button>
+      <button id="btn-new" type="button" class="link">Nueva sesión</button>
+    </div>
+  </main>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

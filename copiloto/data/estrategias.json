@@ -1,0 +1,148 @@
+{
+  "E1": [
+    {
+      "id": "3001",
+      "codigo": "EST01",
+      "nombre": "EST01-Localización alternativa",
+      "descripcion": "Teletrabajo, otras instalaciones, salas de respaldo u hoteles."
+    },
+    {
+      "id": "3002",
+      "codigo": "EST02",
+      "nombre": "EST02-Refuerzo con otras áreas",
+      "descripcion": "Dedicación de personal de otras áreas a las actividades interrumpidas."
+    },
+    {
+      "id": "3003",
+      "codigo": "EST03",
+      "nombre": "EST03-Escalado al equipo de gestión de incidentes",
+      "descripcion": "Escalado y decisión del equipo de gestión de incidentes de primer nivel."
+    },
+    {
+      "id": "3004",
+      "codigo": "EST04",
+      "nombre": "EST04-No hacer nada",
+      "descripcion": "Solo para actividades no críticas y bajo criterio expreso; debe evaluarse y descartarse explícitamente."
+    }
+  ],
+  "E2": [
+    {
+      "id": "3002",
+      "codigo": "EST02",
+      "nombre": "EST02-Refuerzo con otras áreas",
+      "descripcion": "Dedicación de personal de otras áreas a las actividades interrumpidas."
+    },
+    {
+      "id": "3003",
+      "codigo": "EST03",
+      "nombre": "EST03-Escalado al equipo de gestión de incidentes",
+      "descripcion": "Escalado y decisión del equipo de gestión de incidentes de primer nivel."
+    },
+    {
+      "id": "3006",
+      "codigo": "EST06",
+      "nombre": "EST06-Subcontratación alternativa",
+      "descripcion": "Cobertura temporal o sustitución externa de capacidad."
+    }
+  ],
+  "E3": [
+    {
+      "id": "3001",
+      "codigo": "EST01",
+      "nombre": "EST01-Localización alternativa",
+      "descripcion": "Teletrabajo, otras instalaciones, salas de respaldo u hoteles."
+    },
+    {
+      "id": "3002",
+      "codigo": "EST02",
+      "nombre": "EST02-Refuerzo con otras áreas",
+      "descripcion": "Dedicación de personal de otras áreas a las actividades interrumpidas."
+    },
+    {
+      "id": "3003",
+      "codigo": "EST03",
+      "nombre": "EST03-Escalado al equipo de gestión de incidentes",
+      "descripcion": "Escalado y decisión del equipo de gestión de incidentes de primer nivel."
+    },
+    {
+      "id": "3004",
+      "codigo": "EST04",
+      "nombre": "EST04-No hacer nada",
+      "descripcion": "Solo para actividades no críticas y bajo criterio expreso; debe evaluarse y descartarse explícitamente."
+    },
+    {
+      "id": "3005",
+      "codigo": "EST05",
+      "nombre": "EST05-Recuperación tecnológica",
+      "descripcion": "Recuperación de la infraestructura tecnológica y/o activación del plan de recuperación (DRP)."
+    }
+  ],
+  "E4": [
+    {
+      "id": "3002",
+      "codigo": "EST02",
+      "nombre": "EST02-Refuerzo con otras áreas",
+      "descripcion": "Dedicación de personal de otras áreas a las actividades interrumpidas."
+    },
+    {
+      "id": "3003",
+      "codigo": "EST03",
+      "nombre": "EST03-Escalado al equipo de gestión de incidentes",
+      "descripcion": "Escalado y decisión del equipo de gestión de incidentes de primer nivel."
+    },
+    {
+      "id": "3007",
+      "codigo": "EST07",
+      "nombre": "EST07-Teletrabajo desde domicilio",
+      "descripcion": "Cambio temporal del modelo de prestación para sostener la operación."
+    }
+  ],
+  "E5": [
+    {
+      "id": "3004",
+      "codigo": "EST04",
+      "nombre": "EST04-No hacer nada",
+      "descripcion": "Solo para actividades no críticas y bajo criterio expreso; debe evaluarse y descartarse explícitamente."
+    },
+    {
+      "id": "3005",
+      "codigo": "EST05",
+      "nombre": "EST05-Recuperación tecnológica",
+      "descripcion": "Recuperación de la infraestructura tecnológica y/o activación del plan de recuperación (DRP)."
+    }
+  ],
+  "E6": [
+    {
+      "id": "3003",
+      "codigo": "EST03",
+      "nombre": "EST03-Escalado al equipo de gestión de incidentes",
+      "descripcion": "Escalado y decisión del equipo de gestión de incidentes de primer nivel."
+    },
+    {
+      "id": "3005",
+      "codigo": "EST05",
+      "nombre": "EST05-Recuperación tecnológica",
+      "descripcion": "Recuperación de la infraestructura tecnológica y/o activación del plan de recuperación (DRP)."
+    },
+    {
+      "id": "3008",
+      "codigo": "EST08",
+      "nombre": "EST08-Recuperación reforzada",
+      "descripcion": "Recuperación tecnológica reforzada para escenario hostil: reconstrucción desde imagen validada en red segregada."
+    }
+  ],
+  "E7": [
+    {
+      "id": "3003",
+      "codigo": "EST03",
+      "nombre": "EST03-Escalado al equipo de gestión de incidentes",
+      "descripcion": "Escalado y decisión del equipo de gestión de incidentes de primer nivel."
+    },
+    {
+      "id": "3006",
+      "codigo": "EST06",
+      "nombre": "EST06-Subcontratación alternativa",
+      "descripcion": "Cobertura temporal o sustitución externa de capacidad."
+    }
+  ]
+}

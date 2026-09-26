@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <link rel="icon" href="data:,">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Debrief del simulacro</title>
+  <meta name="theme-color" content="#0b1020">
+  <link rel="stylesheet" href="debrief.css">
+</head>
+<body>
+<main>
+  <header>
+    <p class="kicker">Simulacro ISO 22301 · Evidencia consolidada</p>
+    <h1>Debrief del simulacro</h1>
+    <p class="muted">Carga los registros JSON exportados por cada visor (R1, R2, R3). Todo se procesa en este navegador; nada se envía a ningún servidor.</p>
+  </header>
+
+  <label id="drop" class="drop">
+    <input id="files" type="file" accept="application/json,.json" multiple>
+    <strong>Arrastra aquí los JSON de sesión</strong>
+    <span class="muted">o pulsa para elegirlos</span>
+  </label>
+
+  <section id="messages" class="messages" aria-live="polite"></section>
+
+  <section id="result" hidden>
+    <h2 id="res-title"></h2>
+    <div id="stats" class="stats"></div>
+    <div class="actions no-print">
+      <button id="btn-json" type="button" class="primary">Descargar consolidado JSON</button>
+      <button id="btn-csv" type="button">Descargar CSV</button>
+      <button id="btn-print" type="button">Imprimir / PDF</button>
+    </div>
+
+    <h3>Tiempo de respuesta por rol</h3>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Rol</th><th>Fichero</th><th>Decisiones propias</th><th>Media</th><th>Máximo</th><th>Acciones en panel</th><th>Correcciones</th></tr></thead>
+      <tbody id="roles"></tbody>
+    </table></div>
+
+    <h3>Decisiones</h3>
+    <p class="muted">Fuente principal: el visor del rol activo. <span class="tag tag-discrepancia">discrepancia</span> = algún visor registró otra letra.</p>
+    <div class="table-wrap"><table>
+      <thead id="dec-head"></thead>
+      <tbody id="decisions"></tbody>
+    </table></div>
+
+    <h3>Cronología</h3>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Hora</th><th>Rol</th><th>Evento</th></tr></thead>
+      <tbody id="timeline"></tbody>
+    </table></div>
+
+    <h3>Integridad</h3>
+    <ul id="hashes" class="hashes"></ul>
+  </section>
+</main>
+<script type="module" src="main.js"></script>
+</body>
+</html>

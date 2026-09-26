@@ -1,0 +1,43 @@
+{
+  "roles": [
+    {
+      "id": "R1",
+      "name": "R1 · Dirección de la crisis",
+      "functions": [
+        "Declara la situación y ejerce la autoridad de escalado.",
+        "Decide sobre medidas de alto impacto (cortes, retorno, interlocución).",
+        "Autoriza la comunicación externa."
+      ],
+      "rules": [
+        "Responde solo cuando la decisión es de R1.",
+        "Anuncia en voz alta la letra elegida antes de confirmar."
+      ]
+    },
+    {
+      "id": "R2",
+      "name": "R2 · Coordinación técnica y Panel de Crisis",
+      "functions": [
+        "Opera el Panel de Crisis virtual (declara escenarios, ajusta el inicio, analiza el impacto).",
+        "Traduce el cálculo del panel (nivel, RTO, pérdidas) para el comité.",
+        "Coordina TI, proveedores y terceros."
+      ],
+      "rules": [
+        "Responde solo cuando la decisión es de R2.",
+        "Anuncia en voz alta la letra elegida antes de confirmar."
+      ]
+    },
+    {
+      "id": "R3",
+      "name": "R3 · Comunicación y cumplimiento",
+      "functions": [
+        "Gestiona las comunicaciones con clientes, medios y autoridades.",
+        "Controla obligaciones legales, contractuales y de notificación.",
+        "Mantiene la matriz de contactos y los borradores."
+      ],
+      "rules": [
+        "Responde solo cuando la decisión es de R3.",
+        "Anuncia en voz alta la letra elegida antes de confirmar."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+idactivo,codigo,nombre,idnodoabs,tipo_calculo,activo,nivel_base,nivel_comite,umbral_prob_servicio,categoria_1,categoria_2,categoria_3
+2001,E1,E1 - Imposibilidad de acceso físico al puesto de trabajo,,general,1,1,3,75,Acceso restringido parcial durante menos de una jornada,Sede inaccesible durante una jornada completa,Sede inaccesible varios días o sin fecha de recuperación
+2002,E2,E2 - Ausencia de personal clave,,personas,1,1,3,75,Ausencias puntuales cubiertas por suplentes,Falta de varios perfiles clave sin suplente inmediato,Ausencia masiva o de responsables sin sustitución posible
+2003,E3,E3 - Incapacidad de acceso a los sistemas de información,,general,1,2,3,75,Degradación parcial de sistemas no críticos,Pérdida de sistemas relevantes con alternativa manual,Pérdida generalizada de sistemas críticos sin alternativa
+2004,E4,E4 - Incapacidad de desplazamiento a las instalaciones,,general,1,1,3,75,Dificultades puntuales de desplazamiento,Desplazamiento imposible para parte de la plantilla,Desplazamiento imposible para la mayoría durante días
+2005,E5,E5 - Error en los sistemas,,general,1,1,3,75,Fallo acotado con recuperación en horas,Fallo que afecta a varios servicios,Fallo generalizado que exige activar la recuperación
+2006,E6,E6 - Acción hostil,,hostil,1,2,3,75,Indicios de actividad hostil sin impacto confirmado,Actividad hostil confirmada con impacto acotado,Compromiso confirmado con impacto extendido o desconocido
+2007,E7,E7 - Indisponibilidad de proveedores críticos,,proveedor,1,1,3,75,Degradación de un proveedor con alternativa,Caída de un proveedor crítico durante horas,Caída prolongada de proveedores críticos sin alternativa

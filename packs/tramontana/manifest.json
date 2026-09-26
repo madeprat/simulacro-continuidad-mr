@@ -1,0 +1,18 @@
+{
+  "schema": "crisis.exercise/1.0",
+  "exercise_id": "TRAMONTANA",
+  "name": "Ejercicio de continuidad TRAMONTANA",
+  "version": "1.0",
+  "expected_players": 3,
+  "duration_minutes": 120,
+  "round_count": 9,
+  "decision_count": 29,
+  "language": "es-ES",
+  "files": {
+    "roles": "roles.json",
+    "rounds": "rounds.json",
+    "debrief": "debrief.json"
+  },
+  "intro": "Ejercicio de mesa en realidad mixta. El Panel de Crisis es una pantalla virtual en la pared de la sala: cualquiera puede operarlo con el mando o la mano. En cada decisión solo responde el rol activo; los demás registran la respuesta que anuncie en voz alta.",
+  "ending": "Fin del ejercicio. Salid de la realidad mixta para revisar el resumen y exportar el registro de sesión."
+}

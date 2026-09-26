@@ -1,0 +1,40 @@
+/* Página contenedora del copiloto y barra de ejercicio. */
+html, body { margin: 0; min-height: 100%; background: #071121; color: #f6f8fc; }
+body { font-family: "Manrope", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; }
+.cp-page { max-width: 1480px; margin: 0 auto; padding: 16px; }
+@media (max-width: 520px) { .cp-page { padding: 8px; } }
+
+.ej-toggle {
+  position: fixed; left: 16px; bottom: 16px; z-index: 50;
+  font: inherit; font-weight: 700; font-size: 14px; color: #0d162e; background: #dbf266;
+  border: 0; border-radius: 999px; padding: 10px 16px; cursor: pointer; box-shadow: 0 8px 20px rgba(0,0,0,.35);
+}
+.ej-panel {
+  position: fixed; left: 16px; bottom: 64px; z-index: 50; width: min(380px, calc(100vw - 32px));
+  max-height: calc(100vh - 96px); overflow-y: auto;
+  background: rgba(8, 19, 39, .97); border: 1px solid rgba(207,207,201,.25); border-radius: 14px;
+  padding: 14px; box-shadow: 0 18px 40px rgba(0,0,0,.45); font-size: 14px;
+}
+.ej-panel[hidden] { display: none; }
+.ej-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.ej-x { background: none; border: 0; color: #cbd5e1; font-size: 16px; cursor: pointer; }
+.ej-block { display: grid; gap: 8px; padding: 10px 0; border-top: 1px solid rgba(207,207,201,.15); }
+.ej-block summary { cursor: pointer; font-weight: 700; }
+.ej-label { color: rgba(246,248,252,.62); font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+.ej-clock { font-size: 22px; font-variant-numeric: tabular-nums; }
+.ej-mode { color: #dbf266; font-size: 12px; }
+.ej-row { display: flex; flex-wrap: wrap; gap: 6px; }
+.ej-panel button, .ej-panel select, .ej-panel input {
+  font: inherit; font-size: 13px; color: #f6f8fc; background: #12213d; border: 1px solid rgba(207,207,201,.25);
+  border-radius: 8px; padding: 8px 10px; min-height: 36px;
+}
+.ej-panel button { cursor: pointer; font-weight: 600; }
+.ej-panel .ej-primary { background: #dbf266; color: #0d162e; border-color: #dbf266; }
+.ej-panel select, .ej-panel input { width: 100%; }
+.ej-field { display: grid; gap: 4px; }
+.ej-field span { color: rgba(246,248,252,.62); font-size: 12px; }
+.ej-hint, .ej-source { color: rgba(246,248,252,.62); font-size: 12px; margin: 0; }
+.ej-status { margin: 6px 0 0; font-size: 13px; min-height: 1em; }
+.ej-status[data-tone="error"] { color: #f87171; }
+.ej-status[data-tone="warn"] { color: #fbbf24; }
+.ej-status[data-tone="ok"] { color: #4ade80; }

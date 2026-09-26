@@ -1,0 +1,22 @@
+name: Comprobaciones
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  comprobar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Control de anonimato
+        run: node tools/comprobar-anonimato.mjs
+      - name: Pruebas del motor y del consolidador
+        run: npm test
+      - name: Catálogo regenerable
+        run: |
+          python3 tools/generar_catalogo.py
+          git diff --exit-code copiloto/data
