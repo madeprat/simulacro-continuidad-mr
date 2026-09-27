@@ -41,3 +41,28 @@ test('rechaza registros de sesiones distintas', () => {
   b.data.session_id = 'OTRA';
   assert.equal(validateLogs([a, b]).errors.length, 1);
 });
+
+test('capacidades, evidencia del panel y hallazgos propuestos', async () => {
+  const { capabilitySummary, suggestFindings, panelEvidence, findingsCSV } = await import('../debrief/consolidar.js');
+  const pack2 = { rounds: [{ id: 'R01', decisions: [{ id: 'D1', role: 'R1' }, { id: 'D2', role: 'R1' }] }],
+    debrief: { status: 'propuesta', capabilities: { autoridad: 'Roles y autoridad' },
+      assessments: { D1: { preferred_response: 'B', capability: 'autoridad', severity_if_missed: 'high', rationale: 'Porque sí.' },
+        D2: { preferred_response: 'C', capability: 'autoridad', severity_if_missed: 'medium' } } } };
+  const logs = [log('R1', { D1: rec('D1', 'R1', 'A', 'own', 20), D2: rec('D2', 'R1', 'C', 'own', 10) }, {
+    events: [{ type: 'panel_analyzed', at: '2026-01-01T10:05:00Z', round_id: 'R01', scenarios: { E3: 1 } },
+      { type: 'panel_disaster', at: '2026-01-01T10:40:00Z', round_id: 'R01', loss_total: 5100 }] }),
+    log('R2', {}, { events: [{ type: 'panel_disaster', at: '2026-01-01T10:40:01Z', round_id: 'R01', loss_total: 5100 }] })];
+  const r = consolidate(logs, pack2);
+  assert.equal(r.answer_sheet_status, 'propuesta');
+  const [cap] = r.capabilities;
+  assert.deepEqual([cap.label, cap.expected, cap.deviations, cap.high_deviations, cap.status], ['Roles y autoridad', 1, 1, 1, 'mejorar']);
+  assert.equal(r.suggested_findings.length, 1);
+  assert.equal(r.suggested_findings[0].severity, 'high');
+  assert.match(r.suggested_findings[0].action, /Porque sí/);
+  assert.equal(r.panel_evidence.filter((e) => e.type === 'panel_disaster').length, 1);
+  r.findings = r.suggested_findings;
+  assert.match(findingsCSV(r), /F-D1/);
+  assert.equal(typeof capabilitySummary, 'function');
+  assert.equal(typeof suggestFindings, 'function');
+  assert.equal(typeof panelEvidence, 'function');
+});

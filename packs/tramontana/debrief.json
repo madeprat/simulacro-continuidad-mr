@@ -1,4 +1,191 @@
 {
-  "note": "Pendiente: la hoja de respuestas y los criterios de debrief no se incluyen en esta versión del pack. Las decisiones se registran como 'no_evaluada'.",
-  "assessments": {}
+  "status": "propuesta",
+  "note": "Hoja de respuestas PROPUESTA a partir del texto de las preguntas; debe validarla quien diseñó el ejercicio. No se muestra a los participantes durante el ejercicio.",
+  "capabilities": {
+    "deteccion_escalado": "Detección y escalado",
+    "autoridad": "Roles y autoridad",
+    "recuperacion": "Continuidad y recuperación",
+    "comunicacion": "Comunicaciones",
+    "cumplimiento": "Obligaciones legales y contractuales",
+    "informacion": "Disponibilidad de información",
+    "decision": "Toma de decisiones con incertidumbre",
+    "terceros": "Coordinación con terceros",
+    "retorno": "Retorno a la normalidad"
+  },
+  "assessments": {
+    "D1": {
+      "preferred_response": "B",
+      "capability": "deteccion_escalado",
+      "severity_if_missed": "high",
+      "rationale": "Declarar pronto y proporcionado: E3 tiene base objetiva (SIEM degradado, ingesta perdida) y E6 se anuncia como hipótesis para recalcular. Esperar al forense retrasa todo; declarar al máximo «por si acaso» distorsiona el nivel."
+    },
+    "D2": {
+      "preferred_response": "C",
+      "capability": "deteccion_escalado",
+      "severity_if_missed": "medium",
+      "rationale": "El reloj debe empezar con el primer indicio real, no con la detección ni con el botón. De ello dependen RTO, MTPD, pérdidas y el plazo RGPD."
+    },
+    "D3": {
+      "preferred_response": "C",
+      "capability": "autoridad",
+      "severity_if_missed": "high",
+      "rationale": "Declara quien tiene la autoridad (o su suplente nominado si no es localizable), sobre sospecha razonable y dejando constancia de hora, declarante y base."
+    },
+    "D4": {
+      "preferred_response": "A",
+      "capability": "cumplimiento",
+      "severity_if_missed": "medium",
+      "rationale": "Aún no hay obligación de notificar, pero sí de prepararse: registro del incidente, borradores y matriz de contactos y obligaciones listos."
+    },
+    "D5": {
+      "preferred_response": "C",
+      "capability": "deteccion_escalado",
+      "severity_if_missed": "medium",
+      "rationale": "El nivel solo es útil con su base: escenario, servicios afectados, RTO más exigente, pérdida por hora y escaladas automáticas disparadas."
+    },
+    "D6": {
+      "preferred_response": "B",
+      "capability": "autoridad",
+      "severity_if_missed": "high",
+      "rationale": "La recomendación del panel es un cálculo; la escalada es un acto de autoridad que se declara y registra con hora y base."
+    },
+    "D7": {
+      "preferred_response": "A",
+      "capability": "comunicacion",
+      "severity_if_missed": "high",
+      "rationale": "Primera comunicación al cliente afectado: conocimiento, equipo asignado, interlocutor único, hora de la próxima actualización y contención inmediata, sin atribuir causa ni vector."
+    },
+    "D8": {
+      "preferred_response": "D",
+      "capability": "recuperacion",
+      "severity_if_missed": "high",
+      "rationale": "Activar el plan es un conjunto de medidas en los primeros 30 minutos (declaración, convocatoria, canales alternativos, congelación de cambios, bitácora, retainers, aseguradora, portavoz), no un documento."
+    },
+    "D9": {
+      "preferred_response": "B",
+      "capability": "autoridad",
+      "severity_if_missed": "medium",
+      "rationale": "Comité reducido con quórum, suplentes con la misma autoridad, secretario con bitácora, cadencia fijada y separación entre quien decide y quien ejecuta."
+    },
+    "D10": {
+      "preferred_response": "C",
+      "capability": "comunicacion",
+      "severity_if_missed": "medium",
+      "rationale": "Con el directorio comprometido, la convocatoria se duplica por un canal fuera de banda, verificable y con confirmación activa de recepción."
+    },
+    "D11": {
+      "preferred_response": "D",
+      "capability": "decision",
+      "severity_if_missed": "high",
+      "rationale": "Corte segmentado decidido por quien tiene autoridad, con modo degradado previo, comunicación a los afectados, criterios de reversión y registro; ni todo ni nada."
+    },
+    "D12": {
+      "preferred_response": "B",
+      "capability": "recuperacion",
+      "severity_if_missed": "medium",
+      "rationale": "El panel solo ilumina las estrategias de los escenarios declarados (declarar de menos oculta opciones) y «No hacer nada» debe evaluarse y descartarse explícitamente."
+    },
+    "D13": {
+      "preferred_response": "B",
+      "capability": "comunicacion",
+      "severity_if_missed": "high",
+      "rationale": "Comunicar antes o a la vez que el corte, con alcance, duración estimada e instrucciones, priorizando a quienes tienen indicio de afectación."
+    },
+    "D14": {
+      "preferred_response": "C",
+      "capability": "cumplimiento",
+      "severity_if_missed": "high",
+      "rationale": "La lista del panel es un mínimo: faltan las obligaciones propias como proveedor, las cláusulas contractuales, empleados, medios y aseguradora."
+    },
+    "D15": {
+      "preferred_response": "C",
+      "capability": "cumplimiento",
+      "severity_if_missed": "high",
+      "rationale": "Posición doble: responsable de los datos propios (AEPD en 72 h) y encargada de los de clientes (avisar sin dilación al cliente, que decide y notifica). Se determina cliente por cliente."
+    },
+    "D16": {
+      "preferred_response": "B",
+      "capability": "cumplimiento",
+      "severity_if_missed": "high",
+      "rationale": "Las 72 h cuentan desde que se tiene conocimiento de la brecha, aunque el alcance no esté confirmado."
+    },
+    "D17": {
+      "preferred_response": "B",
+      "capability": "comunicacion",
+      "severity_if_missed": "high",
+      "rationale": "Mensaje externo breve y preestablecido, sin cifras no confirmadas, atribución, vector ni plazos; portavoz único y coordinación con jurídico y aseguradora."
+    },
+    "D18": {
+      "preferred_response": "C",
+      "capability": "informacion",
+      "severity_if_missed": "high",
+      "rationale": "Si cae el panel, se dirige con la copia fuera de banda del conjunto mínimo, fuera del dominio afectado y con fecha verificable."
+    },
+    "D19": {
+      "preferred_response": "B",
+      "capability": "decision",
+      "severity_if_missed": "medium",
+      "rationale": "Decidir con lo disponible etiquetando qué es confirmado, preliminar o no verificado, y fijando cuándo se revisa la decisión."
+    },
+    "D20": {
+      "preferred_response": "C",
+      "capability": "recuperacion",
+      "severity_if_missed": "high",
+      "rationale": "Priorizar primero MTPD superado con impacto crítico, luego obligación legal, luego RTO contractual; el volumen de negocio, lo último."
+    },
+    "D21": {
+      "preferred_response": "C",
+      "capability": "decision",
+      "severity_if_missed": "medium",
+      "rationale": "Se decide explicitando qué eje pesa más y por qué; si se aplaza, se contiene el daño reputacional mientras tanto."
+    },
+    "D22": {
+      "preferred_response": "B",
+      "capability": "recuperacion",
+      "severity_if_missed": "high",
+      "rationale": "Modo degradado concreto: consolas del cliente con accesos registrados, alcance reducido y comunicado, reasignación, relevos obligatorios e instancia limpia en red segregada."
+    },
+    "D23": {
+      "preferred_response": "B",
+      "capability": "cumplimiento",
+      "severity_if_missed": "medium",
+      "rationale": "Comunicar proactivamente con nueva estimación, activar penalizaciones y póliza, cuantificar y registrarlo como entrada al sistema de gestión."
+    },
+    "D24": {
+      "preferred_response": "C",
+      "capability": "terceros",
+      "severity_if_missed": "high",
+      "rationale": "Primero lo irreversible (rotación de logs del cloud), luego lo que condiciona la cobertura (aseguradora y perito), después forense con alternativa en paralelo y el aviso del fabricante coordinado."
+    },
+    "D25": {
+      "preferred_response": "C",
+      "capability": "comunicacion",
+      "severity_if_missed": "high",
+      "rationale": "Contactar en paralelo a los 40 y a los no listados, actualizar el mensaje público sin validar ni desmentir al atacante y reforzar la atención."
+    },
+    "D26": {
+      "preferred_response": "C",
+      "capability": "autoridad",
+      "severity_if_missed": "high",
+      "rationale": "La interlocución con el atacante la autoriza el órgano de gobierno con asesoramiento jurídico y de la aseguradora, según la postura previa del plan, y la ejecuta un negociador especializado."
+    },
+    "D27": {
+      "preferred_response": "B",
+      "capability": "retorno",
+      "severity_if_missed": "high",
+      "rationale": "No hay retorno con una vía de acceso sin explicar: erradicación verificada de forma independiente, rotación completa, reconstrucción desde imagen validada, monitorización reforzada y decisión formal."
+    },
+    "D28": {
+      "preferred_response": "B",
+      "capability": "retorno",
+      "severity_if_missed": "medium",
+      "rationale": "«Cerrar incidente» consolida el histórico del cálculo; no cierra la crisis ni las obligaciones. Antes se desactivan los escenarios resueltos y se registra la decisión de R1."
+    },
+    "D29": {
+      "preferred_response": "B",
+      "capability": "retorno",
+      "severity_if_missed": "medium",
+      "rationale": "Pasa a ordinaria la operación; siguen abiertos forense, regulador, expedientes, remediación, seguimiento y reclamaciones, con traspaso formal y responsable por frente."
+    }
+  }
 }

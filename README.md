@@ -7,7 +7,7 @@ Kit para ejercicios presenciales de continuidad de negocio (ISO 22301) con tres 
 |---|---|---|
 | **Simulador MR** (`/`) | Navegador de Meta Quest (WebXR, passthrough) | Rondas, injects en la sala, decisiones A–D por rol, **Panel de Crisis virtual** en la pared (el copiloto dentro de las gafas), voz narradora, audio 3D, registro de evidencias JSON/CSV |
 | **Copiloto de Continuidad web** (`/copiloto/`) | Opcional: portátil o TV | La misma lógica en versión web completa (con historial, ficha imprimible y catálogo desde Google Sheets). Modo ejercicio con reloj simulado |
-| **Debrief** (`/debrief/`) | PC del facilitador | Consolida los registros de R1/R2/R3, detecta discrepancias, tiempos por rol y cronología; exporta JSON/CSV/PDF |
+| **Debrief** (`/debrief/`) | PC del facilitador | Consolida los registros de R1/R2/R3: valoración por capacidad frente a la hoja de respuestas, hallazgos y acciones de mejora editables, actuaciones en el Panel de Crisis, discrepancias, tiempos y cronología; exporta JSON/CSV/PDF |
 
 Todo el contenido es **ficticio y anónimo** (organización «la Compañía», buzones de rol en `compania.example`).
 
@@ -116,6 +116,22 @@ tras el primer análisis sin recargar; el impacto «Crítico» se reconoce con o
   pestaña como CSV (*Archivo → Compartir → Publicar en la web*) y pega las tres URL en la barra de ejercicio →
   *Importar*. Se guarda en el navegador y sigue funcionando offline. Basta con permiso de lectura
   (la publicación es pública para quien tenga el enlace: usa solo datos ficticios).
+
+## Debrief
+
+1. Cada visor exporta su JSON al terminar; el facilitador los arrastra a `/debrief/`.
+2. El informe muestra, por **capacidad del SGCN** (detección y escalado, autoridad, recuperación, comunicaciones,
+   obligaciones, información, decisión con incertidumbre, terceros, retorno), cuántas decisiones coinciden con la
+   referencia y cuántas se desvían (y con qué gravedad). No hay nota global: el diseño pide leerlo por capacidad.
+3. **Hallazgos y acciones de mejora:** se proponen a partir de las desviaciones y discrepancias; el facilitador los
+   edita, descarta o añade (responsable y plazo). Se guardan en el navegador y salen en el JSON consolidado,
+   en un CSV de acciones de mejora y en el informe impreso/PDF.
+4. También: actuaciones reales en el Panel de Crisis por ronda, decisiones con la respuesta de referencia y su
+   justificación, tiempos por rol, cronología e integridad SHA-256 de cada registro.
+
+La hoja de respuestas vive en `packs/<pack>/debrief.json` (`preferred_response`, `capability`,
+`severity_if_missed`, `rationale`). La de TRAMONTANA es una **propuesta** (`"status": "propuesta"`) pendiente de
+validar; el debrief lo advierte. Nunca se muestra a los participantes durante el ejercicio.
 
 ## Formato de pack (`crisis.exercise/1.0`)
 

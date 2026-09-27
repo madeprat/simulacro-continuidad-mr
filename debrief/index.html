@@ -13,7 +13,7 @@
   <header>
     <p class="kicker">Simulacro ISO 22301 · Evidencia consolidada</p>
     <h1>Debrief del simulacro</h1>
-    <p class="muted">Carga los registros JSON exportados por cada visor (R1, R2, R3). Todo se procesa en este navegador; nada se envía a ningún servidor.</p>
+    <p class="muted no-print">Carga los registros JSON exportados por cada visor (R1, R2, R3). Todo se procesa en este navegador; nada se envía a ningún servidor.</p>
   </header>
 
   <label id="drop" class="drop">
@@ -26,12 +26,35 @@
 
   <section id="result" hidden>
     <h2 id="res-title"></h2>
+    <p id="sheet-warning" class="banner" hidden>La hoja de respuestas de este pack es una <strong>propuesta</strong> pendiente de validar: úsala como guía de conversación, no como veredicto.</p>
     <div id="stats" class="stats"></div>
     <div class="actions no-print">
       <button id="btn-json" type="button" class="primary">Descargar consolidado JSON</button>
-      <button id="btn-csv" type="button">Descargar CSV</button>
+      <button id="btn-csv" type="button">Descargar decisiones CSV</button>
+      <button id="btn-actions-csv" type="button">Descargar acciones de mejora CSV</button>
       <button id="btn-print" type="button">Imprimir / PDF</button>
     </div>
+
+    <h3>Capacidades ejercitadas</h3>
+    <p class="muted">El resultado se lee por capacidad, no como nota global. «Mejorar» = alguna desviación de gravedad alta.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Capacidad</th><th>Decisiones</th><th>Esperadas</th><th>Desviaciones</th><th>Graves</th><th>Tiempo medio</th><th>Estado</th></tr></thead>
+      <tbody id="caps"></tbody>
+    </table></div>
+
+    <h3>Hallazgos y acciones de mejora</h3>
+    <p class="muted no-print">Propuestos a partir de las desviaciones y discrepancias. Edítalos, desmarca los que no procedan y añade los tuyos: se guardan en este navegador y se incluyen en el consolidado y en el informe.</p>
+    <div id="findings" class="findings"></div>
+    <div class="actions no-print"><button id="btn-add-finding" type="button">+ Añadir hallazgo</button></div>
+    <label class="notes-label" for="notes">Observaciones del facilitador</label>
+    <textarea id="notes" class="notes" rows="4" placeholder="Contexto, comportamiento del equipo, incidencias técnicas…"></textarea>
+
+    <h3>Decisiones</h3>
+    <p class="muted">Fuente principal: el visor del rol activo. <span class="tag tag-discrepancia">discrepancia</span> = algún visor registró otra letra. 🔗 = la letra llegó sincronizada.</p>
+    <div class="table-wrap"><table>
+      <thead id="dec-head"></thead>
+      <tbody id="decisions"></tbody>
+    </table></div>
 
     <h3>Tiempo de respuesta por rol</h3>
     <div class="table-wrap"><table>
@@ -39,11 +62,10 @@
       <tbody id="roles"></tbody>
     </table></div>
 
-    <h3>Decisiones</h3>
-    <p class="muted">Fuente principal: el visor del rol activo. <span class="tag tag-discrepancia">discrepancia</span> = algún visor registró otra letra.</p>
+    <h3>Actuaciones en el Panel de Crisis</h3>
     <div class="table-wrap"><table>
-      <thead id="dec-head"></thead>
-      <tbody id="decisions"></tbody>
+      <thead><tr><th>Hora</th><th>Ronda</th><th>Rol</th><th>Actuación</th></tr></thead>
+      <tbody id="panel"></tbody>
     </table></div>
 
     <h3>Cronología</h3>

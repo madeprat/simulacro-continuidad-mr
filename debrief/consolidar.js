@@ -72,8 +72,15 @@ export function consolidate(logs, pack = null) {
       answer, source: primary ? 'own' : allAnswers.length ? 'observed' : null,
       response_seconds: primary?.response_seconds ?? null, answered_at: primary?.answered_at ?? null,
       observed, status, reference_rating: rating, capability: assessment?.capability || null,
+      preferred_response: assessment?.preferred_response || null, severity_if_missed: assessment?.severity_if_missed || null,
+      rationale: assessment?.rationale || null, sync_from: primary ? null : (logs.map((l) => l.data.decisions?.[decision.id]?.sync_from).find(Boolean) || null),
     };
   });
+
+  const capLabels = (pack && pack.debrief && pack.debrief.capabilities) || {};
+  const capabilities = capabilitySummary(decisions, capLabels);
+  const panel = panelEvidence(logs);
+  const findings = suggestFindings(decisions, capLabels);
 
   // Los eventos comunes a todos los visores se toman de un único registro de referencia para no triplicarlos.
   const SHARED = ['round_started', 'round_completed', 'inject_shown', 'inject_acknowledged', 'decision_shown', 'panel_action_shown'];
@@ -115,8 +122,74 @@ export function consolidate(logs, pack = null) {
       without_own_source: decisions.filter((d) => d.status === 'sin_fuente_propia').length,
       unanswered: decisions.filter((d) => d.status === 'sin_respuesta').length,
     },
+    answer_sheet_status: (pack && pack.debrief && pack.debrief.status) || null,
+    capabilities, panel_evidence: panel, suggested_findings: findings,
     per_role: perRole, decisions, timeline,
   };
+}
+
+// Resultado por capacidad del sistema de gestión de continuidad (base del debrief, no una nota global).
+export function capabilitySummary(decisions, labels = {}) {
+  const by = {};
+  for (const d of decisions) {
+    if (!d.capability) continue;
+    const c = (by[d.capability] = by[d.capability] || { id: d.capability, label: labels[d.capability] || d.capability, total: 0, answered: 0, expected: 0, deviations: 0, high_deviations: 0, times: [] });
+    c.total++;
+    if (d.answer) c.answered++;
+    if (d.reference_rating === 'esperada') c.expected++;
+    if (d.reference_rating === 'desviacion') { c.deviations++; if (d.severity_if_missed === 'high') c.high_deviations++; }
+    if (typeof d.response_seconds === 'number') c.times.push(d.response_seconds);
+  }
+  return Object.values(by).map(({ times, ...c }) => ({
+    ...c,
+    expected_pct: c.answered ? Math.round((c.expected / c.answered) * 100) : null,
+    avg_response_seconds: times.length ? Math.round((times.reduce((a, b) => a + b, 0) / times.length) * 10) / 10 : null,
+    status: !c.answered ? 'sin_datos' : c.high_deviations ? 'mejorar' : c.deviations ? 'revisar' : 'adecuada',
+  })).sort((a, b) => (b.high_deviations - a.high_deviations) || (b.deviations - a.deviations) || a.label.localeCompare(b.label));
+}
+
+// Actuaciones reales sobre el Panel de Crisis, por ronda (sin duplicar lo que cada visor calcula por su cuenta).
+export function panelEvidence(logs) {
+  const TYPES = ['panel_analyzed', 'panel_onset_set', 'panel_status', 'panel_disaster', 'panel_comm_marked', 'panel_committee_convened', 'panel_action_confirmed'];
+  const out = [];
+  const seen = new Set();
+  for (const l of logs) {
+    for (const e of l.data.events || []) {
+      if (!TYPES.includes(e.type)) continue;
+      // La condición de desastre y las confirmaciones de actuación las registra cada visor: se toma la primera por ronda.
+      if (e.type === 'panel_disaster' || e.type === 'panel_action_confirmed') {
+        const key = e.type + '|' + e.round_id + '|' + (e.action_id || '');
+        if (seen.has(key)) continue;
+        seen.add(key);
+      }
+      out.push({ at: e.at, round_id: e.round_id || null, role: l.data.local_role, type: e.type, detail: describe(e) });
+    }
+  }
+  return out.sort((a, b) => (a.at < b.at ? -1 : a.at > b.at ? 1 : 0));
+}
+
+// Propuesta de hallazgos para que el facilitador los revise, edite o descarte.
+export function suggestFindings(decisions, labels = {}) {
+  const out = [];
+  for (const d of decisions) {
+    const cap = labels[d.capability] || d.capability || 'General';
+    if (d.reference_rating === 'desviacion') {
+      out.push({
+        id: 'F-' + d.decision_id, decision_id: d.decision_id, capability: cap, severity: d.severity_if_missed || 'medium',
+        text: `${d.decision_id} (${d.active_role}): se eligió ${d.answer}; la respuesta de referencia es ${d.preferred_response}.`,
+        action: d.rationale ? 'Reforzar: ' + d.rationale : 'Revisar el criterio en el plan y formar al rol.',
+      });
+    } else if (d.status === 'discrepancia') {
+      out.push({ id: 'F-' + d.decision_id + '-sync', decision_id: d.decision_id, capability: cap, severity: 'low',
+        text: `${d.decision_id}: los visores registraron letras distintas (${[d.answer, ...Object.values(d.observed)].join(' / ')}).`,
+        action: 'Revisar el protocolo de anuncio en voz alta de la decisión.' });
+    } else if (!d.answer) {
+      out.push({ id: 'F-' + d.decision_id + '-nr', decision_id: d.decision_id, capability: cap, severity: 'medium',
+        text: `${d.decision_id} (${d.active_role}): sin respuesta registrada.`, action: 'Comprobar si la decisión se tomó y no se registró.' });
+    }
+  }
+  const order = { high: 0, medium: 1, low: 2 };
+  return out.sort((a, b) => order[a.severity] - order[b.severity]);
 }
 
 function describe(e) {
@@ -150,10 +223,17 @@ function describe(e) {
 export function toCSV(result) {
   const roles = result.roles_loaded;
   const cols = ['session_id', 'exercise_id', 'exercise_version', 'round_id', 'decision_id', 'active_role', 'answer', 'source',
-    'response_seconds', 'answered_at', ...roles.map((r) => `observed_${r}`), 'status', 'reference_rating', 'capability'];
+    'response_seconds', 'answered_at', ...roles.map((r) => `observed_${r}`), 'status', 'preferred_response', 'reference_rating', 'severity_if_missed', 'capability'];
   const esc = (v) => { const s = v == null ? '' : String(v); return /[",;\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
   const rows = result.decisions.map((d) => [result.session_id, result.exercise?.id, result.exercise?.version, d.round_id, d.decision_id,
     d.active_role, d.answer, d.source, d.response_seconds, d.answered_at, ...roles.map((r) => d.observed[r] || ''), d.status,
-    d.reference_rating, d.capability].map(esc).join(','));
+    d.preferred_response, d.reference_rating, d.severity_if_missed, d.capability].map(esc).join(','));
+  return '﻿' + [cols.join(','), ...rows].join('\r\n') + '\r\n';
+}
+
+export function findingsCSV(result) {
+  const esc = (v) => { const s = v == null ? '' : String(v); return /[",;\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
+  const cols = ['session_id', 'exercise_id', 'id', 'decision_id', 'capability', 'severity', 'finding', 'action', 'owner', 'due'];
+  const rows = (result.findings || []).map((f) => [result.session_id, result.exercise?.id, f.id, f.decision_id, f.capability, f.severity, f.text, f.action, f.owner, f.due].map(esc).join(','));
   return '﻿' + [cols.join(','), ...rows].join('\r\n') + '\r\n';
 }
