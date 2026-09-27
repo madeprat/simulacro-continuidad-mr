@@ -35,3 +35,33 @@ td.q { min-width: 260px; }
   :root { --bg: #fff; --card: #fff; --text: #0f172a; --muted: #475569; --border: #cbd5e1; }
   .no-print, .drop, .messages { display: none; }
 }
+
+/* ── Valoración, capacidades y hallazgos ── */
+.banner { padding: 12px 16px; border-radius: 12px; background: rgba(251,191,36,.12); border: 1px solid rgba(251,191,36,.4); color: #fde68a; }
+.rationale { display: block; margin-top: 4px; color: var(--muted); }
+.rating-esperada { background: rgba(74,222,128,.15); color: var(--green); }
+.rating-desviacion { background: rgba(248,113,113,.18); color: var(--red); }
+.rating-no_evaluada { background: rgba(148,163,184,.16); color: var(--muted); }
+.cap-adecuada { background: rgba(74,222,128,.15); color: var(--green); }
+.cap-revisar { background: rgba(251,191,36,.16); color: var(--amber); }
+.cap-mejorar { background: rgba(248,113,113,.18); color: var(--red); }
+.cap-sin_datos { background: rgba(148,163,184,.16); color: var(--muted); }
+.findings { display: grid; gap: 12px; }
+.finding { background: var(--card); border: 1px solid var(--border); border-left: 4px solid var(--amber); border-radius: 12px; padding: 12px 14px; }
+.finding.sev-high { border-left-color: var(--red); }
+.finding.sev-low { border-left-color: var(--muted); }
+.finding.excluded { opacity: .45; }
+.finding-head { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-bottom: 8px; }
+.finding-head .cap { font-weight: 700; }
+.finding-head select, .ffield input, .ffield textarea, .notes { font: inherit; font-size: 14px; color: var(--text); background: #0b1224; border: 1px solid var(--border); border-radius: 8px; padding: 6px 8px; }
+.finding-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.ffield { display: grid; gap: 4px; font-size: 13px; color: var(--muted); }
+.ffield textarea, .ffield input { width: 100%; }
+.notes-label { display: block; margin: 16px 0 6px; color: var(--muted); font-size: 14px; }
+.notes { width: 100%; }
+@media (max-width: 700px) { .finding-grid { grid-template-columns: 1fr; } }
+@media print {
+  .finding.excluded, .inc { display: none; }
+  .finding-head select, .ffield input, .ffield textarea, .notes { background: #fff; color: #0f172a; border-color: #cbd5e1; }
+  .banner { color: #92400e; background: #fffbeb; }
+}

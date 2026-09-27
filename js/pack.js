@@ -74,6 +74,12 @@ export function validatePack(pack) {
       }
     }
   }
+  // Hoja de respuestas (debrief.json): solo decisiones existentes y letras A–D.
+  const decisionIds = new Set(pack.rounds.flatMap((r) => (r.decisions || []).map((d) => d.id)));
+  for (const [id, a] of Object.entries((pack.debrief && pack.debrief.assessments) || {})) {
+    if (!decisionIds.has(id)) errors.push(`debrief.json: la decisión ${id} no existe en el pack.`);
+    else if (a.preferred_response && !ANSWER_IDS.includes(a.preferred_response)) errors.push(`debrief.json/${id}: respuesta de referencia «${a.preferred_response}» no válida.`);
+  }
   if (m.decision_count && m.decision_count !== pack.rounds.reduce((n, r) => n + (r.decisions || []).length, 0)) {
     errors.push(`manifest.decision_count (${m.decision_count}) no coincide con las decisiones del pack.`);
   }
