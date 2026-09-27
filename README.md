@@ -56,6 +56,30 @@ que se opera con el rayo del mando o con la mano:
 - *Estimación de luz:* no se usa. Los paneles son interfaz sin iluminación y el navegador de Quest no expone
   `light-estimation`; solo aportaría algo con objetos 3D iluminados (p. ej. un teléfono modelado).
 
+## Sincronización en directo entre visores
+
+Con la casilla *Sincronizar en directo* (activada por defecto en el briefing), los visores con el **mismo pack y
+código de sesión** forman una sala:
+
+- **Panel de Crisis compartido:** lo que cualquiera opera (escenarios, categorías, analizar, hora de inicio,
+  pausar/cerrar, comunicaciones notificadas, convocatoria) aparece al instante en los demás, con aviso
+  («R2 ha analizado el impacto») y voz. La pestaña abierta es de cada uno. Un visor que llega tarde recibe el estado
+  actual y el estado de referencia de la ronda no pisa lo ya operado.
+- **Decisiones:** cuando el rol activo confirma, su letra llega preseleccionada a los otros visores
+  («Recibido de R2: C»); basta confirmar (o elegir otra si lo anunciado fue distinto). Se registra como observada
+  con `sync_from`, así el debrief distingue lo sincronizado de lo tecleado.
+- **Presencia:** el HUD muestra quién está conectado (🔗 R1 R3) y el menú ofrece *Ir a donde está R2* si alguien
+  va por otro paso.
+- **Sin red no pasa nada:** cada visor sigue funcionando solo y reintenta la conexión cada pocos segundos.
+
+Cómo funciona: WebRTC con [PeerJS](https://peerjs.com) (incluido en `vendor/`). El primer visor ocupa el identificador
+de anfitrión de la sala y reenvía los mensajes; si se cae, otro lo sustituye automáticamente. Hace falta Internet para
+el emparejamiento (servidor público de PeerJS); los datos van directos entre visores o, si la wifi los aísla, por
+los servidores TURN de PeerJS. Solo viajan datos del ejercicio (ficticios). Usad un código de sesión poco común
+(p. ej. `20261003-sala2-k7`) para no coincidir con otra sala.
+
+Para probar sin gafas: abre tres pestañas con `?sync=local` (sincroniza pestañas del mismo navegador).
+
 ## Cómo encaja en un simulacro
 
 1. **Visores (Quest):** mismo código de sesión, un rol por visor, calibración de pared del panel/puerta/mesa/frente
@@ -110,6 +134,7 @@ index.html, js/, css/           Simulador MR (WebXR)
 js/crisis-panel.js              Panel de Crisis virtual (copiloto dentro de las gafas)
 js/copilot-view.js              Tarjetas de resumen por rol
 js/voice.js                     Voz narradora (SpeechSynthesis)
+js/sync.js                      Sincronización entre visores (PeerJS/WebRTC o pestañas locales)
 copiloto/                       Copiloto de Continuidad para la TV
   js/core.js                    Motor de cálculo común (TV y gafas)
   js/copiloto.js                Interfaz portada del panel original

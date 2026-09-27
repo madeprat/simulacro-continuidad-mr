@@ -84,14 +84,15 @@ export class Session {
     });
   }
 
-  decisionAnswered(round, decision, answer) {
+  // extra: p. ej. { sync_from: 'R2' } cuando la letra llegó sincronizada desde el visor del rol activo.
+  decisionAnswered(round, decision, answer, extra = {}) {
     const answered_at = now();
     const shown_at = this.shownAt[decision.id] || answered_at;
     const source = decision.role === this.role ? 'own' : 'observed';
     const previous = this.data.decisions[decision.id];
     const record = {
       round_id: round.id, decision_id: decision.id, active_role: decision.role, answer, answer_source: source,
-      shown_at, answered_at, response_seconds: secondsBetween(shown_at, answered_at),
+      shown_at, answered_at, response_seconds: secondsBetween(shown_at, answered_at), ...extra,
     };
     if (previous && previous.answer !== answer) {
       this.log('session_corrected', { decision_id: decision.id, previous_answer: previous.answer, new_answer: answer });

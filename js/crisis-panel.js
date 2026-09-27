@@ -38,10 +38,13 @@ export function tabFor(label = '') {
 const hhmm = (ms) => new Date(ms).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
 
 export class CrisisPanel {
-  constructor({ data, onEvent = () => {} }) {
+  constructor({ data, onEvent = () => {}, onChange = () => {} }) {
     this.data = data;
     this.ctx0 = { scenarioRows: data.scenarios, estrategias: data.estrategias, config: data.config };
     this.onEvent = onEvent;
+    this.onChange = onChange; // se llama tras cada cambio compartible (para sincronizar con los otros visores)
+    this.roundId = null;
+    this.changedAt = 0;
     this.canvas = document.createElement('canvas');
     this.canvas.width = W;
     this.canvas.height = H;
@@ -69,8 +72,9 @@ export class CrisisPanel {
   }
 
   // Estado de referencia al empezar una ronda del pack (así los tres visores parten del mismo panel).
-  setRoundBaseline(st, roundLabel) {
+  setRoundBaseline(st, roundLabel, roundId = null) {
     if (!st) return;
+    this.roundId = roundId;
     this.base = st;
     this.roundStartReal = Date.now();
     const codes = Object.keys(st.selected || {});
@@ -80,7 +84,40 @@ export class CrisisPanel {
       : null;
     this.state.svcPage = 0;
     this.state.notice = codes.length ? `Panel actualizado al estado de referencia de ${roundLabel}.` : 'Panel sin incidente declarado.';
+    this.changedAt = Date.now();
     this.draw();
+    this.onChange('baseline');
+  }
+
+  /* ─────────────── Estado compartido entre visores ─────────────── */
+
+  // Lo que ven todos: escenarios, incidente, comunicaciones notificadas, convocatoria y reloj del ejercicio.
+  // La pestaña abierta y la paginación son de cada visor.
+  getShared() {
+    const st = this.state;
+    return {
+      roundId: this.roundId, simNow: this.now(), changedAt: this.changedAt,
+      selected: { ...st.selected }, act: st.act ? { ...st.act, scenarios: { ...st.act.scenarios } } : null,
+      sent: { ...st.sent }, convened: st.convened,
+    };
+  }
+
+  // Aplica el estado recibido de otro visor si es más reciente que el propio.
+  applyShared(shared, from, action) {
+    if (!shared || shared.changedAt <= this.changedAt) return false;
+    // Un estado de referencia de la misma ronda no pisa lo que ya se ha operado en ella.
+    if (action === 'baseline' && shared.roundId && shared.roundId === this.roundId) return false;
+    this.roundId = shared.roundId;
+    this.changedAt = shared.changedAt;
+    this.base = { ...(this.base || {}), nowMs: shared.simNow };
+    this.roundStartReal = Date.now();
+    Object.assign(this.state, { selected: { ...shared.selected }, act: shared.act, sent: { ...shared.sent }, convened: shared.convened });
+    const what = { analyze: 'ha analizado el impacto', onset: 'ha ajustado la hora de inicio', contain: 'ha pausado el seguimiento',
+      resume: 'ha reanudado el seguimiento', close: 'ha cerrado el incidente', sent: 'ha marcado una comunicación',
+      convene: 'ha convocado al comité', sc: 'ha cambiado los escenarios', cat: 'ha cambiado una categoría' }[action];
+    this.state.notice = what ? `${from} ${what}.` : this.state.notice;
+    this.draw();
+    return true;
   }
 
   elapsed() {
@@ -182,6 +219,10 @@ export class CrisisPanel {
       this.onEvent('panel_committee_convened', {});
       st.notice = 'Convocatoria registrada. Duplícala por un canal fuera de banda y confirma la recepción.';
     } else return false;
+    if (!['tab', 'svc', 'ctx', 'comm'].includes(kind)) {
+      this.changedAt = Date.now();
+      this.onChange(kind);
+    }
     this.draw();
     return true;
   }

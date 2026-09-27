@@ -74,6 +74,8 @@
     <section class="card options">
       <label class="check"><input type="checkbox" id="opt-depth" checked> Oclusión con objetos reales (Quest 3: las personas y los muebles tapan los paneles)</label>
       <label class="check"><input type="checkbox" id="opt-voice" checked> Voz narradora (lee alertas, llamadas y preguntas)</label>
+      <label class="check"><input type="checkbox" id="opt-sync" checked> Sincronizar en directo con los otros visores (necesita Internet para conectar)</label>
+      <p class="hint sync-line">🔗 <span id="sync-status">Sin sincronizar</span></p>
     </section>
     <div class="actions">
       <button id="btn-enter-xr" type="button" class="primary">Entrar en realidad mixta</button>
@@ -114,6 +116,7 @@
     </div>
   </main>
 
+  <script src="vendor/peerjs.min.js"></script>
   <script type="module" src="js/app.js"></script>
 </body>
 </html>

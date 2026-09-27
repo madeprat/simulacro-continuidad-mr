@@ -1,6 +1,6 @@
 // Service worker: precarga el motor y los packs para ejecutar el simulacro sin conexión.
 // Estrategia: red primero (para recibir cambios del pack) y caché como respaldo offline.
-const CACHE = 'simulacro-mr-v4';
+const CACHE = 'simulacro-mr-v5';
 const ASSETS = [
   './',
   'index.html',
@@ -12,6 +12,8 @@ const ASSETS = [
   'js/copilot-view.js',
   'js/crisis-panel.js',
   'js/voice.js',
+  'js/sync.js',
+  'vendor/peerjs.min.js',
   'copiloto/',
   'copiloto/index.html',
   'copiloto/catalogo.html',
