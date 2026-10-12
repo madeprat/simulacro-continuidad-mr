@@ -1,0 +1,53 @@
+{
+  "status": "propuesta",
+  "note": "Hoja de respuestas PROPUESTA para el ejercicio bancario (DORA); debe validarla quien dirija el ejercicio. No se muestra durante el juego.",
+  "capabilities": {
+    "deteccion_escalado": "Detección y escalado",
+    "autoridad": "Roles y autoridad",
+    "recuperacion": "Continuidad y recuperación",
+    "comunicacion": "Comunicaciones",
+    "cumplimiento": "Obligaciones legales y contractuales",
+    "informacion": "Disponibilidad de información",
+    "decision": "Toma de decisiones con incertidumbre",
+    "terceros": "Coordinación con terceros",
+    "retorno": "Retorno a la normalidad"
+  },
+  "assessments": {
+    "D1": {
+      "preferred_response": "B",
+      "capability": "deteccion_escalado",
+      "severity_if_missed": "high",
+      "rationale": "La responsabilidad no se externaliza: el banco responde de sus servicios aunque falle un tercero. Activar, clasificar pronto y exigir información al proveedor es lo que permite cumplir los plazos. Cambiar de procesador en caliente o apagar canales añade daño."
+    },
+    "D2": {
+      "preferred_response": "B",
+      "capability": "decision",
+      "severity_if_missed": "medium",
+      "rationale": "Se declara lo que se sabe: un proveedor crítico caído y un servicio de pago degradado. Lo demás se recalcula al confirmarse."
+    },
+    "D3": {
+      "preferred_response": "B",
+      "capability": "cumplimiento",
+      "severity_if_missed": "high",
+      "rationale": "DORA fija plazos cortos precisamente para notificar con información incompleta y completarla después. La obligación es del banco aunque el origen esté en un tercero."
+    },
+    "D4": {
+      "preferred_response": "B",
+      "capability": "recuperacion",
+      "severity_if_missed": "high",
+      "rationale": "Para eso existen la estrategia de salida y los canales alternativos: mantener el servicio esencial mientras el proveedor se recupera. Reconectar con un sistema comprometido traslada el ataque al banco."
+    },
+    "D5": {
+      "preferred_response": "B",
+      "capability": "decision",
+      "severity_if_missed": "high",
+      "rationale": "Decidir con incertidumbre: medidas proporcionales sobre el grupo en riesgo, sin esperar a la certeza y sin castigar a todos los clientes."
+    },
+    "D6": {
+      "preferred_response": "B",
+      "capability": "comunicacion",
+      "severity_if_missed": "high",
+      "rationale": "Los clientes tienen derecho a saberlo y la información desactiva la estafa. DORA obliga a informar a los clientes afectados, y el RGPD puede obligar a notificar la brecha."
+    }
+  }
+}

@@ -1,0 +1,170 @@
+{
+  "schema": "crisis.site/1.0",
+  "name": "Banco Siroco",
+  "note": "Entidad bancaria ficticia: sede central, CPD principal y de respaldo, red de oficinas y cajeros, centro de atención, SOC y proveedores TIC críticos.",
+  "nodes": [
+    {
+      "id": "SEDE",
+      "type": "building",
+      "label": "Sede central",
+      "floors": 6,
+      "x": -1.4,
+      "z": -1.8,
+      "w": 1.4,
+      "d": 1.0,
+      "scenarios": [
+        "E1"
+      ],
+      "services": [
+        "BAN-07",
+        "BAN-10",
+        "BAN-11",
+        "BAN-15"
+      ]
+    },
+    {
+      "id": "CPD",
+      "type": "datacenter",
+      "label": "CPD principal",
+      "x": 1.2,
+      "z": -1.4,
+      "w": 1.2,
+      "d": 0.9,
+      "scenarios": [
+        "E5"
+      ],
+      "services": [
+        "BAN-03",
+        "BAN-04",
+        "BAN-08",
+        "BAN-12"
+      ]
+    },
+    {
+      "id": "RESP",
+      "type": "datacenter",
+      "label": "CPD de respaldo",
+      "role": "backup",
+      "x": 3.4,
+      "z": 0.6,
+      "w": 0.9,
+      "d": 0.7,
+      "scenarios": [],
+      "services": []
+    },
+    {
+      "id": "OFI",
+      "type": "building",
+      "label": "Oficinas y cajeros",
+      "floors": 2,
+      "x": -0.2,
+      "z": 1.8,
+      "w": 1.6,
+      "d": 0.9,
+      "scenarios": [
+        "E4"
+      ],
+      "services": [
+        "BAN-02",
+        "BAN-05"
+      ]
+    },
+    {
+      "id": "CALL",
+      "type": "room",
+      "label": "Atención al cliente",
+      "x": -2.8,
+      "z": 0.6,
+      "w": 1.0,
+      "d": 0.7,
+      "scenarios": [
+        "E2"
+      ],
+      "services": [
+        "BAN-06"
+      ]
+    },
+    {
+      "id": "SOC",
+      "type": "room",
+      "label": "SOC y prevención del fraude",
+      "x": 1.4,
+      "z": 0.4,
+      "w": 1.1,
+      "d": 0.7,
+      "scenarios": [
+        "E6"
+      ],
+      "services": [
+        "BAN-09",
+        "BAN-13"
+      ]
+    },
+    {
+      "id": "TARJ",
+      "type": "provider",
+      "label": "Procesador de tarjetas",
+      "x": 3.0,
+      "z": -2.8,
+      "scenarios": [
+        "E7"
+      ],
+      "services": [
+        "BAN-01"
+      ]
+    },
+    {
+      "id": "FONDOS",
+      "type": "provider",
+      "label": "Transporte de fondos",
+      "x": 3.0,
+      "z": 2.6,
+      "scenarios": [],
+      "services": [
+        "BAN-14"
+      ]
+    }
+  ],
+  "links": [
+    {
+      "from": "CPD",
+      "to": "SEDE",
+      "label": "Red corporativa"
+    },
+    {
+      "from": "CPD",
+      "to": "OFI",
+      "label": "Operativa de oficina"
+    },
+    {
+      "from": "CPD",
+      "to": "RESP",
+      "label": "Replicación"
+    },
+    {
+      "from": "CPD",
+      "to": "TARJ",
+      "label": "Autorizaciones"
+    },
+    {
+      "from": "TARJ",
+      "to": "OFI",
+      "label": "Cajeros y TPV"
+    },
+    {
+      "from": "SOC",
+      "to": "CPD",
+      "label": "Monitorización"
+    },
+    {
+      "from": "CALL",
+      "to": "CPD",
+      "label": "Consulta de clientes"
+    },
+    {
+      "from": "FONDOS",
+      "to": "OFI",
+      "label": "Efectivo"
+    }
+  ]
+}

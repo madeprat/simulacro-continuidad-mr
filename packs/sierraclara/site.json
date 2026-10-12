@@ -1,0 +1,184 @@
+{
+  "schema": "crisis.site/1.0",
+  "name": "Hospital Comarcal Sierra Clara",
+  "note": "Hospital público ficticio de 250 camas: bloque de hospitalización, Urgencias, laboratorio, consultas y farmacia, CPD propio, respaldo en la consejería y proveedores.",
+  "nodes": [
+    {
+      "id": "BLOQ",
+      "type": "building",
+      "label": "Bloque de hospitalización",
+      "floors": 5,
+      "x": -0.8,
+      "z": -1.8,
+      "w": 1.8,
+      "d": 1.1,
+      "scenarios": [],
+      "services": [
+        "HOS-02",
+        "HOS-03",
+        "HOS-04",
+        "HOS-07",
+        "HOS-12"
+      ]
+    },
+    {
+      "id": "URG",
+      "type": "room",
+      "label": "Urgencias",
+      "x": -2.8,
+      "z": 0.4,
+      "w": 1.2,
+      "d": 0.8,
+      "scenarios": [
+        "E2"
+      ],
+      "services": [
+        "HOS-01"
+      ]
+    },
+    {
+      "id": "LAB",
+      "type": "room",
+      "label": "Laboratorio y banco de sangre",
+      "x": -0.2,
+      "z": 1.2,
+      "w": 1.1,
+      "d": 0.7,
+      "scenarios": [],
+      "services": [
+        "HOS-06",
+        "HOS-11"
+      ]
+    },
+    {
+      "id": "CEX",
+      "type": "building",
+      "label": "Consultas y farmacia",
+      "floors": 2,
+      "x": 1.6,
+      "z": 1.9,
+      "w": 1.3,
+      "d": 0.8,
+      "scenarios": [],
+      "services": [
+        "HOS-08",
+        "HOS-09",
+        "HOS-15"
+      ]
+    },
+    {
+      "id": "CPD",
+      "type": "datacenter",
+      "label": "CPD del hospital",
+      "x": 1.8,
+      "z": -1.2,
+      "w": 1.1,
+      "d": 0.9,
+      "scenarios": [
+        "E1",
+        "E3",
+        "E5"
+      ],
+      "services": [
+        "HOS-05",
+        "HOS-10",
+        "HOS-16"
+      ]
+    },
+    {
+      "id": "RESP",
+      "type": "datacenter",
+      "label": "CPD de respaldo (consejería)",
+      "role": "backup",
+      "x": 3.4,
+      "z": 0.2,
+      "w": 0.9,
+      "d": 0.7,
+      "scenarios": [
+        "E7"
+      ],
+      "services": []
+    },
+    {
+      "id": "CLIMA",
+      "type": "provider",
+      "label": "Mantenimiento de climatización",
+      "x": 3.2,
+      "z": -2.8,
+      "scenarios": [
+        "E7"
+      ],
+      "services": [
+        "HOS-17"
+      ]
+    },
+    {
+      "id": "LAV",
+      "type": "provider",
+      "label": "Lavandería y esterilización",
+      "x": -3.4,
+      "z": -2.2,
+      "scenarios": [
+        "E7"
+      ],
+      "services": [
+        "HOS-13"
+      ]
+    },
+    {
+      "id": "AMB",
+      "type": "provider",
+      "label": "Transporte sanitario",
+      "x": -1.6,
+      "z": 2.9,
+      "scenarios": [
+        "E4"
+      ],
+      "services": [
+        "HOS-14"
+      ]
+    }
+  ],
+  "links": [
+    {
+      "from": "CPD",
+      "to": "BLOQ",
+      "label": "Historia clínica"
+    },
+    {
+      "from": "CPD",
+      "to": "URG",
+      "label": "Historia clínica"
+    },
+    {
+      "from": "CPD",
+      "to": "LAB",
+      "label": "Resultados"
+    },
+    {
+      "from": "CPD",
+      "to": "CEX",
+      "label": "Citas y prescripción"
+    },
+    {
+      "from": "CPD",
+      "to": "RESP",
+      "label": "Copias"
+    },
+    {
+      "from": "CLIMA",
+      "to": "CPD",
+      "label": "Refrigeración"
+    },
+    {
+      "from": "AMB",
+      "to": "URG",
+      "label": "Traslados"
+    },
+    {
+      "from": "LAV",
+      "to": "BLOQ",
+      "label": "Material estéril"
+    }
+  ]
+}

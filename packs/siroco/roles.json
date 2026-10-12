@@ -1,0 +1,43 @@
+{
+  "roles": [
+    {
+      "id": "R1",
+      "name": "R1 · Dirección y comité de crisis",
+      "functions": [
+        "Preside el comité y toma las decisiones de alto impacto.",
+        "Responde ante el supervisor y el consejo.",
+        "Autoriza las comunicaciones públicas."
+      ],
+      "rules": [
+        "Solo respondes cuando la decisión es de R1.",
+        "Si los visores no están conectados, di tu letra en voz alta (o por teléfono) antes de confirmar."
+      ]
+    },
+    {
+      "id": "R2",
+      "name": "R2 · Riesgo TIC, continuidad y Panel de Crisis",
+      "functions": [
+        "Opera el Panel de Crisis y lee la maqueta del banco.",
+        "Gestiona al proveedor TIC y las alternativas de pago.",
+        "Clasifica el incidente con los criterios de DORA."
+      ],
+      "rules": [
+        "Solo respondes cuando la decisión es de R2.",
+        "Si los visores no están conectados, di tu letra en voz alta (o por teléfono) antes de confirmar."
+      ]
+    },
+    {
+      "id": "R3",
+      "name": "R3 · Cumplimiento, clientes y comunicación",
+      "functions": [
+        "Controla los plazos de notificación al supervisor y a la AEPD.",
+        "Prepara los mensajes a clientes y medios.",
+        "Vigila suplantaciones y fraude."
+      ],
+      "rules": [
+        "Solo respondes cuando la decisión es de R3.",
+        "Si los visores no están conectados, di tu letra en voz alta (o por teléfono) antes de confirmar."
+      ]
+    }
+  ]
+}

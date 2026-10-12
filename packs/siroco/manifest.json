@@ -1,0 +1,20 @@
+{
+  "schema": "crisis.exercise/1.0",
+  "exercise_id": "SIROCO",
+  "name": "Simulacro bancario SIROCO (DORA)",
+  "version": "1.0",
+  "expected_players": 3,
+  "duration_minutes": 30,
+  "round_count": 3,
+  "decision_count": 6,
+  "language": "es-ES",
+  "files": {
+    "roles": "roles.json",
+    "rounds": "rounds.json",
+    "debrief": "debrief.json",
+    "site": "site.json",
+    "catalog": "catalogo/"
+  },
+  "intro": "Sois el comité de crisis de Banco Siroco, una entidad ficticia sujeta a DORA. Viernes de nómina, 09:05: los pagos con tarjeta empiezan a fallar y el origen está en un proveedor TIC crítico. Tres rondas y tres roles. La maqueta del banco muestra de quién dependéis.",
+  "ending": "Fin del simulacro. Banco Siroco ha mantenido a sus clientes pagando, ha notificado en plazo y ha frenado el fraude. Salid de la realidad mixta para ver el resumen y compararlo con lo que pide DORA."
+}

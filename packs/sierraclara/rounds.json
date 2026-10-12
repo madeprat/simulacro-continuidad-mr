@@ -1,0 +1,287 @@
+{
+  "rounds": [
+    {
+      "id": "R01",
+      "number": 1,
+      "title": "Calor en el CPD",
+      "crisis_time": "T+0",
+      "copilot": {
+        "clock": "D0 10:45",
+        "scenarios": {}
+      },
+      "events": [
+        {
+          "id": "R01-E1",
+          "type": "ALERT",
+          "anchor": "FRONT",
+          "title": "Alarma de temperatura · 10:32",
+          "text": "El CPD del Hospital Comarcal Sierra Clara marca 41 °C: la climatización ha fallado en plena ola de calor. A las 10:40 los servidores de la historia clínica se apagan solos para protegerse."
+        },
+        {
+          "id": "R01-E2",
+          "type": "PHONE",
+          "anchor": "DOOR",
+          "source": "Supervisora de Urgencias",
+          "title": "10:44 h",
+          "text": "«No vemos historias, ni alergias, ni tratamientos. Hay 23 pacientes en Urgencias y llegan dos ambulancias.»"
+        },
+        {
+          "id": "R01-E3",
+          "type": "MESSAGE",
+          "anchor": "TABLE",
+          "source": "Mantenimiento",
+          "title": "Climatización",
+          "text": "La reparación llevará entre 4 y 6 horas. Se pueden poner ventiladores y abrir el CPD, pero entra polvo y calor."
+        }
+      ],
+      "panel_actions": [
+        {
+          "id": "R01-A1",
+          "when": "after",
+          "tab": "⚡ Activación",
+          "text": "Declarad en el Panel de Crisis lo que está pasando y pulsad «Analizar impacto». Mirad en la maqueta qué depende del CPD."
+        }
+      ],
+      "decisions": [
+        {
+          "id": "D1",
+          "role": "R1",
+          "question": "Son las 10:45. ¿Qué activas?",
+          "answers": [
+            {
+              "id": "A",
+              "text": "Esperar a que mantenimiento arregle la climatización."
+            },
+            {
+              "id": "B",
+              "text": "El plan de contingencia: procedimientos en papel en Urgencias y plantas, comité de crisis y valorar con la coordinación de emergencias el desvío de ambulancias no críticas."
+            },
+            {
+              "id": "C",
+              "text": "Desviar todas las ambulancias y cerrar Urgencias."
+            },
+            {
+              "id": "D",
+              "text": "Que el personal fotografíe los informes en papel con su móvil y los comparta por mensajería."
+            }
+          ]
+        },
+        {
+          "id": "D2",
+          "role": "R2",
+          "question": "¿Qué declaras en el Panel de Crisis?",
+          "answers": [
+            {
+              "id": "A",
+              "text": "Nada: es una avería de mantenimiento."
+            },
+            {
+              "id": "B",
+              "text": "E3 (sin sistemas clínicos) en categoría 2 y E1 en categoría 1: el CPD no se puede usar mientras dure la avería."
+            },
+            {
+              "id": "C",
+              "text": "E6 en categoría 3: podría ser un ataque."
+            },
+            {
+              "id": "D",
+              "text": "Solo E7: es culpa del proveedor de climatización."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "R02",
+      "number": 2,
+      "title": "Todo en papel",
+      "crisis_time": "T+2 h",
+      "copilot": {
+        "clock": "D0 12:40",
+        "declared": "D0 10:45",
+        "onset": "D0 10:32",
+        "scenarios": {
+          "E3": 2,
+          "E1": 1
+        }
+      },
+      "events": [
+        {
+          "id": "R02-E1",
+          "type": "ALERT",
+          "anchor": "FRONT",
+          "title": "Laboratorio · 12:30",
+          "text": "Sin sistema, los resultados salen en papel con 90 minutos de retraso. Un potasio crítico no llegó a tiempo a la planta: se detectó a mano y el paciente está bien."
+        },
+        {
+          "id": "R02-E2",
+          "type": "MESSAGE",
+          "anchor": "DOOR",
+          "source": "Proveedor de la historia clínica",
+          "title": "12:35 h",
+          "text": "«Podemos arrancar en el CPD de respaldo de la consejería, pero con la copia de las 04:00: se perderían más de 8 horas de registros.»"
+        },
+        {
+          "id": "R02-E3",
+          "type": "PHONE",
+          "anchor": "DOOR",
+          "source": "Coordinación de emergencias",
+          "title": "12:38 h",
+          "text": "«¿Cuántas ambulancias podéis recibir esta tarde? Tenemos un accidente múltiple en la autovía.»"
+        }
+      ],
+      "panel_actions": [
+        {
+          "id": "R02-A1",
+          "when": "before",
+          "tab": "🧭 Servicios RTO",
+          "text": "Revisad los servicios por RTO: ¿cuáles han superado ya su límite? Fijaos en el laboratorio de la maqueta."
+        }
+      ],
+      "decisions": [
+        {
+          "id": "D3",
+          "role": "R2",
+          "question": "¿Cómo recuperas la historia clínica?",
+          "answers": [
+            {
+              "id": "A",
+              "text": "Esperar a la climatización para arrancar el CPD principal sin perder datos."
+            },
+            {
+              "id": "B",
+              "text": "Arrancar en el CPD de respaldo con la copia de las 04:00 y reincorporar lo registrado en papel desde esa hora, con doble verificación de alergias y tratamientos."
+            },
+            {
+              "id": "C",
+              "text": "Encender ya los servidores principales con ventiladores, aunque siga el calor."
+            },
+            {
+              "id": "D",
+              "text": "Pedir al proveedor que restaure sin validaciones para ir más rápido."
+            }
+          ]
+        },
+        {
+          "id": "D4",
+          "role": "R1",
+          "question": "¿Qué haces con los resultados críticos de laboratorio?",
+          "answers": [
+            {
+              "id": "A",
+              "text": "Nada: el caso ya se detectó."
+            },
+            {
+              "id": "B",
+              "text": "Un circuito específico: el laboratorio llama a la planta por cada resultado crítico y se registra quién lo recibe, hasta que vuelva el sistema."
+            },
+            {
+              "id": "C",
+              "text": "Que el personal de planta vaya a buscarlos cuando pueda."
+            },
+            {
+              "id": "D",
+              "text": "Suspender las analíticas no urgentes y nada más."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "R03",
+      "number": 3,
+      "title": "La vuelta y las obligaciones",
+      "crisis_time": "T+20 h",
+      "copilot": {
+        "clock": "D1 06:40",
+        "declared": "D0 10:45",
+        "onset": "D0 10:32",
+        "scenarios": {
+          "E3": 1,
+          "E6": 1
+        }
+      },
+      "events": [
+        {
+          "id": "R03-E1",
+          "type": "MESSAGE",
+          "anchor": "DOOR",
+          "source": "Sistemas",
+          "title": "03:10 h",
+          "text": "La historia clínica funciona desde el CPD de respaldo. Queda incorporar lo registrado en papel durante la noche."
+        },
+        {
+          "id": "R03-E2",
+          "type": "ALERT",
+          "anchor": "FRONT",
+          "title": "Atención al paciente · 06:20",
+          "text": "Varios pacientes reciben un SMS que se hace pasar por el hospital: «Su historial se ha perdido. Actualice sus datos aquí»."
+        },
+        {
+          "id": "R03-E3",
+          "type": "PHONE",
+          "anchor": "DOOR",
+          "source": "Delegado de protección de datos",
+          "title": "06:35 h",
+          "text": "«Hemos estado casi 17 horas sin acceso a datos de salud y hubo un resultado crítico retrasado. ¿Notificamos algo?»"
+        }
+      ],
+      "panel_actions": [
+        {
+          "id": "R03-A1",
+          "when": "before",
+          "tab": "📡 Comunicaciones",
+          "text": "Abrid Comunicaciones: revisad los contextos «Servicio público (ENS)» y «Datos de salud» y la cuenta atrás de 72 h. Después decidid."
+        }
+      ],
+      "decisions": [
+        {
+          "id": "D5",
+          "role": "R3",
+          "question": "¿Qué notificáis y a quién?",
+          "answers": [
+            {
+              "id": "A",
+              "text": "Nada: ha sido una avería, no un ciberataque."
+            },
+            {
+              "id": "B",
+              "text": "Notificar el incidente al CCN-CERT por LUCÍA, porque afectó gravemente a la disponibilidad de un servicio público, y con el DPD notificar a la AEPD dentro de las 72 h la brecha de disponibilidad de datos de salud, documentando el resultado crítico retrasado."
+            },
+            {
+              "id": "C",
+              "text": "Solo a la AEPD."
+            },
+            {
+              "id": "D",
+              "text": "Esperar al informe del fabricante de la climatización."
+            }
+          ]
+        },
+        {
+          "id": "D6",
+          "role": "R1",
+          "question": "¿Qué haces con el SMS falso?",
+          "answers": [
+            {
+              "id": "A",
+              "text": "Ignorarlo: no lo ha enviado el hospital."
+            },
+            {
+              "id": "B",
+              "text": "Aviso inmediato en web, redes, pantallas y centros de salud: el hospital nunca pide datos por SMS y no se ha perdido ningún historial. Además, se denuncia como intento de fraude."
+            },
+            {
+              "id": "C",
+              "text": "Enviar otro SMS masivo pidiendo a los pacientes que verifiquen sus datos."
+            },
+            {
+              "id": "D",
+              "text": "Desmentirlo solo si pregunta algún medio."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

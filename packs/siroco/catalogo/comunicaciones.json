@@ -1,0 +1,220 @@
+{
+  "contexts": [
+    {
+      "id": "supervisor",
+      "label": "Supervisor (DORA)"
+    },
+    {
+      "id": "clientes",
+      "label": "Clientes"
+    },
+    {
+      "id": "fraude",
+      "label": "Fraude y datos"
+    }
+  ],
+  "items": [
+    {
+      "id": "sup-1",
+      "ctx": [
+        "supervisor"
+      ],
+      "order": 10,
+      "when": "Ahora",
+      "bucket": "now",
+      "mandatory": true,
+      "title": "Clasificar el incidente con los criterios de DORA",
+      "quien": "Riesgo TIC y Cumplimiento",
+      "canal": "Comité de crisis",
+      "plazo": "En cuanto haya datos suficientes",
+      "base": "DORA art. 18 y normas técnicas de clasificación",
+      "evidencia": "Ficha de clasificación con criterios, valores y hora",
+      "accion": "info",
+      "color": "critical",
+      "mail_asunto": "Clasificar el incidente con los criterios de DORA",
+      "mail_cuerpo": "Clasificar el incidente con los criterios de DORA."
+    },
+    {
+      "id": "sup-2",
+      "ctx": [
+        "supervisor"
+      ],
+      "order": 20,
+      "when": "Si es grave",
+      "bucket": "deadline",
+      "mandatory": true,
+      "title": "Notificación inicial de incidente grave al Banco de España",
+      "quien": "Cumplimiento normativo",
+      "canal": "Canal de notificación del supervisor",
+      "plazo": "4 h desde la clasificación y máximo 24 h desde que se conoció",
+      "base": "DORA art. 19",
+      "evidencia": "Notificación enviada y acuse",
+      "accion": "info",
+      "color": "danger",
+      "mail_asunto": "Notificación inicial de incidente grave al Banco de España",
+      "mail_cuerpo": "Notificación inicial de incidente grave al Banco de España.",
+      "plazo_horas": 24
+    },
+    {
+      "id": "sup-3",
+      "ctx": [
+        "supervisor"
+      ],
+      "order": 30,
+      "when": "72 h después",
+      "bucket": "next",
+      "mandatory": true,
+      "title": "Informe intermedio al supervisor",
+      "quien": "Cumplimiento normativo",
+      "canal": "Canal de notificación del supervisor",
+      "plazo": "72 h desde la notificación inicial",
+      "base": "DORA art. 19.4",
+      "evidencia": "Informe y acuse",
+      "accion": "info",
+      "color": "warn",
+      "mail_asunto": "Informe intermedio al supervisor",
+      "mail_cuerpo": "Informe intermedio al supervisor."
+    },
+    {
+      "id": "sup-4",
+      "ctx": [
+        "supervisor"
+      ],
+      "order": 40,
+      "when": "Post-incidente",
+      "bucket": "post",
+      "mandatory": true,
+      "title": "Informe final con causas y medidas",
+      "quien": "Riesgo TIC y Cumplimiento",
+      "canal": "Canal de notificación del supervisor",
+      "plazo": "Un mes desde el informe intermedio",
+      "base": "DORA art. 19.4",
+      "evidencia": "Informe final y plan de acción",
+      "accion": "info",
+      "color": "ok",
+      "mail_asunto": "Informe final con causas y medidas",
+      "mail_cuerpo": "Informe final con causas y medidas."
+    },
+    {
+      "id": "sup-5",
+      "ctx": [
+        "supervisor"
+      ],
+      "order": 50,
+      "when": "Durante el incidente",
+      "bucket": "now",
+      "mandatory": false,
+      "title": "Exigir al proveedor TIC información y plan de recuperación a hora fija",
+      "quien": "Gestión de proveedores",
+      "canal": "Contacto contractual de crisis",
+      "plazo": "En la primera hora",
+      "base": "DORA art. 28 y 30 (contrato)",
+      "evidencia": "Comunicaciones con el proveedor y compromisos",
+      "accion": "info",
+      "color": "warn",
+      "mail_asunto": "Exigir al proveedor TIC información y plan de recuperación a hora fija",
+      "mail_cuerpo": "Exigir al proveedor TIC información y plan de recuperación a hora fija."
+    },
+    {
+      "id": "cli-1",
+      "ctx": [
+        "clientes"
+      ],
+      "order": 60,
+      "when": "Ahora",
+      "bucket": "now",
+      "mandatory": true,
+      "title": "Informar a los clientes afectados y de las medidas",
+      "quien": "Comunicación con Cumplimiento",
+      "canal": "App, web, oficinas y redes",
+      "plazo": "Sin dilación indebida",
+      "base": "DORA art. 19.3",
+      "evidencia": "Texto, hora y canales",
+      "accion": "info",
+      "color": "critical",
+      "mail_asunto": "Informar a los clientes afectados y de las medidas",
+      "mail_cuerpo": "Informar a los clientes afectados y de las medidas."
+    },
+    {
+      "id": "cli-2",
+      "ctx": [
+        "clientes"
+      ],
+      "order": 70,
+      "when": "Si hay suplantación",
+      "bucket": "next",
+      "mandatory": true,
+      "title": "Aviso: el banco nunca pide datos por SMS",
+      "quien": "Comunicación",
+      "canal": "App, web, oficinas y redes",
+      "plazo": "En cuanto se detecte",
+      "base": "Protocolo de comunicación",
+      "evidencia": "Capturas con hora de publicación",
+      "accion": "info",
+      "color": "danger",
+      "mail_asunto": "Aviso: el banco nunca pide datos por SMS",
+      "mail_cuerpo": "Aviso: el banco nunca pide datos por SMS."
+    },
+    {
+      "id": "fra-1",
+      "ctx": [
+        "fraude"
+      ],
+      "order": 80,
+      "when": "Ahora",
+      "bucket": "now",
+      "mandatory": true,
+      "title": "Vigilancia reforzada y bloqueo preventivo de tarjetas en riesgo",
+      "quien": "Prevención del fraude",
+      "canal": "Sistemas de fraude",
+      "plazo": "Sin demora",
+      "base": "Política de fraude",
+      "evidencia": "Tarjetas bloqueadas y alertas generadas",
+      "accion": "info",
+      "color": "critical",
+      "mail_asunto": "Vigilancia reforzada y bloqueo preventivo de tarjetas en riesgo",
+      "mail_cuerpo": "Vigilancia reforzada y bloqueo preventivo de tarjetas en riesgo."
+    },
+    {
+      "id": "fra-2",
+      "ctx": [
+        "fraude"
+      ],
+      "order": 90,
+      "when": "Antes de 72 h",
+      "bucket": "deadline",
+      "mandatory": true,
+      "title": "Notificar la brecha de datos de tarjetas a la AEPD",
+      "quien": "Banco como responsable del tratamiento",
+      "canal": "Sede electrónica de la AEPD",
+      "plazo": "Máximo 72 h desde el conocimiento",
+      "base": "RGPD art. 33.1",
+      "evidencia": "Justificante de notificación",
+      "accion": "info",
+      "color": "danger",
+      "mail_asunto": "Notificar la brecha de datos de tarjetas a la AEPD",
+      "mail_cuerpo": "Notificar la brecha de datos de tarjetas a la AEPD.",
+      "plazo_horas": 72
+    },
+    {
+      "id": "fra-3",
+      "ctx": [
+        "fraude"
+      ],
+      "order": 100,
+      "when": "Hoy",
+      "bucket": "next",
+      "mandatory": false,
+      "title": "Denuncia y coordinación con las fuerzas de seguridad",
+      "quien": "Asesoría jurídica con el CISO",
+      "canal": "Denuncia formal",
+      "plazo": "Cuando haya evidencias preservadas",
+      "base": "Base penal",
+      "evidencia": "Copia de la denuncia",
+      "accion": "info",
+      "color": "warn",
+      "mail_asunto": "Denuncia y coordinación con las fuerzas de seguridad",
+      "mail_cuerpo": "Denuncia y coordinación con las fuerzas de seguridad."
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "schema": "crisis.exercise/1.0",
+  "exercise_id": "SIERRACLARA",
+  "name": "Simulacro hospitalario SIERRA CLARA",
+  "version": "1.0",
+  "expected_players": 3,
+  "duration_minutes": 30,
+  "round_count": 3,
+  "decision_count": 6,
+  "language": "es-ES",
+  "files": {
+    "roles": "roles.json",
+    "rounds": "rounds.json",
+    "debrief": "debrief.json",
+    "site": "site.json",
+    "catalog": "catalogo/"
+  },
+  "intro": "Sois el comité de crisis del Hospital Comarcal Sierra Clara, un hospital público ficticio de 250 camas sujeto al ENS. Ola de calor, martes, 10:32. Tres rondas y tres roles. La maqueta del hospital muestra qué depende del CPD.",
+  "ending": "Fin del simulacro. El hospital ha seguido atendiendo pacientes sin sistemas y ha cumplido sus obligaciones. Salid de la realidad mixta para ver el resumen y compararlo con lo que recomienda un plan de contingencia."
+}

@@ -1,0 +1,43 @@
+{
+  "roles": [
+    {
+      "id": "R1",
+      "name": "R1 · Gerencia del hospital",
+      "functions": [
+        "Dirige la crisis y decide sobre desvíos, cirugía y recursos.",
+        "Habla con la consejería y la coordinación de emergencias.",
+        "Autoriza las comunicaciones públicas."
+      ],
+      "rules": [
+        "Solo respondes cuando la decisión es de R1.",
+        "Si los visores no están conectados, di tu letra en voz alta (o por teléfono) antes de confirmar."
+      ]
+    },
+    {
+      "id": "R2",
+      "name": "R2 · Coordinación de continuidad y sistemas",
+      "functions": [
+        "Opera el Panel de Crisis y lee la maqueta del hospital.",
+        "Coordina sistemas, mantenimiento y proveedores.",
+        "Decide cómo y cuándo se recuperan los sistemas."
+      ],
+      "rules": [
+        "Solo respondes cuando la decisión es de R2.",
+        "Si los visores no están conectados, di tu letra en voz alta (o por teléfono) antes de confirmar."
+      ]
+    },
+    {
+      "id": "R3",
+      "name": "R3 · Pacientes, comunicación y protección de datos",
+      "functions": [
+        "Atiende a pacientes, familias y medios.",
+        "Controla las notificaciones (CCN-CERT, AEPD) con el DPD.",
+        "Vigila suplantaciones del hospital."
+      ],
+      "rules": [
+        "Solo respondes cuando la decisión es de R3.",
+        "Si los visores no están conectados, di tu letra en voz alta (o por teléfono) antes de confirmar."
+      ]
+    }
+  ]
+}

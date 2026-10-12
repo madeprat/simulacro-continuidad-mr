@@ -1,0 +1,118 @@
+{
+  "E1": [
+    {
+      "id": "10201",
+      "codigo": "EST01",
+      "nombre": "EST01-Procedimientos en papel",
+      "descripcion": "Peticiones, prescripciones y resultados en papel con circuitos definidos."
+    },
+    {
+      "id": "10203",
+      "codigo": "EST03",
+      "nombre": "EST03-Activar el comité de crisis",
+      "descripcion": "Gerencia, dirección médica y de enfermería, sistemas y comunicación con mando único."
+    },
+    {
+      "id": "10205",
+      "codigo": "EST05",
+      "nombre": "EST05-Arrancar en el CPD de respaldo",
+      "descripcion": "Restaurar en la infraestructura de respaldo de la consejería."
+    }
+  ],
+  "E2": [
+    {
+      "id": "10202",
+      "codigo": "EST02",
+      "nombre": "EST02-Reorganizar la actividad",
+      "descripcion": "Aplazar cirugía y consultas no urgentes; reforzar Urgencias y plantas."
+    },
+    {
+      "id": "10203",
+      "codigo": "EST03",
+      "nombre": "EST03-Activar el comité de crisis",
+      "descripcion": "Gerencia, dirección médica y de enfermería, sistemas y comunicación con mando único."
+    }
+  ],
+  "E3": [
+    {
+      "id": "10201",
+      "codigo": "EST01",
+      "nombre": "EST01-Procedimientos en papel",
+      "descripcion": "Peticiones, prescripciones y resultados en papel con circuitos definidos."
+    },
+    {
+      "id": "10203",
+      "codigo": "EST03",
+      "nombre": "EST03-Activar el comité de crisis",
+      "descripcion": "Gerencia, dirección médica y de enfermería, sistemas y comunicación con mando único."
+    },
+    {
+      "id": "10205",
+      "codigo": "EST05",
+      "nombre": "EST05-Arrancar en el CPD de respaldo",
+      "descripcion": "Restaurar en la infraestructura de respaldo de la consejería."
+    },
+    {
+      "id": "10207",
+      "codigo": "EST07",
+      "nombre": "EST07-Desvío de pacientes",
+      "descripcion": "Coordinar con emergencias el desvío de ambulancias no críticas."
+    }
+  ],
+  "E4": [
+    {
+      "id": "10206",
+      "codigo": "EST06",
+      "nombre": "EST06-Proveedor alternativo",
+      "descripcion": "Laboratorio de referencia, ambulancias o mantenimiento de respaldo."
+    },
+    {
+      "id": "10207",
+      "codigo": "EST07",
+      "nombre": "EST07-Desvío de pacientes",
+      "descripcion": "Coordinar con emergencias el desvío de ambulancias no críticas."
+    }
+  ],
+  "E5": [
+    {
+      "id": "10201",
+      "codigo": "EST01",
+      "nombre": "EST01-Procedimientos en papel",
+      "descripcion": "Peticiones, prescripciones y resultados en papel con circuitos definidos."
+    },
+    {
+      "id": "10205",
+      "codigo": "EST05",
+      "nombre": "EST05-Arrancar en el CPD de respaldo",
+      "descripcion": "Restaurar en la infraestructura de respaldo de la consejería."
+    }
+  ],
+  "E6": [
+    {
+      "id": "10203",
+      "codigo": "EST03",
+      "nombre": "EST03-Activar el comité de crisis",
+      "descripcion": "Gerencia, dirección médica y de enfermería, sistemas y comunicación con mando único."
+    },
+    {
+      "id": "10208",
+      "codigo": "EST08",
+      "nombre": "EST08-Aislar y conservar evidencias",
+      "descripcion": "Contener sin borrar para la investigación."
+    }
+  ],
+  "E7": [
+    {
+      "id": "10203",
+      "codigo": "EST03",
+      "nombre": "EST03-Activar el comité de crisis",
+      "descripcion": "Gerencia, dirección médica y de enfermería, sistemas y comunicación con mando único."
+    },
+    {
+      "id": "10206",
+      "codigo": "EST06",
+      "nombre": "EST06-Proveedor alternativo",
+      "descripcion": "Laboratorio de referencia, ambulancias o mantenimiento de respaldo."
+    }
+  ]
+}
