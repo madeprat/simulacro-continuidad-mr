@@ -1,7 +1,7 @@
 // Service worker: precarga el motor y los packs para ejecutar el simulacro sin conexión.
 // Estrategia: red primero (para recibir cambios del pack) y caché como respaldo offline. Si la red tarda más de
 // 3 s (wifi de sala con portal cautivo o sin salida), se sirve la caché y la respuesta de red la actualiza al llegar.
-const CACHE = 'simulacro-mr-v11';
+const CACHE = 'simulacro-mr-v12';
 const NET_TIMEOUT_MS = 3000;
 const ASSETS = [
   './',
@@ -101,6 +101,26 @@ const ASSETS = [
   'packs/siroco/catalogo/escenarios.json',
   'packs/siroco/catalogo/estrategias.json',
   'packs/siroco/catalogo/comunicaciones.json',
+  'packs/marjal/manifest.json',
+  'packs/marjal/roles.json',
+  'packs/marjal/rounds.json',
+  'packs/marjal/debrief.json',
+  'packs/marjal/site.json',
+  'packs/marjal/catalogo/config.json',
+  'packs/marjal/catalogo/servicios.json',
+  'packs/marjal/catalogo/escenarios.json',
+  'packs/marjal/catalogo/estrategias.json',
+  'packs/marjal/catalogo/comunicaciones.json',
+  'packs/calima/manifest.json',
+  'packs/calima/roles.json',
+  'packs/calima/rounds.json',
+  'packs/calima/debrief.json',
+  'packs/calima/site.json',
+  'packs/calima/catalogo/config.json',
+  'packs/calima/catalogo/servicios.json',
+  'packs/calima/catalogo/escenarios.json',
+  'packs/calima/catalogo/estrategias.json',
+  'packs/calima/catalogo/comunicaciones.json',
 ];
 
 self.addEventListener('install', (e) => {

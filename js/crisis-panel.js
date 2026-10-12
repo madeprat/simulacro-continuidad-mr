@@ -576,7 +576,7 @@ export class CrisisPanel {
     this.text(`Sí — hay ${items.length} comunicaciones${mandatory ? `, ${mandatory} obligatorias` : ''}.`, area.x, y, 27, THEME.text, 700);
     y += 44;
     const elapsedMin = snap ? snap.elapsed / 60 : null;
-    if (snap && items.some((i) => i.plazo_horas === 72)) {
+    if (snap && items.some((i) => i.plazo_horas === 72 && /RGPD/.test(i.base || ''))) {
       const r = snap.rgpd;
       this.box(area.x, y, area.w * 0.6, 60, r.expired ? 'rgba(194,38,46,.2)' : 'rgba(234,155,49,.14)', null);
       this.text(r.expired ? '⛔ Plazo RGPD vencido. Documenta el motivo del retraso.' : `⏳ RGPD 72 h: quedan ${r.hours} h ${r.minutes} min para notificar a la AEPD si aplica.`,

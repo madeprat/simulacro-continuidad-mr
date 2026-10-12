@@ -1,0 +1,290 @@
+{
+  "rounds": [
+    {
+      "id": "R01",
+      "number": 1,
+      "title": "Aviso rojo",
+      "crisis_time": "T+0",
+      "copilot": {
+        "clock": "D0 16:10",
+        "scenarios": {}
+      },
+      "events": [
+        {
+          "id": "R01-E1",
+          "type": "ALERT",
+          "anchor": "FRONT",
+          "title": "Aviso rojo · desde las 07:30",
+          "text": "La agencia meteorológica mantiene el aviso rojo por lluvias torrenciales. En la cabecera de la rambla han caído 180 l/m² en seis horas. En la costa casi no llueve y el día parece normal."
+        },
+        {
+          "id": "R01-E2",
+          "type": "MESSAGE",
+          "anchor": "DOOR",
+          "source": "Centro de control",
+          "title": "16:00 h",
+          "text": "«El caudal de la rambla sube muy deprisa. La potabilizadora está a 300 metros del cauce y tres pozos han dejado de responder al telecontrol.»"
+        },
+        {
+          "id": "R01-E3",
+          "type": "PHONE",
+          "anchor": "DOOR",
+          "source": "Alcalde de un municipio de la comarca",
+          "title": "16:08 h",
+          "text": "«¿Tenemos que preocuparnos? Aquí está despejado y la gente hace vida normal.»"
+        }
+      ],
+      "panel_actions": [
+        {
+          "id": "R01-A1",
+          "when": "after",
+          "tab": "⚡ Activación",
+          "text": "Declarad en el Panel de Crisis lo que está pasando y pulsad «Analizar impacto». Mirad en la maqueta qué instalaciones están junto al cauce."
+        }
+      ],
+      "decisions": [
+        {
+          "id": "D1",
+          "role": "R1",
+          "question": "Son las 16:10. ¿Qué haces?",
+          "answers": [
+            {
+              "id": "A",
+              "text": "Esperar a que el centro de emergencias diga algo: los avisos a la población no son competencia nuestra."
+            },
+            {
+              "id": "B",
+              "text": "Activar el plan de emergencia de la empresa, informar por escrito al centro de coordinación de emergencias con los datos de caudal y el riesgo para la potabilizadora, proponer avisos a la población y anotarlo todo con hora en el libro de decisiones."
+            },
+            {
+              "id": "C",
+              "text": "Llamar informalmente a algún conocido de emergencias y esperar."
+            },
+            {
+              "id": "D",
+              "text": "Parar la potabilizadora por precaución sin avisar a nadie."
+            }
+          ]
+        },
+        {
+          "id": "D2",
+          "role": "R2",
+          "question": "¿Qué declaras en el Panel de Crisis?",
+          "answers": [
+            {
+              "id": "A",
+              "text": "Nada: aquí no llueve."
+            },
+            {
+              "id": "B",
+              "text": "E1 (instalación inundable) y E3 (telecontrol) en categoría 1, a recalcular con la crecida."
+            },
+            {
+              "id": "C",
+              "text": "E5 en categoría 3: el agua ya está contaminada."
+            },
+            {
+              "id": "D",
+              "text": "E6: alguien ha atacado los pozos."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "R02",
+      "number": 2,
+      "title": "La rambla se desborda",
+      "crisis_time": "T+3 h",
+      "copilot": {
+        "clock": "D0 19:10",
+        "declared": "D0 16:10",
+        "onset": "D0 15:50",
+        "scenarios": {
+          "E1": 3,
+          "E3": 2,
+          "E4": 2
+        }
+      },
+      "events": [
+        {
+          "id": "R02-E1",
+          "type": "ALERT",
+          "anchor": "FRONT",
+          "title": "Desbordamiento · 18:55",
+          "text": "La rambla se desborda. El agua entra en la potabilizadora y para la producción. En varios municipios se inundan bajos y garajes y se cortan carreteras. Llegan llamadas de vecinos atrapados."
+        },
+        {
+          "id": "R02-E2",
+          "type": "MESSAGE",
+          "anchor": "DOOR",
+          "source": "Laboratorio de calidad",
+          "title": "19:02 h",
+          "text": "«Con el agua de la crecida entrando en la red, no podemos garantizar la potabilidad en 9 de los 14 municipios.»"
+        },
+        {
+          "id": "R02-E3",
+          "type": "PHONE",
+          "anchor": "DOOR",
+          "source": "Centro de coordinación de emergencias",
+          "title": "19:08 h",
+          "text": "«Vamos a enviar un aviso a los móviles de la zona. ¿Qué tenemos que decir sobre el agua?»"
+        }
+      ],
+      "panel_actions": [
+        {
+          "id": "R02-A1",
+          "when": "before",
+          "tab": "📡 Comunicaciones",
+          "text": "Abrid Comunicaciones, contexto «Población y municipios», antes de decidir."
+        }
+      ],
+      "decisions": [
+        {
+          "id": "D3",
+          "role": "R3",
+          "question": "¿Qué recomiendas incluir en el aviso a los móviles?",
+          "answers": [
+            {
+              "id": "A",
+              "text": "Nada sobre el agua: la prioridad es la inundación."
+            },
+            {
+              "id": "B",
+              "text": "Un mensaje corto y concreto: no consumir agua del grifo en los 9 municipios (nombrados) hasta nuevo aviso, junto a las instrucciones de protección (subir a pisos altos, no usar el coche) y el canal donde informarse."
+            },
+            {
+              "id": "C",
+              "text": "«Precaución con el agua», sin más detalle, para no alarmar."
+            },
+            {
+              "id": "D",
+              "text": "Esperar a los análisis de mañana para estar seguros."
+            }
+          ]
+        },
+        {
+          "id": "D4",
+          "role": "R2",
+          "question": "¿Cómo garantizas el agua a hospitales y residencias?",
+          "answers": [
+            {
+              "id": "A",
+              "text": "Esperar a que vuelva a funcionar la potabilizadora."
+            },
+            {
+              "id": "B",
+              "text": "Cisternas y agua embotellada a hospitales, residencias y centros de diálisis con una lista priorizada, y sectorizar la red para aislar la zona contaminada."
+            },
+            {
+              "id": "C",
+              "text": "Repartir agua por orden de llamada."
+            },
+            {
+              "id": "D",
+              "text": "Bombear agua sin tratar para mantener la presión."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "R03",
+      "number": 3,
+      "title": "Diez días después",
+      "crisis_time": "T+10 días",
+      "copilot": {
+        "clock": "D10 10:00",
+        "declared": "D0 16:10",
+        "onset": "D0 15:50",
+        "scenarios": {
+          "E1": 2,
+          "E5": 2,
+          "E7": 1
+        }
+      },
+      "events": [
+        {
+          "id": "R03-E1",
+          "type": "DOCUMENT",
+          "anchor": "TABLE",
+          "source": "Juzgado de instrucción",
+          "title": "Requerimiento",
+          "text": "El juzgado que investiga la gestión de la emergencia pide a la empresa el registro del día de la riada: qué se sabía, quién decidió qué, a qué hora se avisó a cada organismo y con qué acuse."
+        },
+        {
+          "id": "R03-E2",
+          "type": "MESSAGE",
+          "anchor": "DOOR",
+          "source": "CSIRT de referencia",
+          "title": "09:30 h",
+          "text": "«El incidente dejó sin telecontrol vuestra red durante horas. Tenemos la alerta temprana y la notificación; queda pendiente el informe final.»"
+        },
+        {
+          "id": "R03-E3",
+          "type": "PHONE",
+          "anchor": "DOOR",
+          "source": "Consejo de administración",
+          "title": "09:50 h",
+          "text": "«Algunos consejeros preguntan si pueden tener responsabilidad personal.»"
+        }
+      ],
+      "panel_actions": [
+        {
+          "id": "R03-A1",
+          "when": "before",
+          "tab": "📡 Comunicaciones",
+          "text": "Abrid Comunicaciones, contexto «NIS2 (CSIRT)»: revisad qué está hecho y qué falta."
+        }
+      ],
+      "decisions": [
+        {
+          "id": "D5",
+          "role": "R1",
+          "question": "¿Qué entregas al juzgado?",
+          "answers": [
+            {
+              "id": "A",
+              "text": "Un resumen que redactamos ahora con lo que recordamos."
+            },
+            {
+              "id": "B",
+              "text": "El libro de decisiones tal como se llevó durante la emergencia (horas, decisiones, información disponible, avisos y acuses), sin retocar, junto con la telemetría y las comunicaciones."
+            },
+            {
+              "id": "C",
+              "text": "Nada hasta que lo revise un abogado durante meses."
+            },
+            {
+              "id": "D",
+              "text": "Solo los correos que nos favorecen."
+            }
+          ]
+        },
+        {
+          "id": "D6",
+          "role": "R3",
+          "question": "¿Qué respondes al consejo sobre su responsabilidad?",
+          "answers": [
+            {
+              "id": "A",
+              "text": "Que no se preocupen: la responsabilidad es de las administraciones."
+            },
+            {
+              "id": "B",
+              "text": "Que NIS2 hace responsables a los órganos de dirección de aprobar y supervisar las medidas de gestión de riesgos y de formarse en ellas; que se revise si el plan estaba aprobado y ejercitado, y que el informe final al CSIRT y las lecciones aprendidas pasen por el consejo."
+            },
+            {
+              "id": "C",
+              "text": "Que lo pregunten a la aseguradora."
+            },
+            {
+              "id": "D",
+              "text": "Que dimitan para evitar problemas."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

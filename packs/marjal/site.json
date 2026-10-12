@@ -1,0 +1,182 @@
+{
+  "schema": "crisis.site/1.0",
+  "name": "Aguas del Marjal",
+  "note": "Empresa ficticia de aguas que abastece a 14 municipios: potabilizadora junto a la rambla, pozos, depuradora, centro de control, laboratorio y proveedores.",
+  "nodes": [
+    {
+      "id": "ETAP",
+      "type": "datacenter",
+      "label": "Potabilizadora (junto a la rambla)",
+      "x": -2.0,
+      "z": -1.8,
+      "w": 1.3,
+      "d": 1.0,
+      "scenarios": [
+        "E1",
+        "E5"
+      ],
+      "services": [
+        "AGU-01"
+      ]
+    },
+    {
+      "id": "POZOS",
+      "type": "room",
+      "label": "Pozos y bombeos",
+      "x": -3.2,
+      "z": 0.6,
+      "w": 1.0,
+      "d": 0.7,
+      "scenarios": [
+        "E1"
+      ],
+      "services": [
+        "AGU-02"
+      ]
+    },
+    {
+      "id": "EDAR",
+      "type": "datacenter",
+      "label": "Depuradora",
+      "x": 0.4,
+      "z": -2.6,
+      "w": 1.1,
+      "d": 0.8,
+      "scenarios": [
+        "E1"
+      ],
+      "services": [
+        "AGU-04",
+        "AGU-05"
+      ]
+    },
+    {
+      "id": "CTRL",
+      "type": "room",
+      "label": "Centro de control (telecontrol)",
+      "x": 1.4,
+      "z": -0.6,
+      "w": 1.1,
+      "d": 0.7,
+      "scenarios": [
+        "E3",
+        "E6"
+      ],
+      "services": [
+        "AGU-06"
+      ]
+    },
+    {
+      "id": "RED",
+      "type": "building",
+      "label": "Red de 14 municipios",
+      "floors": 1,
+      "x": -0.4,
+      "z": 1.0,
+      "w": 2.0,
+      "d": 1.2,
+      "scenarios": [
+        "E5"
+      ],
+      "services": [
+        "AGU-03",
+        "AGU-08",
+        "AGU-11"
+      ]
+    },
+    {
+      "id": "SEDE",
+      "type": "building",
+      "label": "Sede y laboratorio",
+      "floors": 3,
+      "x": 2.4,
+      "z": 1.8,
+      "w": 1.1,
+      "d": 0.8,
+      "scenarios": [],
+      "services": [
+        "AGU-07",
+        "AGU-09",
+        "AGU-10",
+        "AGU-14"
+      ]
+    },
+    {
+      "id": "CIST",
+      "type": "provider",
+      "label": "Cisternas y agua embotellada",
+      "x": -2.6,
+      "z": 2.8,
+      "scenarios": [
+        "E4"
+      ],
+      "services": [
+        "AGU-12"
+      ]
+    },
+    {
+      "id": "ELEC",
+      "type": "provider",
+      "label": "Compañía eléctrica",
+      "x": 3.4,
+      "z": -2.4,
+      "scenarios": [
+        "E7"
+      ],
+      "services": [
+        "AGU-13"
+      ]
+    },
+    {
+      "id": "EMER",
+      "type": "provider",
+      "label": "Centro de coordinación de emergencias",
+      "x": 3.6,
+      "z": 0.2,
+      "scenarios": [],
+      "services": []
+    }
+  ],
+  "links": [
+    {
+      "from": "ETAP",
+      "to": "RED",
+      "label": "Agua potable"
+    },
+    {
+      "from": "POZOS",
+      "to": "RED",
+      "label": "Agua de pozo"
+    },
+    {
+      "from": "CTRL",
+      "to": "ETAP",
+      "label": "Telecontrol"
+    },
+    {
+      "from": "CTRL",
+      "to": "RED",
+      "label": "Telecontrol"
+    },
+    {
+      "from": "RED",
+      "to": "EDAR",
+      "label": "Saneamiento"
+    },
+    {
+      "from": "ELEC",
+      "to": "ETAP",
+      "label": "Energía"
+    },
+    {
+      "from": "SEDE",
+      "to": "EMER",
+      "label": "Avisos y datos"
+    },
+    {
+      "from": "CIST",
+      "to": "RED",
+      "label": "Agua de emergencia"
+    }
+  ]
+}

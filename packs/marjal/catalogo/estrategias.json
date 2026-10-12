@@ -1,0 +1,124 @@
+{
+  "E1": [
+    {
+      "id": "30201",
+      "codigo": "EST01",
+      "nombre": "EST01-Operación manual en planta",
+      "descripcion": "Personal en planta y válvulas a mano cuando no hay telecontrol."
+    },
+    {
+      "id": "30202",
+      "codigo": "EST02",
+      "nombre": "EST02-Sectorizar la red",
+      "descripcion": "Aislar zonas afectadas para proteger el resto."
+    },
+    {
+      "id": "30203",
+      "codigo": "EST03",
+      "nombre": "EST03-Activar el plan de emergencia",
+      "descripcion": "Dirección, operaciones, calidad y comunicación con mando único y libro de decisiones."
+    },
+    {
+      "id": "30205",
+      "codigo": "EST05",
+      "nombre": "EST05-Suministro alternativo",
+      "descripcion": "Cisternas, agua embotellada y conexiones con redes vecinas."
+    }
+  ],
+  "E2": [
+    {
+      "id": "30203",
+      "codigo": "EST03",
+      "nombre": "EST03-Activar el plan de emergencia",
+      "descripcion": "Dirección, operaciones, calidad y comunicación con mando único y libro de decisiones."
+    },
+    {
+      "id": "30206",
+      "codigo": "EST06",
+      "nombre": "EST06-Proveedor de respaldo",
+      "descripcion": "Grupos electrógenos y logística de respaldo."
+    }
+  ],
+  "E3": [
+    {
+      "id": "30201",
+      "codigo": "EST01",
+      "nombre": "EST01-Operación manual en planta",
+      "descripcion": "Personal en planta y válvulas a mano cuando no hay telecontrol."
+    },
+    {
+      "id": "30203",
+      "codigo": "EST03",
+      "nombre": "EST03-Activar el plan de emergencia",
+      "descripcion": "Dirección, operaciones, calidad y comunicación con mando único y libro de decisiones."
+    }
+  ],
+  "E4": [
+    {
+      "id": "30205",
+      "codigo": "EST05",
+      "nombre": "EST05-Suministro alternativo",
+      "descripcion": "Cisternas, agua embotellada y conexiones con redes vecinas."
+    },
+    {
+      "id": "30206",
+      "codigo": "EST06",
+      "nombre": "EST06-Proveedor de respaldo",
+      "descripcion": "Grupos electrógenos y logística de respaldo."
+    }
+  ],
+  "E5": [
+    {
+      "id": "30202",
+      "codigo": "EST02",
+      "nombre": "EST02-Sectorizar la red",
+      "descripcion": "Aislar zonas afectadas para proteger el resto."
+    },
+    {
+      "id": "30205",
+      "codigo": "EST05",
+      "nombre": "EST05-Suministro alternativo",
+      "descripcion": "Cisternas, agua embotellada y conexiones con redes vecinas."
+    },
+    {
+      "id": "30207",
+      "codigo": "EST07",
+      "nombre": "EST07-Aviso de no consumo",
+      "descripcion": "Recomendar a emergencias y municipios el aviso a la población."
+    }
+  ],
+  "E6": [
+    {
+      "id": "30201",
+      "codigo": "EST01",
+      "nombre": "EST01-Operación manual en planta",
+      "descripcion": "Personal en planta y válvulas a mano cuando no hay telecontrol."
+    },
+    {
+      "id": "30203",
+      "codigo": "EST03",
+      "nombre": "EST03-Activar el plan de emergencia",
+      "descripcion": "Dirección, operaciones, calidad y comunicación con mando único y libro de decisiones."
+    },
+    {
+      "id": "30208",
+      "codigo": "EST08",
+      "nombre": "EST08-Aislar y conservar evidencias",
+      "descripcion": "Para ciberincidentes en el control de la red."
+    }
+  ],
+  "E7": [
+    {
+      "id": "30203",
+      "codigo": "EST03",
+      "nombre": "EST03-Activar el plan de emergencia",
+      "descripcion": "Dirección, operaciones, calidad y comunicación con mando único y libro de decisiones."
+    },
+    {
+      "id": "30206",
+      "codigo": "EST06",
+      "nombre": "EST06-Proveedor de respaldo",
+      "descripcion": "Grupos electrógenos y logística de respaldo."
+    }
+  ]
+}
