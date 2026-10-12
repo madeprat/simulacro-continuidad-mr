@@ -1,6 +1,8 @@
 // Service worker: precarga el motor y los packs para ejecutar el simulacro sin conexión.
-// Estrategia: red primero (para recibir cambios del pack) y caché como respaldo offline.
-const CACHE = 'simulacro-mr-v6';
+// Estrategia: red primero (para recibir cambios del pack) y caché como respaldo offline. Si la red tarda más de
+// 3 s (wifi de sala con portal cautivo o sin salida), se sirve la caché y la respuesta de red la actualiza al llegar.
+const CACHE = 'simulacro-mr-v7';
+const NET_TIMEOUT_MS = 3000;
 const ASSETS = [
   './',
   'index.html',
@@ -15,6 +17,9 @@ const ASSETS = [
   'js/sync.js',
   'js/layout.js',
   'js/command-bar.js',
+  'js/shared-state.js',
+  'js/integrity.js',
+  'js/csv.js',
   'vendor/peerjs.min.js',
   'copiloto/',
   'copiloto/index.html',
@@ -64,12 +69,17 @@ self.addEventListener('activate', (e) => {
 
 self.addEventListener('fetch', (e) => {
   if (e.request.method !== 'GET' || new URL(e.request.url).origin !== location.origin) return;
-  e.respondWith(
-    fetch(e.request)
-      .then((res) => {
-        if (res.ok) { const copy = res.clone(); caches.open(CACHE).then((c) => c.put(e.request, copy)); }
-        return res;
-      })
-      .catch(() => caches.match(e.request, { ignoreSearch: true })),
-  );
+  const network = fetch(e.request).then((res) => {
+    if (res.ok) { const copy = res.clone(); caches.open(CACHE).then((c) => c.put(e.request, copy)); }
+    return res;
+  });
+  e.waitUntil(network.catch(() => {}));
+  e.respondWith((async () => {
+    const timeout = new Promise((resolve) => setTimeout(resolve, NET_TIMEOUT_MS, 'timeout'));
+    const first = await Promise.race([network.catch(() => 'error'), timeout]);
+    if (first !== 'timeout' && first !== 'error') return first;
+    const cached = await caches.match(e.request, { ignoreSearch: true });
+    if (cached) return cached;
+    return network; // sin copia en caché: se espera a la red (o falla como sin service worker)
+  })());
 });

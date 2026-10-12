@@ -1,5 +1,6 @@
 // Interfaz del consolidador de debrief.
 import { consolidate, validateLogs, toCSV, findingsCSV, sha256 } from './consolidar.js';
+import { verifyLog, shortPrint } from '../js/integrity.js';
 
 const $ = (id) => document.getElementById(id);
 const el = (tag, text, cls) => { const e = document.createElement(tag); if (text != null) e.textContent = text; if (cls) e.className = cls; return e; };
@@ -92,6 +93,10 @@ async function handleFiles(fileList) {
     try { logs.push({ name: f.name, text, data: JSON.parse(text), hash: await sha256(text) }); }
     catch { msgs.append(el('p', `${f.name}: no es un JSON válido.`, 'error')); }
   }
+  for (const l of logs) {
+    l.chain = verifyLog(l.data);
+    if (l.chain.status === 'alterado') msgs.append(el('p', `${l.name}: registro modificado después de exportarse. ${l.chain.detail}`, 'error'));
+  }
   const { errors, warnings } = validateLogs(logs);
   for (const e of errors) msgs.append(el('p', e, 'error'));
   for (const w of warnings) msgs.append(el('p', w, 'warn'));
@@ -99,7 +104,7 @@ async function handleFiles(fileList) {
   const pack = await loadPack(logs[0].data.exercise?.id);
   if (!pack) msgs.append(el('p', 'No se encontró el pack del ejercicio: se consolida sin textos ni hoja de respuestas.', 'warn'));
   const result = consolidate(logs, pack);
-  result.sources = logs.map((l) => ({ file: l.name, role: l.data.local_role, sha256: l.hash }));
+  result.sources = logs.map((l) => ({ file: l.name, role: l.data.local_role, sha256: l.hash, chain: l.chain.status, chain_head: l.chain.head, chain_detail: l.chain.detail }));
   result.generated_at = new Date().toISOString();
   current = { result, logs };
   const edits = loadEdits();
@@ -151,7 +156,10 @@ function render() {
   $('panel').replaceChildren(...(r.panel_evidence.length ? r.panel_evidence.map((e) => row([fmtTime(e.at), e.round_id || '—', e.role, e.detail]))
     : [row(['—', '—', '—', 'Sin actuaciones registradas en el Panel de Crisis.'])]));
   $('timeline').replaceChildren(...r.timeline.map((t) => row([fmtTime(t.at), t.role, t.detail])));
-  $('hashes').replaceChildren(...r.sources.map((x) => el('li', `${x.role} · ${x.file} · SHA-256 ${x.sha256 || 'no disponible'}`)));
+  const CHAIN = { integro: '✓ cadena íntegra', alterado: '✗ cadena rota', sin_cadena: 'sin cadena (motor anterior)' };
+  $('hashes').replaceChildren(...r.sources.map((x) => el('li',
+    `${x.role} · ${x.file} · ${CHAIN[x.chain] || x.chain}${x.chain_head ? ` · huella ${shortPrint(x.chain_head)}` : ''} · SHA-256 del fichero ${x.sha256 || 'no disponible'}`,
+    x.chain === 'alterado' ? 'error' : null)));
 }
 
 $('files').addEventListener('change', (e) => handleFiles(e.target.files));

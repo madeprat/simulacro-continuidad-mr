@@ -3,6 +3,13 @@
 // Reproducen exactamente las reglas del copiloto original (afectación por umbral de probabilidad,
 // puntuación de nivel, escaladas automáticas, pérdida acumulada, condición de desastre y comunicaciones).
 
+// Huella corta del catálogo: si la TV importó otra hoja, no coincide con la de las gafas y se nota.
+// sha256: función (texto → hex) que aporta quien llama, para no atar el motor a una implementación.
+export function catalogFingerprint(data, sha256) {
+  const body = JSON.stringify({ config: data.config, services: data.services, scenarios: data.scenarios, estrategias: data.estrategias });
+  return sha256(body).slice(0, 12);
+}
+
 export function parseNum(raw) {
   if (raw === null || raw === undefined || raw === '') return null;
   // Fuera símbolos y unidades («1.500 €», «12,5 h»): solo cifras, signo y separadores.

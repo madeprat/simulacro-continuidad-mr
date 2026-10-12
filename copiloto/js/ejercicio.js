@@ -104,7 +104,7 @@ export function mountExerciseBar({ clock, backend, dataset, open = false }) {
       h('div', { class: 'ej-row' },
         h('button', { type: 'button', class: 'ej-primary', onclick: importSheets }, 'Importar'),
         h('button', { type: 'button', onclick: () => { clearImported(); location.reload(); } }, 'Usar catálogo incluido'))),
-    h('p', { class: 'ej-source' }, 'Catálogo: ' + dataset.source),
+    h('p', { class: 'ej-source' }, 'Catálogo: ' + dataset.source + (dataset.fingerprint ? ' · huella ' + dataset.fingerprint.replace(/(.{4})(?!$)/g, '$1 ') : '')),
     status,
   );
   const toggle = h('button', { type: 'button', class: 'ej-toggle', onclick: () => { panel.hidden = !panel.hidden; } }, '🎬 Ejercicio');

@@ -3,6 +3,7 @@
 // así cada visor calcula lo mismo que muestra la TV sin necesidad de red.
 import * as core from '../copiloto/js/core.js';
 import { THEME } from './panel.js';
+import { sha256Hex } from './integrity.js';
 
 const LEVEL_ACCENT = { 1: THEME.green, 2: THEME.amber, 3: THEME.red };
 const TONE_ACCENT = { ok: THEME.green, warn: THEME.amber, danger: THEME.red, critical: THEME.red };
@@ -15,9 +16,15 @@ export const WIDGETS_BY_ROLE = {
 };
 
 export async function loadCopilotData(base = 'copiloto/data/') {
-  const get = async (f) => (await fetch(base + f, { cache: 'no-cache' })).json();
+  const get = async (f) => {
+    const res = await fetch(base + f, { cache: 'no-cache' });
+    if (!res.ok) throw new Error(`No se pudo leer ${base + f} (${res.status})`);
+    return res.json();
+  };
   const [config, services, scenarios, estrategias] = await Promise.all(['config.json', 'servicios.json', 'escenarios.json', 'estrategias.json'].map(get));
-  return { config, services, scenarios, estrategias };
+  const data = { config, services, scenarios, estrategias };
+  data.fingerprint = core.catalogFingerprint(data, sha256Hex);
+  return data;
 }
 
 export function roundState(round, baseMs = core.exerciseBase()) {

@@ -1,7 +1,9 @@
 // Registro de evidencias de sesión (Session Log v1), checkpoint y exportación.
 import { assessmentFor } from './pack.js';
+import { eventHash } from './integrity.js';
+import { csvRow } from './csv.js';
 
-export const ENGINE_VERSION = '0.1.0';
+export const ENGINE_VERSION = '0.2.0';
 export const SESSION_SCHEMA = 'crisis.session/1.0';
 
 const now = () => new Date().toISOString();
@@ -43,7 +45,18 @@ export class Session {
   static fromCheckpoint(pack, cp) {
     const s = new Session(pack, { sessionId: cp.session_id, role: cp.local_role, participant: cp.participant_label });
     s.data = cp;
+    // Registro guardado por una versión anterior (sin cadena): se encadena al reanudar para que la cadena sea continua.
+    if ((cp.events || []).some((e) => !e.hash)) {
+      let prev = '';
+      for (const e of cp.events) { delete e.hash; e.hash = eventHash(prev, e); prev = e.hash; }
+    }
     return s;
+  }
+
+  // Último hash de la cadena de eventos: la «huella» del registro.
+  get head() {
+    const ev = this.data.events;
+    return ev.length ? ev[ev.length - 1].hash || '' : '';
   }
 
   get role() { return this.data.local_role; }
@@ -51,6 +64,7 @@ export class Session {
 
   log(type, payload = {}) {
     const ev = { seq: this.data.events.length + 1, at: now(), type, ...payload };
+    ev.hash = eventHash(this.head, ev);
     this.data.events.push(ev);
     this.save();
     return ev;
@@ -147,16 +161,13 @@ export class Session {
 
   toJSON() {
     const { step_index, ...rest } = this.data;
-    return JSON.stringify({ ...rest, summary: this.summary() }, null, 2);
+    const integrity = { algorithm: 'sha256-encadenado', head: this.head, events: this.data.events.length };
+    return JSON.stringify({ ...rest, summary: this.summary(), integrity }, null, 2);
   }
 
   toCSV() {
     const cols = ['session_id', 'exercise_id', 'exercise_version', 'round_id', 'decision_id', 'active_role', 'local_role',
       'answer', 'answer_source', 'shown_at', 'answered_at', 'response_seconds', 'reference_rating'];
-    const esc = (v) => {
-      const s = v == null ? '' : String(v);
-      return /[",;\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
-    };
     const rows = [cols.join(',')];
     for (const round of this.pack.rounds) {
       for (const d of round.decisions || []) {
@@ -166,11 +177,11 @@ export class Session {
         if (rec && assessment && assessment.preferred_response) {
           rating = rec.answer === assessment.preferred_response ? 'esperada' : 'desviacion';
         }
-        rows.push([
+        rows.push(csvRow([
           this.data.session_id, this.data.exercise.id, this.data.exercise.version, round.id, d.id, d.role, this.role,
           rec?.answer ?? '', rec?.answer_source ?? '', rec?.shown_at ?? '', rec?.answered_at ?? '', rec?.response_seconds ?? '',
           rec ? rating : '',
-        ].map(esc).join(','));
+        ]));
       }
     }
     return '﻿' + rows.join('\r\n') + '\r\n';

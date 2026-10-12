@@ -5,6 +5,20 @@ export const SUPPORTED_SCHEMA = 'crisis.exercise/1.0';
 export const EVENT_TYPES = ['PHONE', 'DOCUMENT', 'ALERT', 'MESSAGE', 'MEDIA', 'INFO_CARD'];
 export const ANCHORS = ['TV', 'DOOR', 'TABLE', 'FRONT'];
 const ANSWER_IDS = ['A', 'B', 'C', 'D'];
+const SEVERITIES = ['high', 'medium', 'low'];
+
+// Traduce la pestaña que nombra una actuación del pack («⚡ Activación», «🗂 Historial»…) a una pestaña del panel.
+export function tabFor(label = '') {
+  const l = label.toLowerCase();
+  if (l.includes('activ')) return 'activation';
+  if (l.includes('impacto') || l.includes('historial')) return 'impact';
+  if (l.includes('nivel')) return 'level';
+  if (l.includes('servicio')) return 'services';
+  if (l.includes('comit')) return 'committee';
+  if (l.includes('comunica')) return 'comms';
+  return null;
+}
+
 
 async function getJSON(url) {
   const res = await fetch(url, { cache: 'no-cache' });
@@ -64,6 +78,7 @@ export function validatePack(pack) {
     for (const a of r.panel_actions || []) {
       seen(a.id, `${where}/acción en el panel`);
       if (a.when && !['before', 'after'].includes(a.when)) errors.push(`${where}/${a.id}: «when» debe ser before/after.`);
+      if (a.tab && !tabFor(a.tab)) errors.push(`${where}/${a.id}: pestaña del panel desconocida «${a.tab}».`);
     }
     for (const d of r.decisions || []) {
       seen(d.id, `${where}/decisión`);
@@ -74,11 +89,29 @@ export function validatePack(pack) {
       }
     }
   }
+  // Estado del copiloto al empezar cada ronda: «D0 07:33», escenarios E1… con categoría 1–3.
+  const TIME = /^D\d+\s+\d{1,2}:\d{2}$/;
+  for (const r of pack.rounds) {
+    const c = r.copilot;
+    if (!c) continue;
+    for (const k of ['clock', 'declared', 'onset']) {
+      if (c[k] != null && !TIME.test(String(c[k]).trim())) errors.push(`Ronda ${r.id}/copilot.${k}: formato «D0 07:33» esperado, se encontró «${c[k]}».`);
+    }
+    if (!c.clock) errors.push(`Ronda ${r.id}/copilot: falta «clock».`);
+    for (const [code, cat] of Object.entries(c.scenarios || {})) {
+      if (!/^E\d+$/i.test(code)) errors.push(`Ronda ${r.id}/copilot: escenario «${code}» no válido.`);
+      if (![1, 2, 3].includes(Number(cat))) errors.push(`Ronda ${r.id}/copilot: la categoría de ${code} debe ser 1, 2 o 3.`);
+    }
+    if (c.status && !['active', 'contained', 'closed'].includes(c.status)) errors.push(`Ronda ${r.id}/copilot: estado «${c.status}» no válido.`);
+  }
   // Hoja de respuestas (debrief.json): solo decisiones existentes y letras A–D.
   const decisionIds = new Set(pack.rounds.flatMap((r) => (r.decisions || []).map((d) => d.id)));
   for (const [id, a] of Object.entries((pack.debrief && pack.debrief.assessments) || {})) {
     if (!decisionIds.has(id)) errors.push(`debrief.json: la decisión ${id} no existe en el pack.`);
     else if (a.preferred_response && !ANSWER_IDS.includes(a.preferred_response)) errors.push(`debrief.json/${id}: respuesta de referencia «${a.preferred_response}» no válida.`);
+    if (a.severity_if_missed && !SEVERITIES.includes(a.severity_if_missed)) errors.push(`debrief.json/${id}: gravedad «${a.severity_if_missed}» no válida (high, medium o low).`);
+    const caps = pack.debrief && pack.debrief.capabilities;
+    if (a.capability && caps && !caps[a.capability]) errors.push(`debrief.json/${id}: la capacidad «${a.capability}» no tiene etiqueta en «capabilities».`);
   }
   if (m.decision_count && m.decision_count !== pack.rounds.reduce((n, r) => n + (r.decisions || []).length, 0)) {
     errors.push(`manifest.decision_count (${m.decision_count}) no coincide con las decisiones del pack.`);

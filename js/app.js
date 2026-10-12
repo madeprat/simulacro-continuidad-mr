@@ -5,6 +5,7 @@ import { CrisisPanel, tabFor } from './crisis-panel.js';
 import { voice } from './voice.js';
 import { loadPackIndex, loadPack, buildSteps, acceptRemoteAnswer } from './pack.js';
 import { Session, loadCheckpoint, checkpointKey, download, ENGINE_VERSION } from './session.js';
+import { shortPrint } from './integrity.js';
 import { loadCopilotData, roundState, computeSnapshot, widgetSpecs } from './copilot-view.js';
 import { SyncHub, syncLabel } from './sync.js';
 import { slotPose, slotFor } from './layout.js';
@@ -172,7 +173,7 @@ function startSync() {
   S.sync.addEventListener('join', (e) => {
     if (S.session && S.phase !== 'idle') S.session.log('sync_joined', { role: e.detail.role });
     // Quien llega recibe el estado actual del Panel de Crisis.
-    if (S.crisis && S.crisis.changedAt) S.sync.send('panel', { state: S.crisis.getShared(), action: 'estado' });
+    if (S.crisis && S.crisis.changed) S.sync.send('panel', { state: S.crisis.getShared(), action: 'estado' });
     if (S.session) for (const rec of Object.values(S.session.data.decisions)) {
       if (rec.answer_source === 'own') S.sync.send('answer', { decision_id: rec.decision_id, answer: rec.answer, round_id: rec.round_id });
     }
@@ -261,6 +262,8 @@ function prepareSession() {
       try { localStorage.setItem(checkpointKey(S.pack, S.sessionId, S.role) + ':archived:' + Date.now(), JSON.stringify(cp)); } catch { /* sin almacenamiento */ }
     }
     S.session = new Session(S.pack, { sessionId: S.sessionId, role: S.role, participant: S.participant });
+    // Huella del catálogo con el que calcula este visor: el debrief avisa si los visores no usaron el mismo.
+    if (S.copilot.data) S.session.data.catalog_fingerprint = S.copilot.data.fingerprint;
     S.session.save();
   }
 }
@@ -271,6 +274,7 @@ function renderSummary() {
   const fmt = (sec) => new Date(sec * 1000).toISOString().substring(11, 19);
   $('sum-title').textContent = `${s.data.exercise.id} · Sesión ${s.data.session_id} · ${s.role}`;
   $('sum-state').textContent = s.data.completed_at ? 'Sesión completada' : 'Sesión en curso (guardada; puede reanudarse)';
+  $('sum-print').textContent = shortPrint(s.head);
   const stats = [
     ['Rondas completadas', `${sum.rounds_completed} / ${sum.rounds_total}`],
     ['Decisiones registradas', `${sum.decisions_recorded} / ${sum.decisions_total}`],
@@ -860,7 +864,7 @@ function enterReady() {
   stepPanel.set({
     accent: THEME.lime, icon: '🟢', kicker: `${S.pack.manifest.exercise_id} · Sesión ${S.session.data.session_id}`,
     title: resuming ? 'Listo para reanudar' : 'Preparado',
-    source: S.roleInfo.name,
+    source: S.roleInfo.name + (S.copilot.data ? ` · catálogo ${shortPrint(S.copilot.data.fingerprint)}` : ''),
     body: resuming
       ? `Se reanudará en la ronda ${step.round ? step.round.number : '—'}. Espera la indicación del facilitador.`
       : 'Espera la orden del facilitador. Todos los visores pulsan COMENZAR a la vez.',
@@ -976,6 +980,7 @@ function runStep(index) {
     stepPanel.set({
       accent: THEME.lime, icon: '🏁', kicker: 'Fin del ejercicio', title: S.pack.manifest.name,
       body: `${sum.decisions_recorded} de ${sum.decisions_total} decisiones registradas (${sum.decisions_own} propias, ${sum.decisions_observed} observadas).\n\n${S.pack.manifest.ending || ''}`,
+      note: `Huella del registro: ${shortPrint(sess.head)} (anótala o fotografíala: el debrief la comprueba)`, noteColor: THEME.muted,
       buttons: [{ id: 'exit', label: 'Salir y exportar', primary: true }],
     });
     place(stepPanel, 'FRONT');

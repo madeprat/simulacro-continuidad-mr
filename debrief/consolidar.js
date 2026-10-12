@@ -2,6 +2,8 @@
 // Regla (diseño, cap. 07.4): para cada decisión, la fuente principal es el visor cuyo rol era el activo;
 // los demás aportan la respuesta observada y se marcan las discrepancias. Los originales no se modifican.
 
+import { csvRow } from '../js/csv.js';
+
 export const SESSION_SCHEMA = 'crisis.session/1.0';
 export const CONSOLIDATED_SCHEMA = 'crisis.consolidated/1.0';
 
@@ -25,6 +27,8 @@ export function validateLogs(logs) {
   const dup = roles.filter((r, i) => roles.indexOf(r) !== i);
   if (dup.length) warnings.push(`Hay más de un registro del rol ${[...new Set(dup)].join(', ')}; se usa el primero como fuente principal.`);
   for (const l of logs) if (!l.data.completed_at) warnings.push(`${l.name}: la sesión de ${l.data.local_role} no se completó.`);
+  const prints = [...new Set(logs.map((l) => l.data.catalog_fingerprint).filter(Boolean))];
+  if (prints.length > 1) warnings.push(`Los visores calcularon con catálogos distintos (huellas ${prints.join(', ')}): el impacto y el nivel pueden no coincidir entre roles.`);
   return { errors, warnings };
 }
 
@@ -224,16 +228,14 @@ export function toCSV(result) {
   const roles = result.roles_loaded;
   const cols = ['session_id', 'exercise_id', 'exercise_version', 'round_id', 'decision_id', 'active_role', 'answer', 'source',
     'response_seconds', 'answered_at', ...roles.map((r) => `observed_${r}`), 'status', 'preferred_response', 'reference_rating', 'severity_if_missed', 'capability'];
-  const esc = (v) => { const s = v == null ? '' : String(v); return /[",;\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
-  const rows = result.decisions.map((d) => [result.session_id, result.exercise?.id, result.exercise?.version, d.round_id, d.decision_id,
+  const rows = result.decisions.map((d) => csvRow([result.session_id, result.exercise?.id, result.exercise?.version, d.round_id, d.decision_id,
     d.active_role, d.answer, d.source, d.response_seconds, d.answered_at, ...roles.map((r) => d.observed[r] || ''), d.status,
-    d.preferred_response, d.reference_rating, d.severity_if_missed, d.capability].map(esc).join(','));
+    d.preferred_response, d.reference_rating, d.severity_if_missed, d.capability]));
   return '﻿' + [cols.join(','), ...rows].join('\r\n') + '\r\n';
 }
 
 export function findingsCSV(result) {
-  const esc = (v) => { const s = v == null ? '' : String(v); return /[",;\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
   const cols = ['session_id', 'exercise_id', 'id', 'decision_id', 'capability', 'severity', 'finding', 'action', 'owner', 'due'];
-  const rows = (result.findings || []).map((f) => [result.session_id, result.exercise?.id, f.id, f.decision_id, f.capability, f.severity, f.text, f.action, f.owner, f.due].map(esc).join(','));
+  const rows = (result.findings || []).map((f) => csvRow([result.session_id, result.exercise?.id, f.id, f.decision_id, f.capability, f.severity, f.text, f.action, f.owner, f.due]));
   return '﻿' + [cols.join(','), ...rows].join('\r\n') + '\r\n';
 }
