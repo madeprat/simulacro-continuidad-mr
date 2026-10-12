@@ -5,7 +5,8 @@
 
 export function parseNum(raw) {
   if (raw === null || raw === undefined || raw === '') return null;
-  let str = String(raw).trim().replace(/\s+/g, '');
+  // Fuera símbolos y unidades («1.500 €», «12,5 h»): solo cifras, signo y separadores.
+  let str = String(raw).trim().replace(/[^\d,.-]/g, '');
   if (!str) return null;
   const hasComma = str.indexOf(',') >= 0;
   const hasDot = str.indexOf('.') >= 0;
@@ -14,6 +15,9 @@ export function parseNum(raw) {
     else str = str.replace(/,/g, '');
   } else if (hasComma) {
     str = str.replace(',', '.');
+  } else if (/^-?\d{1,3}(\.\d{3})+$/.test(str)) {
+    // Solo puntos en grupos de tres («1.500», «2.000.000»): separador de miles, como en las hojas en español.
+    str = str.replace(/\./g, '');
   }
   const n = parseFloat(str);
   return isFinite(n) ? n : null;

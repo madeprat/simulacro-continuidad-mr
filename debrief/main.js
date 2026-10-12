@@ -172,3 +172,8 @@ $('btn-print').addEventListener('click', () => window.print());
 
 // Gancho de pruebas automatizadas.
 if (new URLSearchParams(location.search).has('debug')) window.__debrief = { get current() { return current; } };
+
+// Sin conexión también cuando el PC del facilitador solo abre el debrief.
+if ('serviceWorker' in navigator && location.protocol === 'https:') {
+  navigator.serviceWorker.register('../sw.js', { scope: '../' }).catch(() => {});
+}

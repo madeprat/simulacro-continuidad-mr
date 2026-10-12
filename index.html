@@ -27,7 +27,7 @@
       <ul id="pack-errors" class="errors"></ul>
 
       <label class="field">
-        <span>Código de sesión (el mismo en los tres visores)</span>
+        <span>Código de sesión (cópialo igual en los demás visores)</span>
         <input id="session-id" autocomplete="off" required pattern="[A-Za-z0-9._\-]{1,40}">
       </label>
 
@@ -72,6 +72,7 @@
       <button id="btn-brief-summary" type="button">Ver resumen y exportar lo guardado</button>
     </section>
     <section class="card options">
+      <label class="check"><input type="checkbox" id="opt-room"> Modo sala: anclar el Panel de Crisis a una pared calibrada (solo si estáis en la misma sala; por defecto el centro de mando se coloca alrededor de cada uno y sirve también en remoto)</label>
       <label class="check"><input type="checkbox" id="opt-depth" checked> Oclusión con objetos reales (Quest 3: las personas y los muebles tapan los paneles)</label>
       <label class="check"><input type="checkbox" id="opt-voice" checked> Voz narradora (lee alertas, llamadas y preguntas)</label>
       <label class="check"><input type="checkbox" id="opt-sync" checked> Sincronizar en directo con los otros visores (necesita Internet para conectar)</label>
@@ -82,7 +83,7 @@
       <button id="btn-enter-desktop" type="button">Modo escritorio (pruebas)</button>
       <button id="btn-back-setup" type="button" class="link">← Cambiar sesión o rol</button>
     </div>
-    <p class="hint">Al entrar: calibra la pared del Panel de Crisis, la puerta, la mesa y la zona de lectura; después espera la orden del facilitador y pulsa COMENZAR.</p>
+    <p class="hint">Al entrar, mira al frente: el centro de mando se coloca a tu alrededor (Panel de Crisis a la izquierda, lectura al frente, resumen del rol a la derecha). En modo sala, calibra primero la pared, la puerta, la mesa y la zona de lectura. Después espera la orden del facilitador y pulsa COMENZAR.</p>
   </main>
 
   <!-- 3 · Ejecución (RA o escritorio) -->

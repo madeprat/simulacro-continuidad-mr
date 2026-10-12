@@ -1,11 +1,12 @@
 # Simulacro de Continuidad MR · Meta Quest + Copiloto de Continuidad
 
-Kit para ejercicios presenciales de continuidad de negocio (ISO 22301) con tres piezas que funcionan
+Kit para ejercicios de continuidad de negocio (ISO 22301), en la misma sala o cada participante desde su sitio,
+con tres piezas que funcionan
 **sin servidor, sin base de datos y sin conexión** una vez cargadas:
 
 | Pieza | Dónde | Qué hace |
 |---|---|---|
-| **Simulador MR** (`/`) | Navegador de Meta Quest (WebXR, passthrough) | Rondas, injects en la sala, decisiones A–D por rol, **Panel de Crisis virtual** en la pared (el copiloto dentro de las gafas), voz narradora, audio 3D, registro de evidencias JSON/CSV |
+| **Simulador MR** (`/`) | Navegador de Meta Quest (WebXR, passthrough) | **Centro de mando** alrededor de cada participante: rondas, injects, decisiones A–D por rol, **Panel de Crisis virtual** (el copiloto dentro de las gafas), barra de mando con línea de tiempo, voz narradora, audio 3D, registro de evidencias JSON/CSV |
 | **Copiloto de Continuidad web** (`/copiloto/`) | Opcional: portátil o TV | La misma lógica en versión web completa (con historial, ficha imprimible y catálogo desde Google Sheets). Modo ejercicio con reloj simulado |
 | **Debrief** (`/debrief/`) | PC del facilitador | Consolida los registros de R1/R2/R3: valoración por capacidad frente a la hoja de respuestas, hallazgos y acciones de mejora editables, actuaciones en el Panel de Crisis, discrepancias, tiempos y cronología; exporta JSON/CSV/PDF |
 
@@ -24,33 +25,54 @@ Después:
 Tras la primera visita todo queda en caché (service worker) y funciona sin red. En local basta con
 `python3 -m http.server 8080` (las gafas necesitan HTTPS o `adb reverse tcp:8080 tcp:8080`).
 
-## Panel de Crisis virtual (sin TV)
+## Centro de mando (sin pared ni calibración)
 
-La TV ya no es necesaria. Al calibrar, el primer punto es la **pared del Panel de Crisis**: allí aparece una
-pantalla grande con las pestañas del copiloto (Activación, Impacto, Nivel, Servicios RTO, Comité, Comunicaciones)
+Al entrar, cada participante mira al frente y los paneles se colocan **en un arco a su alrededor**, no en las paredes.
+Funciona igual en una sala compartida, en casa o en un despacho, y no hay que calibrar nada:
+
+| Zona | Qué hay |
+|---|---|
+| Frente | Lectura principal: injects, decisiones y fin de ronda. Encima, la **barra de mando** |
+| Izquierda | **Panel de Crisis**; las actuaciones que pide la ronda aparecen entre el panel y el frente |
+| Derecha | Tarjetas de resumen del rol (botón *Resumen*) y avisos que llegan «de fuera» (ancla `DOOR`) |
+| Abajo | Documentos «sobre la mesa» (ancla `TABLE`), algo inclinados |
+
+- **Barra de mando:** rol, ronda, reloj del ejercicio, quién está conectado, botones (*Menú*, *Resumen*, *Voz*,
+  *Recentrar*) y la **línea de tiempo** de la ronda en curso: avisos vistos, actuación en el panel y decisiones con la
+  letra registrada.
+- **Recentrar:** si el participante se gira o cambia de silla, mira al frente y pulsa *Recentrar* (en la barra, en la
+  pantalla de inicio o en el menú).
+- Los paneles entran con un fundido breve y el mando vibra al pasar por un botón y al pulsarlo.
+- **Modo sala** (casilla del briefing): vuelve al comportamiento anterior, con el Panel de Crisis anclado a una pared
+  calibrada (pared, puerta, mesa y zona de lectura). Útil solo si todos comparten sala y queréis el panel en la pared.
+
+Las anclas del pack (`TV`, `DOOR`, `TABLE`, `FRONT`) siguen siendo válidas: en el centro de mando se traducen a
+las zonas del arco (`js/layout.js`).
+
+### Panel de Crisis virtual
+
+Pantalla grande con las pestañas del copiloto (Activación, Impacto, Nivel, Servicios RTO, Comité, Comunicaciones)
 que se opera con el rayo del mando o con la mano:
 
 - Seleccionar escenarios y categoría (C1–C3), *Analizar/Recalcular impacto*, ajustar la hora real de inicio.
 - Reloj de seguimiento y pérdida acumulada; pausar, reanudar o cerrar el seguimiento.
 - Nivel con el desglose de puntos; servicios por RTO paginados; comité (ficha y convocatoria); comunicaciones
   con cuenta atrás RGPD y fichas que se marcan como notificadas.
-- Cuando una ronda pide una actuación, el panel salta solo a la pestaña indicada y la instrucción aparece a su derecha.
+- Cuando una ronda pide una actuación, el panel salta solo a la pestaña indicada y la instrucción aparece a su lado.
 - Cada actuación queda en el registro (`panel_analyzed`, `panel_onset_set`, `panel_status`, `panel_comm_marked`,
   `panel_committee_convened`, `panel_disaster`) y aparece en la cronología del debrief.
-- Al empezar cada ronda el panel se ajusta al **estado de referencia** del pack, para que los tres visores
-  (sin red entre ellos) vean lo mismo; dentro de la ronda cada uno puede operarlo.
-- El botón *Resumen* del HUD muestra, a la izquierda del panel, las tarjetas del rol (R1 nivel + reloj,
-  R2 nivel + servicios, R3 comunicaciones + reloj).
+- Al empezar cada ronda el panel se ajusta al **estado de referencia** del pack, para que todos los visores
+  (también sin red entre ellos) vean lo mismo; dentro de la ronda cada uno puede operarlo.
 
 ### Inmersión
 
 - **Voz narradora** (`SpeechSynthesis`, sin red): lee el inicio de ronda, alertas, llamadas, documentos, actuaciones
-  y preguntas. Botón *Voz* en el HUD y casilla en el briefing. Si el visor no tiene voz en español, queda en silencio.
-- **Audio posicional** (`THREE.PositionalAudio`): el teléfono suena desde la mesa y cada aviso desde su ancla
-  (puerta, panel…), con atenuación por distancia.
+  y preguntas. Botón *Voz* en la barra de mando y casilla en el briefing. Si el visor no tiene voz en español, queda en silencio.
+- **Audio posicional** (`THREE.PositionalAudio`): cada aviso suena desde el panel donde aparece, con atenuación por
+  distancia.
 - **Oclusión por profundidad** (WebXR `depth-sensing`, Quest 3/3S): las personas y los muebles reales tapan los paneles.
-  Casilla en el briefing; si el visor no la ofrece, se entra sin ella. Los paneles de pared se separan 15 cm para
-  que la pared no los corte.
+  Casilla en el briefing; si el visor no la ofrece, se entra sin ella. En modo sala, los paneles de pared se separan
+  15 cm para que la pared no los corte.
 - **Texto estable a distancia:** texturas con mipmaps trilineales (`LinearMipmapLinearFilter`) y la anisotropía
   máxima del visor.
 - *Estimación de luz:* no se usa. Los paneles son interfaz sin iluminación y el navegador de Quest no expone
@@ -65,25 +87,31 @@ código de sesión** forman una sala:
   pausar/cerrar, comunicaciones notificadas, convocatoria) aparece al instante en los demás, con aviso
   («R2 ha analizado el impacto») y voz. La pestaña abierta es de cada uno. Un visor que llega tarde recibe el estado
   actual y el estado de referencia de la ronda no pisa lo ya operado.
-- **Decisiones:** cuando el rol activo confirma, su letra llega preseleccionada a los otros visores
-  («Recibido de R2: C»); basta confirmar (o elegir otra si lo anunciado fue distinto). Se registra como observada
-  con `sync_from`, así el debrief distingue lo sincronizado de lo tecleado.
-- **Presencia:** el HUD muestra quién está conectado (🔗 R1 R3) y el menú ofrece *Ir a donde está R2* si alguien
+- **Decisiones:** cuando el rol activo confirma, su elección aparece resaltada en los demás visores
+  («R2 ha elegido C · registrada automáticamente»), se registra sola como observada con `sync_from` y el visor avanza
+  al siguiente paso a los pocos segundos (o al pulsar *Continuar*). Si un visor llega a la decisión cuando ya estaba
+  tomada, la ve y avanza igual. Solo se acepta la respuesta del visor cuyo rol decide y con una letra A–D; si el rol
+  activo corrige su decisión, la corrección llega también. Sin conexión con ese visor, se registra a mano la letra
+  que anuncie (en remoto, por teléfono); si después llega una letra distinta, se conserva la registrada a mano y el
+  debrief marca la discrepancia.
+- **Presencia:** la barra de mando muestra quién está conectado (🔗 R1 · R3) y el menú ofrece *Ir a donde está R2* si alguien
   va por otro paso.
 - **Sin red no pasa nada:** cada visor sigue funcionando solo y reintenta la conexión cada pocos segundos.
 
 Cómo funciona: WebRTC con [PeerJS](https://peerjs.com) (incluido en `vendor/`). El primer visor ocupa el identificador
 de anfitrión de la sala y reenvía los mensajes; si se cae, otro lo sustituye automáticamente. Hace falta Internet para
 el emparejamiento (servidor público de PeerJS); los datos van directos entre visores o, si la wifi los aísla, por
-los servidores TURN de PeerJS. Solo viajan datos del ejercicio (ficticios). Usad un código de sesión poco común
-(p. ej. `20261003-sala2-k7`) para no coincidir con otra sala.
+los servidores TURN de PeerJS. Solo viajan datos del ejercicio (ficticios). El código de sesión propuesto lleva la
+fecha y tres caracteres al azar (p. ej. `20261012-K7F`) para no coincidir con otra sala: el primer visor lo genera y
+los demás lo copian. No hay canal de voz: si los participantes no comparten sala, que hablen por teléfono o por
+videollamada.
 
 Para probar sin gafas: abre tres pestañas con `?sync=local` (sincroniza pestañas del mismo navegador).
 
 ## Cómo encaja en un simulacro
 
-1. **Visores (Quest):** mismo código de sesión, un rol por visor, calibración de pared del panel/puerta/mesa/frente
-   y COMENZAR. El Panel de Crisis virtual sustituye a la TV.
+1. **Visores (Quest):** mismo código de sesión, un rol por visor, mirar al frente y COMENZAR. En la misma sala o cada
+   uno desde su sitio (con teléfono o videollamada para hablar). El Panel de Crisis virtual sustituye a la TV.
 2. **Opcional (facilitador):** el copiloto web (`/copiloto/?ejercicio`, *Aplicar ronda*) en un portátil o TV sirve
    para seguir el ejercicio desde fuera o proyectarlo; usa el mismo motor y el mismo estado de ronda, pero no se
    sincroniza en directo con las gafas.
@@ -148,6 +176,8 @@ validar; el debrief lo advierte. Nunca se muestra a los participantes durante el
 ```
 index.html, js/, css/           Simulador MR (WebXR)
 js/crisis-panel.js              Panel de Crisis virtual (copiloto dentro de las gafas)
+js/layout.js                    Zonas del centro de mando (arco alrededor del participante)
+js/command-bar.js               Barra de mando y línea de tiempo de la ronda
 js/copilot-view.js              Tarjetas de resumen por rol
 js/voice.js                     Voz narradora (SpeechSynthesis)
 js/sync.js                      Sincronización entre visores (PeerJS/WebRTC o pestañas locales)
@@ -162,13 +192,13 @@ debrief/                        Consolidador de registros
 packs/tramontana/               Pack de ejemplo
 tools/generar_catalogo.py       Genera el catálogo ficticio
 tools/comprobar-anonimato.mjs   Control de anonimato (también en CI)
-tests/                          Pruebas del motor y del consolidador (npm test)
+tests/                          Pruebas del motor, del consolidador, de los packs y del simulador (npm test)
 ```
 
 ## Comprobaciones
 
 ```
-npm test                              # motor del copiloto y consolidador
+npm test                              # motor, consolidador, packs, centro de mando y sincronización
 node tools/comprobar-anonimato.mjs    # sin referencias a la organización real ni correos reales
 ```
 
@@ -180,3 +210,6 @@ La integración continua (`.github/workflows/comprobaciones.yml`) ejecuta ambas 
 - Multimedia en injects (audio de llamadas, recortes de prensa ficticios) y consecuencias condicionales.
 - Hoja de respuestas en `debrief.json` para la valoración de referencia.
 - Sincronización opcional TV ↔ gafas por red local.
+- Consola del facilitador para lanzar rondas e injects a todos a la vez (ejercicios en remoto).
+- Maqueta esquemática de sedes y dependencias en el centro de mando, generada desde el pack.
+- Texto vectorial (MSDF) en los paneles para ganar nitidez y no redibujar texturas completas.

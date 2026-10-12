@@ -13,6 +13,13 @@ test('parseNum admite formatos español e inglés', () => {
   assert.equal(core.parseNum('1,234.56'), 1234.56);
   assert.equal(core.parseNum('0,25'), 0.25);
   assert.equal(core.parseNum(''), null);
+  // Miles con punto y símbolos de una hoja con formato de moneda o unidades.
+  assert.equal(core.parseNum('1.500'), 1500);
+  assert.equal(core.parseNum('1.500 €'), 1500);
+  assert.equal(core.parseNum('2.000.000'), 2000000);
+  assert.equal(core.parseNum('950,00 €'), 950);
+  assert.equal(core.parseNum('12,5 h'), 12.5);
+  assert.equal(core.parseNum('0.25'), 0.25);
 });
 
 test('probPct e impactTone', () => {

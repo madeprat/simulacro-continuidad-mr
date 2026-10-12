@@ -105,6 +105,19 @@ export function buildSteps(pack) {
   return steps;
 }
 
+export function findDecision(pack, id) {
+  for (const round of pack.rounds) for (const decision of round.decisions || []) if (decision.id === id) return { round, decision };
+  return null;
+}
+
+// Respuesta recibida de otro visor: solo se acepta si la envía el rol que decide, con una letra A–D
+// y para una decisión que existe en el pack. Devuelve { round, decision, answer, from } o null.
+export function acceptRemoteAnswer(pack, msg) {
+  const found = msg && findDecision(pack, msg.decision_id);
+  if (!found || msg.from !== found.decision.role || !ANSWER_IDS.includes(msg.answer)) return null;
+  return { ...found, answer: msg.answer, from: msg.from };
+}
+
 export function assessmentFor(pack, decision) {
   return decision.assessment || (pack.debrief.assessments || {})[decision.id] || null;
 }
