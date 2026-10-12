@@ -1,0 +1,43 @@
+{
+  "roles": [
+    {
+      "id": "R1",
+      "name": "R1 · Dirección del colegio",
+      "functions": [
+        "Dirige la emergencia y decide: evacuar, cerrar, reabrir.",
+        "Da la cara ante familias, Inspección y prensa.",
+        "Autoriza cualquier comunicación hacia fuera."
+      ],
+      "rules": [
+        "Solo respondes cuando la decisión es de R1.",
+        "Si los visores no están conectados, di tu letra en voz alta (o por teléfono) antes de confirmar."
+      ]
+    },
+    {
+      "id": "R2",
+      "name": "R2 · Coordinación de emergencias y Panel de Crisis",
+      "functions": [
+        "Manda en el punto de encuentro: recuento, bomberos, accesos.",
+        "Opera el Panel de Crisis y explica qué dice la maqueta.",
+        "Coordina mantenimiento, comedor y autobuses."
+      ],
+      "rules": [
+        "Solo respondes cuando la decisión es de R2.",
+        "Si los visores no están conectados, di tu letra en voz alta (o por teléfono) antes de confirmar."
+      ]
+    },
+    {
+      "id": "R3",
+      "name": "R3 · Comunicación con familias y autoridades",
+      "functions": [
+        "Escribe y envía los avisos a las familias.",
+        "Vigila redes sociales y frena los bulos.",
+        "Habla con la Inspección educativa y la aseguradora."
+      ],
+      "rules": [
+        "Solo respondes cuando la decisión es de R3.",
+        "Si los visores no están conectados, di tu letra en voz alta (o por teléfono) antes de confirmar."
+      ]
+    }
+  ]
+}

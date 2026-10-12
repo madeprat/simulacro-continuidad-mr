@@ -7,6 +7,10 @@
     {
       "path": "packs/gregal/",
       "label": "GREGAL · 3 rondas · 6 decisiones · multisede"
+    },
+    {
+      "path": "packs/altamar/",
+      "label": "ALTAMAR · colegio · 3 rondas · 6 decisiones"
     }
   ]
 }

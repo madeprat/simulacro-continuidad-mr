@@ -1,0 +1,289 @@
+{
+  "rounds": [
+    {
+      "id": "R01",
+      "number": 1,
+      "title": "Humo en el comedor",
+      "crisis_time": "T+0",
+      "copilot": {
+        "clock": "D0 11:21",
+        "scenarios": {}
+      },
+      "events": [
+        {
+          "id": "R01-E1",
+          "type": "ALERT",
+          "anchor": "FRONT",
+          "title": "Alarma de incendio · 11:20",
+          "text": "Salta la alarma del pabellón principal. En la cocina del comedor arde la campana extractora y el humo ya llega al pasillo de 1.º y 2.º de ESO. En el centro hay 640 alumnos."
+        },
+        {
+          "id": "R01-E2",
+          "type": "PHONE",
+          "anchor": "DOOR",
+          "source": "Jefa de cocina",
+          "title": "11:21 h",
+          "text": "«¡El extintor no ha bastado! Hemos cortado el gas, pero el humo es negro y baja por la escalera.»"
+        },
+        {
+          "id": "R01-E3",
+          "type": "MESSAGE",
+          "anchor": "TABLE",
+          "source": "Conserjería",
+          "title": "Quién hay dentro",
+          "text": "3.º B está de excursión. Dos alumnos de 1.º A estaban en la enfermería cuando sonó la alarma. El ascensor está bloqueado en la planta 2."
+        }
+      ],
+      "panel_actions": [
+        {
+          "id": "R01-A1",
+          "when": "after",
+          "tab": "⚡ Activación",
+          "text": "Declarad en el Panel de Crisis lo que está pasando (escenario y categoría) y pulsad «Analizar impacto». Mirad cómo se enciende la maqueta."
+        }
+      ],
+      "decisions": [
+        {
+          "id": "D1",
+          "role": "R1",
+          "question": "Son las 11:21. ¿Qué ordenas?",
+          "answers": [
+            {
+              "id": "A",
+              "text": "Esperar a que lleguen los bomberos y digan si hay que evacuar."
+            },
+            {
+              "id": "B",
+              "text": "Evacuación general ya, según el plan de autoprotección: llamar al 112 y activar el equipo de emergencia."
+            },
+            {
+              "id": "C",
+              "text": "Evacuar solo el pabellón principal; el resto sigue en clase para no crear pánico."
+            },
+            {
+              "id": "D",
+              "text": "Llamar a las familias para que vengan a recoger a sus hijos."
+            }
+          ]
+        },
+        {
+          "id": "D2",
+          "role": "R2",
+          "question": "En el punto de encuentro, el recuento dice que faltan los dos alumnos de 1.º A. ¿Qué haces?",
+          "answers": [
+            {
+              "id": "A",
+              "text": "Entrar tú a buscarlos al pabellón."
+            },
+            {
+              "id": "B",
+              "text": "Revisar listas de enfermería y de quién salió por otras puertas, preguntar a los tutores y, si siguen sin aparecer, decir a los bomberos nada más llegar quiénes son y dónde se les vio por última vez."
+            },
+            {
+              "id": "C",
+              "text": "Esperar: seguro que están con otro grupo."
+            },
+            {
+              "id": "D",
+              "text": "Pedir a los alumnos mayores que los busquen por el patio y los edificios."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "R02",
+      "number": 2,
+      "title": "Las familias llegan antes que la información",
+      "crisis_time": "T+40 min",
+      "copilot": {
+        "clock": "D0 12:00",
+        "declared": "D0 11:21",
+        "onset": "D0 11:18",
+        "scenarios": {
+          "E1": 2,
+          "E3": 2
+        }
+      },
+      "events": [
+        {
+          "id": "R02-E1",
+          "type": "ALERT",
+          "anchor": "FRONT",
+          "title": "Bomberos · 11:52",
+          "text": "Fuego apagado. Los dos alumnos de 1.º A aparecieron a las 11:34 en el gimnasio: salieron por la puerta de atrás con la enfermera. Están bien. El pabellón principal queda precintado y sin electricidad: ni red, ni wifi, ni pizarras."
+        },
+        {
+          "id": "R02-E2",
+          "type": "MESSAGE",
+          "anchor": "DOOR",
+          "source": "Redes sociales",
+          "title": "Vídeo viral",
+          "text": "Un vídeo del humo con el texto «Arde el Altamar y hay niños dentro» supera las 15.000 reproducciones en 20 minutos. Algunas familias lo están compartiendo."
+        },
+        {
+          "id": "R02-E3",
+          "type": "PHONE",
+          "anchor": "DOOR",
+          "source": "Conserjería",
+          "title": "12:00 h",
+          "text": "«La centralita no para: más de 200 llamadas. Y hay coches de familias en doble fila bloqueando la entrada de los bomberos.»"
+        }
+      ],
+      "panel_actions": [
+        {
+          "id": "R02-A1",
+          "when": "before",
+          "tab": "🎯 Nivel",
+          "text": "El panel ya tiene el estado de la ronda (edificio inutilizable y red caída). Revisad el nivel y fijaos en qué servicios del colegio se han puesto en rojo en la maqueta."
+        }
+      ],
+      "decisions": [
+        {
+          "id": "D3",
+          "role": "R3",
+          "question": "¿Qué comunicas a las familias y cómo?",
+          "answers": [
+            {
+              "id": "A",
+              "text": "Nada hasta tener todos los datos: mejor no equivocarse."
+            },
+            {
+              "id": "B",
+              "text": "Ya mismo, por la app y por SMS, a todas las familias: todo el alumnado está bien y localizado, cómo y dónde recogerlos de forma ordenada y a qué hora llega la siguiente actualización. El mismo texto en la web y en redes."
+            },
+            {
+              "id": "C",
+              "text": "Contestar uno a uno en redes a quien comparte el vídeo."
+            },
+            {
+              "id": "D",
+              "text": "Pedir a los alumnos que avisen ellos a sus familias con el móvil."
+            }
+          ]
+        },
+        {
+          "id": "D4",
+          "role": "R2",
+          "question": "Los coches de las familias bloquean el acceso de los bomberos. ¿Qué haces?",
+          "answers": [
+            {
+              "id": "A",
+              "text": "Nada: eso es cosa de la policía."
+            },
+            {
+              "id": "B",
+              "text": "Pedir a la Policía Local que corte la calle y organizar la recogida por la puerta del polideportivo, con profesorado entregando a cada alumno según las listas."
+            },
+            {
+              "id": "C",
+              "text": "Abrir la puerta principal para que entren todos los coches."
+            },
+            {
+              "id": "D",
+              "text": "Entregar a cada alumno a quien lo pida en la puerta, sin listas, para despejar rápido."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "R03",
+      "number": 3,
+      "title": "¿Mañana hay colegio?",
+      "crisis_time": "T+6 h",
+      "copilot": {
+        "clock": "D0 17:20",
+        "declared": "D0 11:21",
+        "onset": "D0 11:18",
+        "scenarios": {
+          "E1": 3,
+          "E3": 2,
+          "E7": 2
+        }
+      },
+      "events": [
+        {
+          "id": "R03-E1",
+          "type": "DOCUMENT",
+          "anchor": "TABLE",
+          "source": "Informe de bomberos y aseguradora",
+          "title": "Daños",
+          "text": "El pabellón principal no podrá usarse en al menos 10 días: humo en cocina, comedor y dos plantas de aulas. El edificio de Primaria y el polideportivo están bien."
+        },
+        {
+          "id": "R03-E2",
+          "type": "MESSAGE",
+          "anchor": "DOOR",
+          "source": "Empresa de comedor",
+          "title": "Sin cocina",
+          "text": "Sin cocina no pueden servir comidas mañana. Ofrecen menú frío desde su cocina central a partir del jueves."
+        },
+        {
+          "id": "R03-E3",
+          "type": "PHONE",
+          "anchor": "DOOR",
+          "source": "Inspección educativa",
+          "title": "17:15 h",
+          "text": "«Necesitamos vuestro plan para reanudar las clases antes de las 20:00. 2.º de Bachillerato tiene exámenes de evaluación la semana que viene.»"
+        }
+      ],
+      "panel_actions": [
+        {
+          "id": "R03-A1",
+          "when": "before",
+          "tab": "📡 Comunicaciones",
+          "text": "Abrid la pestaña Comunicaciones, contexto «Autoridades y terceros»: mirad el plazo del plan para la Inspección. Después decidid."
+        }
+      ],
+      "decisions": [
+        {
+          "id": "D5",
+          "role": "R1",
+          "question": "¿Cómo reanudas la actividad?",
+          "answers": [
+            {
+              "id": "A",
+              "text": "Cerrar el colegio hasta que el pabellón esté reparado."
+            },
+            {
+              "id": "B",
+              "text": "Reabrir mañana por fases: Primaria en su edificio; ESO y Bachillerato en el polideportivo y en aulas libres, con horario reducido; 2.º de Bachillerato con prioridad; clases en línea solo donde no haya espacio. Revisar el plan en tres días."
+            },
+            {
+              "id": "C",
+              "text": "Volver mañana al pabellón principal: el humo no es peligroso."
+            },
+            {
+              "id": "D",
+              "text": "Pasar a todo el colegio a clases en línea durante un mes."
+            }
+          ]
+        },
+        {
+          "id": "D6",
+          "role": "R3",
+          "question": "Esta tarde, ¿qué envías a la Inspección y a las familias?",
+          "answers": [
+            {
+              "id": "A",
+              "text": "Un comunicado general: «Estamos trabajando en ello»."
+            },
+            {
+              "id": "B",
+              "text": "El plan por fases con fechas: qué cambia en cada etapa, qué pasa con el comedor y los autobuses, a quién preguntar y cuándo será la siguiente actualización. A la Inspección, además, el registro de lo ocurrido."
+            },
+            {
+              "id": "C",
+              "text": "Nada hasta que llegue el informe definitivo de la aseguradora."
+            },
+            {
+              "id": "D",
+              "text": "Solo una publicación en redes sociales."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

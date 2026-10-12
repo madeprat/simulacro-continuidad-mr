@@ -21,7 +21,6 @@ export const TABS = [
   { id: 'committee', icon: '👥', label: 'Comité' },
   { id: 'comms', icon: '📡', label: 'Comunicaciones' },
 ];
-const CTX = [{ id: 'seguridad', label: 'Incidente de seguridad' }, { id: 'publico', label: 'Afecta a cliente público' }, { id: 'privacidad', label: 'Datos personales en riesgo' }];
 const SVC_PAGE = 8;
 
 // La traducción de pestañas vive en pack.js (la usa también la validación del pack).
@@ -33,6 +32,8 @@ export class CrisisPanel {
   constructor({ data, onEvent = () => {}, onChange = () => {} }) {
     this.data = data;
     this.ctx0 = { scenarioRows: data.scenarios, estrategias: data.estrategias, config: data.config };
+    // Comunicaciones del catálogo del pack (p. ej. un colegio) o, si no trae, las de un incidente de seguridad.
+    this.comms = data.comms || { contexts: core.COMMS_CONTEXTS, items: core.COMMS_TABLE };
     this.onEvent = onEvent;
     this.onChange = onChange; // se llama tras cada cambio compartible (para sincronizar con los otros visores)
     this.roundId = null;
@@ -53,7 +54,7 @@ export class CrisisPanel {
     this.heightM = WIDTH_M * H / W;
     this.regions = [];
     this.hover = null;
-    this.state = { tab: 'activation', selected: {}, act: null, svcPage: 0, commsCtx: 'seguridad', commsItem: null, sent: {}, convened: null, notice: '' };
+    this.state = { tab: 'activation', selected: {}, act: null, svcPage: 0, commsCtx: (data.comms || { contexts: core.COMMS_CONTEXTS }).contexts[0].id, commsItem: null, sent: {}, convened: null, notice: '' };
     this.base = null;
     this.roundStartReal = Date.now();
     this.lastSecond = -1;
@@ -562,14 +563,14 @@ export class CrisisPanel {
     });
     const dy = area.y + 62 + 7 * 68 + 10;
     this.kicker('Documentos operativos', rx + 24, dy);
-    ['Directorio del equipo de respuesta', 'Plan de gestión de incidentes', 'Estrategia de recuperación'].forEach((d, i) => this.text('📄 ' + d, rx + 24, dy + 38 + i * 36, 23, '#cae4ff', 500, rw - 48));
+    (this.data.config.documents || ['Directorio del equipo de respuesta', 'Plan de gestión de incidentes', 'Estrategia de recuperación']).forEach((d, i) => this.text('📄 ' + d, rx + 24, dy + 38 + i * 36, 23, '#cae4ff', 500, rw - 48));
   }
 
   drawComms(area, snap) {
     const st = this.state;
     const cw = (area.w * 0.6 - 20) / 3;
-    CTX.forEach((c, i) => this.button('ctx:' + c.id, area.x + i * (cw + 10), area.y, cw, 64, c.label, { active: st.commsCtx === c.id, px: 23 }));
-    const items = core.getCommsForCtx(st.commsCtx);
+    this.comms.contexts.slice(0, 3).forEach((c, i) => this.button('ctx:' + c.id, area.x + i * (cw + 10), area.y, cw, 64, c.label, { active: st.commsCtx === c.id, px: 23 }));
+    const items = core.getCommsForCtx(st.commsCtx, this.comms.items);
     const mandatory = items.filter((i) => i.mandatory).length;
     let y = area.y + 84;
     this.text(`Sí — hay ${items.length} comunicaciones${mandatory ? `, ${mandatory} obligatorias` : ''}.`, area.x, y, 27, THEME.text, 700);

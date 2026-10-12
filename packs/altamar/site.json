@@ -1,0 +1,167 @@
+{
+  "schema": "crisis.site/1.0",
+  "name": "Colegio Altamar",
+  "note": "Colegio ficticio de 640 alumnos: pabellón principal (ESO, Bachillerato, comedor y secretaría), edificio de Primaria, polideportivo, conserjería y proveedores.",
+  "nodes": [
+    {
+      "id": "PAB",
+      "type": "building",
+      "label": "Pabellón principal",
+      "floors": 3,
+      "x": -1.0,
+      "z": -1.4,
+      "w": 1.8,
+      "d": 1.1,
+      "scenarios": [
+        "E1"
+      ],
+      "services": [
+        "COL-02",
+        "COL-03",
+        "COL-04",
+        "COL-09",
+        "COL-12",
+        "COL-16"
+      ]
+    },
+    {
+      "id": "COCINA",
+      "type": "room",
+      "label": "Cocina y comedor",
+      "x": -2.8,
+      "z": 0.4,
+      "w": 1.2,
+      "d": 0.8,
+      "scenarios": [
+        "E1"
+      ],
+      "services": [
+        "COL-05"
+      ]
+    },
+    {
+      "id": "PRIM",
+      "type": "building",
+      "label": "Edificio de Primaria",
+      "floors": 2,
+      "x": 1.6,
+      "z": -1.2,
+      "w": 1.4,
+      "d": 0.9,
+      "scenarios": [],
+      "services": [
+        "COL-01",
+        "COL-07",
+        "COL-15"
+      ]
+    },
+    {
+      "id": "POLI",
+      "type": "building",
+      "label": "Polideportivo",
+      "floors": 1,
+      "role": "backup",
+      "x": 1.6,
+      "z": 1.6,
+      "w": 1.6,
+      "d": 1.1,
+      "scenarios": [],
+      "services": [
+        "COL-14",
+        "COL-18"
+      ]
+    },
+    {
+      "id": "CONS",
+      "type": "room",
+      "label": "Conserjería y centralita",
+      "x": -0.6,
+      "z": 1.6,
+      "w": 1.0,
+      "d": 0.6,
+      "scenarios": [
+        "E3"
+      ],
+      "services": [
+        "COL-08",
+        "COL-13",
+        "COL-17"
+      ]
+    },
+    {
+      "id": "NUBE",
+      "type": "provider",
+      "label": "Plataforma y app de familias",
+      "x": 3.2,
+      "z": -2.6,
+      "scenarios": [
+        "E6"
+      ],
+      "services": [
+        "COL-10",
+        "COL-11"
+      ]
+    },
+    {
+      "id": "BUS",
+      "type": "provider",
+      "label": "Empresa de autobuses",
+      "x": -3.4,
+      "z": 2.6,
+      "scenarios": [
+        "E4"
+      ],
+      "services": [
+        "COL-06"
+      ]
+    },
+    {
+      "id": "CATER",
+      "type": "provider",
+      "label": "Empresa de comedor",
+      "x": -3.4,
+      "z": -2.4,
+      "scenarios": [
+        "E7"
+      ],
+      "services": []
+    }
+  ],
+  "links": [
+    {
+      "from": "PAB",
+      "to": "COCINA",
+      "label": "Pasillo del comedor"
+    },
+    {
+      "from": "PAB",
+      "to": "CONS",
+      "label": "Red y megafonía"
+    },
+    {
+      "from": "PRIM",
+      "to": "CONS",
+      "label": "Red y megafonía"
+    },
+    {
+      "from": "CONS",
+      "to": "NUBE",
+      "label": "Internet"
+    },
+    {
+      "from": "POLI",
+      "to": "PRIM",
+      "label": "Patio"
+    },
+    {
+      "from": "CATER",
+      "to": "COCINA",
+      "label": "Suministro"
+    },
+    {
+      "from": "BUS",
+      "to": "CONS",
+      "label": "Rutas"
+    }
+  ]
+}

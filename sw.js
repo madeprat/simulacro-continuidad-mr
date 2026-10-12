@@ -1,7 +1,7 @@
 // Service worker: precarga el motor y los packs para ejecutar el simulacro sin conexión.
 // Estrategia: red primero (para recibir cambios del pack) y caché como respaldo offline. Si la red tarda más de
 // 3 s (wifi de sala con portal cautivo o sin salida), se sirve la caché y la respuesta de red la actualiza al llegar.
-const CACHE = 'simulacro-mr-v8';
+const CACHE = 'simulacro-mr-v9';
 const NET_TIMEOUT_MS = 3000;
 const ASSETS = [
   './',
@@ -61,6 +61,16 @@ const ASSETS = [
   'packs/gregal/rounds.json',
   'packs/gregal/debrief.json',
   'packs/gregal/site.json',
+  'packs/altamar/manifest.json',
+  'packs/altamar/roles.json',
+  'packs/altamar/rounds.json',
+  'packs/altamar/debrief.json',
+  'packs/altamar/site.json',
+  'packs/altamar/catalogo/config.json',
+  'packs/altamar/catalogo/servicios.json',
+  'packs/altamar/catalogo/escenarios.json',
+  'packs/altamar/catalogo/estrategias.json',
+  'packs/altamar/catalogo/comunicaciones.json',
 ];
 
 self.addEventListener('install', (e) => {

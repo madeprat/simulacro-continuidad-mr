@@ -22,7 +22,10 @@ export async function loadCopilotData(base = 'copiloto/data/') {
     return res.json();
   };
   const [config, services, scenarios, estrategias] = await Promise.all(['config.json', 'servicios.json', 'escenarios.json', 'estrategias.json'].map(get));
-  const data = { config, services, scenarios, estrategias };
+  // Opcional: comunicaciones propias del catálogo ({ contexts: [{id,label}], items: [...] }).
+  const commsRes = await fetch(base + 'comunicaciones.json', { cache: 'no-cache' }).catch(() => null);
+  const comms = commsRes && commsRes.ok ? await commsRes.json() : null;
+  const data = { config, services, scenarios, estrategias, comms };
   data.fingerprint = core.catalogFingerprint(data, sha256Hex);
   return data;
 }
@@ -73,7 +76,19 @@ function servicesSpec(snap) {
   };
 }
 
-function commsSpec(snap) {
+function commsSpec(snap, comms) {
+  if (comms) { // comunicaciones propias del pack: resumen por contexto
+    const all = comms.items.filter((i) => i.mandatory && i.bucket === 'now').length;
+    return {
+      accent: THEME.amber, icon: '📡', kicker: 'Copiloto · Comunicaciones',
+      title: `${all} comunicaciones obligatorias «ahora»`,
+      body: comms.contexts.map((c) => {
+        const items = core.getCommsForCtx(c.id, comms.items);
+        return `${c.label}: ${items.length}${items.some((i) => i.mandatory) ? ` (${items.filter((i) => i.mandatory).length} obligatorias)` : ''}`;
+      }).join('\n'),
+      note: 'Detalle y fichas en la pestaña Comunicaciones del Panel de Crisis.', noteColor: THEME.muted,
+    };
+  }
   const r = snap.rgpd;
   const now = core.getCommsForCtx('seguridad').filter((i) => i.mandatory && i.bucket === 'now').length;
   const pub = core.getCommsForCtx('publico').length;
@@ -86,13 +101,13 @@ function commsSpec(snap) {
   };
 }
 
-export function widgetSpecs(role, snap, config) {
+export function widgetSpecs(role, snap, config, comms = null) {
   if (!snap) {
     return [{
       accent: THEME.border, icon: '🛰', kicker: 'Copiloto de Continuidad',
       title: 'Sin incidente declarado', body: 'El panel de la TV aún no tiene escenarios activos.',
     }];
   }
-  const build = { level: () => levelSpec(snap), pressure: () => pressureSpec(snap, config), services: () => servicesSpec(snap), comms: () => commsSpec(snap) };
+  const build = { level: () => levelSpec(snap), pressure: () => pressureSpec(snap, config), services: () => servicesSpec(snap), comms: () => commsSpec(snap, comms) };
   return (WIDGETS_BY_ROLE[role] || ['level', 'pressure']).map((w) => build[w]());
 }

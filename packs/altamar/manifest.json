@@ -1,0 +1,20 @@
+{
+  "schema": "crisis.exercise/1.0",
+  "exercise_id": "ALTAMAR",
+  "name": "Simulacro escolar ALTAMAR",
+  "version": "1.0",
+  "expected_players": 3,
+  "duration_minutes": 30,
+  "round_count": 3,
+  "decision_count": 6,
+  "language": "es-ES",
+  "files": {
+    "roles": "roles.json",
+    "rounds": "rounds.json",
+    "debrief": "debrief.json",
+    "site": "site.json",
+    "catalog": "catalogo/"
+  },
+  "intro": "Sois el equipo de emergencia del Colegio Altamar, un colegio ficticio de 640 alumnos. Es martes, acaba de terminar el recreo y todo va normal… hasta que deja de ir. Tres rondas, tres roles, decisiones con reloj. Mirad la maqueta del colegio: se enciende con lo que vais declarando.",
+  "ending": "Fin del simulacro. El colegio reabre mañana gracias a vuestras decisiones. Salid de la realidad mixta para ver el resumen y comparar lo que hicisteis con lo que recomienda un plan de emergencia."
+}

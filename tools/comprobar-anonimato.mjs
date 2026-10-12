@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Control de anonimato: falla si algún fichero versionado contiene referencias a la organización real,
-// a sus sistemas o a personas, o correos fuera del dominio ficticio compania.example.
+// a sus sistemas o a personas, o correos fuera de los dominios ficticios .example (RFC 2606).
 // Los patrones van codificados en base64 para que este script no los contenga en claro.
 // Uso: node tools/comprobar-anonimato.mjs   (también lo ejecuta la integración continua)
 import { execSync } from 'node:child_process';
@@ -14,8 +14,8 @@ const PATRONES = [
   'Ym9nb3RbYcOhXQ==',
   'bWFkZWxhaW5lfHJvc2FsW2nDrV1hXHMrY2FzdHJv',
 ].map((b) => new RegExp(Buffer.from(b, 'base64').toString('utf8'), 'i'));
-// Correos: solo se admiten buzones ficticios de compania.example.
-const CORREO = /[A-Za-z0-9._%+-]+@(?!compania\.example\b)[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}/;
+// Correos: solo se admiten buzones ficticios del dominio reservado .example (compania.example, colegio.example…).
+const CORREO = /[A-Za-z0-9._%+-]+@(?![A-Za-z0-9-]+\.example\b)[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}/;
 
 const EXCLUIR = [/^vendor\//, /^tools\/comprobar-anonimato\.mjs$/, /\.(png|jpe?g|gif|webp|ico|mp3|mp4|glb|woff2?)$/i];
 const BINARIOS = /\.(docx?|xlsx?|pptx?|pdf|zip)$/i;

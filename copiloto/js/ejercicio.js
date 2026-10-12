@@ -47,6 +47,9 @@ export function mountExerciseBar({ clock, backend, dataset, open = false }) {
       const file = (manifest.files && manifest.files.rounds) || 'rounds.json';
       rounds = ((await (await fetch(new URL(file, base))).json()).rounds || []).filter((r) => r.copilot);
       for (const r of rounds) roundSel.append(h('option', { value: r.id }, `Ronda ${r.number} · ${r.crisis_time} · ${r.title}`));
+      if (manifest.files && manifest.files.catalog) {
+        say('Este pack trae su propio catálogo (servicios y comunicaciones): se juega en las gafas. Aquí el copiloto calcula con el catálogo general.', 'warn');
+      }
     } catch (e) {
       say('No se pudo leer el pack: ' + e.message, 'error');
     }
