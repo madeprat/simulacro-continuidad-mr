@@ -96,7 +96,7 @@ export class CommandBar {
       g.font = this.font(24, 600); g.fillStyle = s.syncOk ? THEME.green : THEME.muted;
       g.fillText(s.sync, pad + 250, pad + 54);
     }
-    const bw = 150, bh = 70, gap = 12;
+    const bw = s.buttons.length > 4 ? 136 : 150, bh = 70, gap = 12;
     let bx = W - pad - s.buttons.length * bw - (s.buttons.length - 1) * gap;
     for (const b of s.buttons) {
       const hov = this.hover === b.id;

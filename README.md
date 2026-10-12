@@ -37,9 +37,10 @@ Funciona igual en una sala compartida, en casa o en un despacho, y no hay que ca
 | Izquierda | **Panel de Crisis**; las actuaciones que pide la ronda aparecen entre el panel y el frente |
 | Derecha | Tarjetas de resumen del rol (botón *Resumen*) y avisos que llegan «de fuera» (ancla `DOOR`) |
 | Abajo | Documentos «sobre la mesa» (ancla `TABLE`), algo inclinados |
+| Abajo a la izquierda | **Maqueta de la organización** (si el pack la trae), bajo el Panel de Crisis |
 
 - **Barra de mando:** rol, ronda, reloj del ejercicio, quién está conectado, botones (*Menú*, *Resumen*, *Voz*,
-  *Recentrar*) y la **línea de tiempo** de la ronda en curso: avisos vistos, actuación en el panel y decisiones con la
+  *Maqueta*, *Recentrar*) y la **línea de tiempo** de la ronda en curso: avisos vistos, actuación en el panel y decisiones con la
   letra registrada.
 - **Recentrar:** si el participante se gira o cambia de silla, mira al frente y pulsa *Recentrar* (en la barra, en la
   pantalla de inicio o en el menú).
@@ -49,6 +50,20 @@ Funciona igual en una sala compartida, en casa o en un despacho, y no hay que ca
 
 Las anclas del pack (`TV`, `DOOR`, `TABLE`, `FRONT`) siguen siendo válidas: en el centro de mando se traducen a
 las zonas del arco (`js/layout.js`).
+
+### Maqueta de la organización
+
+Plataforma holográfica con las sedes (por plantas), CPD, salas y proveedores del pack, unidos por sus dependencias.
+No hay modelos 3D a medida: se genera desde el `site.json` del pack, así que otra organización es otro JSON.
+Cada nodo se ilumina con lo que el equipo declara y analiza en el Panel de Crisis:
+
+- **Rojo con pulso:** un escenario declarado le afecta directamente (p. ej. E1 a una sede). Muestra escenario y categoría.
+- **Ámbar:** no le afecta directamente, pero alguno de sus servicios del catálogo está afectado («3 de 12 servicios»).
+- **Azul:** operativo. **Gris con base hexagonal:** sitio de respaldo en espera.
+- Los enlaces toman el color del extremo más afectado; el rótulo de la plataforma resume cuántos nodos están afectados.
+
+Si todavía no se ha analizado nada, la maqueta refleja el estado de referencia de la ronda. Se oculta y se muestra con
+el botón *Maqueta*; también se sincroniza sola, porque sigue al Panel de Crisis compartido.
 
 ### Panel de Crisis virtual
 
@@ -172,7 +187,7 @@ tras el primer análisis sin recargar; el impacto «Crítico» se reconoce con o
 6. Los CSV neutralizan el texto que empieza por `=`, `+`, `-` o `@`, para que Excel no lo ejecute como fórmula.
 
 La hoja de respuestas vive en `packs/<pack>/debrief.json` (`preferred_response`, `capability`,
-`severity_if_missed`, `rationale`). La de TRAMONTANA es una **propuesta** (`"status": "propuesta"`) pendiente de
+`severity_if_missed`, `rationale`). Las de TRAMONTANA y GREGAL son **propuestas** (`"status": "propuesta"`) pendientes de
 validar; el debrief lo advierte. Nunca se muestra a los participantes durante el ejercicio.
 
 ## Formato de pack (`crisis.exercise/1.0`)
@@ -184,6 +199,33 @@ validar; el debrief lo advierte. Nunca se muestra a los participantes durante el
 - `rounds[].copilot`: estado del copiloto al empezar la ronda —
   `{"clock": "D0 07:33", "declared": "D0 07:08", "onset": "D0 06:02", "scenarios": {"E3": 1, "E6": 2}}`
   (día relativo del ejercicio + hora; escenario → categoría 1–3).
+
+### Maqueta (`site.json`, `crisis.site/1.0`, opcional)
+
+Se declara en `manifest.files.site`. Ejemplo mínimo:
+
+```json
+{
+  "schema": "crisis.site/1.0",
+  "name": "La Compañía · sede central y CPD",
+  "nodes": [
+    { "id": "SEDE", "type": "building", "label": "Sede central", "floors": 5, "x": -1.5, "z": -1.3,
+      "scenarios": ["E1", "E2", "E4"], "services": ["SRV-027", "SRV-028"] },
+    { "id": "CPD1", "type": "datacenter", "label": "CPD principal", "x": 1.3, "z": -0.5,
+      "scenarios": ["E3", "E5", "E6"], "services": ["SRV-003", "SRV-026"] },
+    { "id": "CPD2", "type": "datacenter", "label": "CPD de respaldo", "role": "backup", "x": 2.6, "z": 1.6 },
+    { "id": "WAN", "type": "provider", "label": "Operador WAN", "x": 2.4, "z": -2.6, "scenarios": ["E7"], "services": ["SRV-040"] }
+  ],
+  "links": [{ "from": "SEDE", "to": "CPD1", "label": "Red corporativa" }, { "from": "CPD1", "to": "CPD2", "label": "Replicación" }]
+}
+```
+
+- `type`: `building` (con `floors`, 1–12), `datacenter`, `room` (sala, p. ej. el SOC) o `provider` (tercero).
+- `x`, `z`: posición en un plano de −4 a 4. **`z` negativo queda al fondo:** poned detrás lo alto y delante lo bajo.
+  Opcionales `w` y `d` (ancho y fondo relativos).
+- `scenarios`: escenarios del catálogo que afectan directamente al nodo. `services`: códigos `SRV-…` del catálogo que
+  dependen de él (cada servicio en un solo nodo). `role: "backup"` marca un sitio de respaldo.
+- Máximo 16 nodos. Se valida al cargar el pack.
 
 Al cargar un pack se valida, además de la estructura: el formato de las horas y las categorías del bloque `copilot`,
 que la pestaña de cada actuación exista en el Panel de Crisis, y en `debrief.json` las letras de referencia, la
@@ -202,6 +244,8 @@ js/sync.js                      Sincronización entre visores (PeerJS/WebRTC o p
 js/shared-state.js              Versión y fusión del estado compartido del Panel de Crisis
 js/integrity.js                 SHA-256 y cadena de integridad del registro (visor y debrief)
 js/csv.js                       Celdas CSV seguras (visor y debrief)
+js/site-model.js                Formato, validación y estado de la maqueta (site.json)
+js/site-view.js                 Maqueta 3D esquemática
 copiloto/                       Copiloto de Continuidad para la TV
   js/core.js                    Motor de cálculo común (TV y gafas)
   js/copiloto.js                Interfaz portada del panel original
@@ -210,7 +254,8 @@ copiloto/                       Copiloto de Continuidad para la TV
   data/, data/plantilla/        Catálogo ficticio y plantillas CSV
   docs/                         Documentos de ejemplo (plan, estrategias, directorio)
 debrief/                        Consolidador de registros
-packs/tramontana/               Pack de ejemplo
+packs/tramontana/               Pack de ejemplo (9 rondas): ciberataque, sede central con CPD propio
+packs/gregal/                   Pack corto (3 rondas): temporal e inundación, organización multisede con nube
 tools/generar_catalogo.py       Genera el catálogo ficticio
 tools/comprobar-anonimato.mjs   Control de anonimato (también en CI)
 tests/                          Pruebas del motor, del consolidador, de los packs y del simulador (npm test)
@@ -232,5 +277,4 @@ La integración continua (`.github/workflows/comprobaciones.yml`) ejecuta ambas 
 - Validar con el equipo la hoja de respuestas de TRAMONTANA (`debrief.json`, hoy en estado «propuesta»).
 - Sincronización opcional TV ↔ gafas por red local.
 - Consola del facilitador para lanzar rondas e injects a todos a la vez (ejercicios en remoto).
-- Maqueta esquemática de sedes y dependencias en el centro de mando, generada desde el pack.
 - Texto vectorial (MSDF) en los paneles para ganar nitidez y no redibujar texturas completas.

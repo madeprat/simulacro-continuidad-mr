@@ -10,6 +10,8 @@ import { loadCopilotData, roundState, computeSnapshot, widgetSpecs } from './cop
 import { SyncHub, syncLabel } from './sync.js';
 import { slotPose, slotFor } from './layout.js';
 import { CommandBar, timelineFor } from './command-bar.js';
+import { SiteView } from './site-view.js';
+import { siteStatus } from './site-model.js';
 
 const $ = (id) => document.getElementById(id);
 const V3 = THREE.Vector3;
@@ -41,6 +43,7 @@ const S = {
   // 'center': centro de mando alrededor del participante (por defecto, sin calibrar; sirve en remoto).
   // 'room': paneles anclados a la sala calibrada (pared del panel, puerta, mesa).
   layout: 'center', rig: null,
+  site: { view: null, pack: null, visible: true, lastUpdate: 0 }, // maqueta de la organización (site.json del pack)
 };
 
 /* ─────────────────────────── Pantallas DOM ─────────────────────────── */
@@ -200,6 +203,7 @@ function onSyncMessage(msg) {
     if (S.crisis.applyShared(data.state, from, data.action)) {
       if (S.session && (S.phase === 'run' || S.phase === 'menu')) S.session.log('panel_sync', { from, action: data.action });
       updateCopilot(true);
+      updateSite(true);
       if (S.phase === 'run' && ['analyze', 'close', 'convene'].includes(data.action)) {
         voice.say(`${from} ${({ analyze: 'ha analizado el impacto', close: 'ha cerrado el incidente', convene: 'ha convocado al comité' })[data.action]}.`);
       }
@@ -502,6 +506,7 @@ function recenter() {
   if (stepPanel.mesh.visible) place(stepPanel, stepPanel.mesh.userData.anchor || 'FRONT');
   if (hudPanel.mesh.visible) placeHud();
   if (copilotPanels.some((p) => p.mesh.visible)) placeCopilot();
+  if (S.site.view && S.site.view.group.visible) placeSite();
   beep(1320, 0.08);
 }
 
@@ -530,6 +535,66 @@ function animateAppear(mesh, material, now) {
   mesh.scale.setScalar(base * (0.95 + 0.05 * e));
   if (t >= 1) { mesh.userData.appearAt = 0; material.opacity = 1; }
   return true;
+}
+
+/* ─────────────────────────── Maqueta de la organización ─────────────────────────── */
+
+// Crea (o reutiliza) la maqueta del pack cargado. Sin site.json en el pack, no hay maqueta.
+function ensureSite() {
+  const site = S.pack && !S.pack.errors.length ? S.pack.site : null;
+  if (S.site.pack === S.pack && S.site.view) return S.site.view;
+  if (S.site.view) { world.remove(S.site.view.group); S.site.view = null; }
+  S.site.pack = S.pack;
+  if (!site || !world) return null;
+  S.site.view = new SiteView(site);
+  world.add(S.site.view.group);
+  return S.site.view;
+}
+
+function placeSite() {
+  const view = S.site.view;
+  if (!view) return;
+  const g = view.group;
+  if (isCenter()) {
+    if (!S.rig) captureRig();
+    // En pantalla la maqueta no se aleja tanto como los paneles: es pequeña y se leería mal.
+    const pose = slotPose(S.rig, 'model', { ...slotOptions(), far: Math.min(1.05, slotOptions().far) });
+    g.position.set(pose.x, pose.y, pose.z);
+    g.lookAt(pose.face.x, pose.y, pose.face.z);
+  } else {
+    // Modo sala: sobre la mesa calibrada, algo a la izquierda para no tapar los documentos.
+    const head = getHead();
+    const a = (S.anchors.TABLE || defaultAnchor('TABLE')).clone().addScaledVector(head.right, -0.45);
+    g.position.copy(a);
+    g.lookAt(head.pos.x, a.y, head.pos.z);
+  }
+  if (!g.visible) g.userData.appearAt = performance.now();
+}
+
+function showSite(on) {
+  const view = ensureSite();
+  if (!view) return;
+  if (on && S.site.visible) { placeSite(); view.group.visible = true; updateSite(true); } else view.group.visible = false;
+}
+
+// Estado de la maqueta: lo declarado y analizado en el Panel de Crisis (o, si no hay panel, la referencia de la ronda).
+function updateSite(force = false) {
+  const view = S.site.view;
+  if (!view || !view.group.visible) return;
+  const now = performance.now();
+  if (!force && now - S.site.lastUpdate < 250) return;
+  S.site.lastUpdate = now;
+  let selected = {}, affected = [];
+  if (S.crisis && S.crisis.state.act) {
+    const snap = S.crisis.snapshot();
+    selected = S.crisis.state.act.scenarios;
+    affected = snap ? snap.affected : [];
+  } else if (S.copilot.data && S.copilot.st && Object.keys(S.copilot.st.selected).length) {
+    const snap = computeSnapshot(S.copilot.data, S.copilot.st, Date.now() - S.copilot.startedReal);
+    selected = S.copilot.st.selected;
+    affected = snap ? snap.affected : [];
+  }
+  view.update(siteStatus(view.site, { selected, affected }));
 }
 
 function crisisScale() {
@@ -569,6 +634,7 @@ function crisisAction(id) {
   beep(1500, 0.04, 0, 0.08);
   S.crisis.handle(id);
   updateCopilot(true);
+  updateSite(true);
 }
 
 function facing(obj, target) {
@@ -750,6 +816,7 @@ function hideAll() {
   voice.stop();
   for (const p of [stepPanel, hudPanel, calibPanel, ...copilotPanels]) p.mesh.visible = false;
   if (S.crisis) S.crisis.mesh.visible = false;
+  if (S.site.view) S.site.view.group.visible = false;
   reticle.visible = false;
   for (const k in markers) markers[k].visible = false;
 }
@@ -859,6 +926,7 @@ function calibrationPoint(frame) {
 function enterReady() {
   S.phase = 'ready';
   placeCrisis();
+  showSite(true);
   const resuming = !!S.session.data.started_at;
   const step = S.steps[S.session.stepIndex];
   stepPanel.set({
@@ -1076,6 +1144,7 @@ function updateHud(force = false) {
       { id: 'menu', label: 'Menú' },
       { id: 'copilot', label: 'Resumen', active: S.copilot.visible },
       { id: 'voice', label: 'Voz', active: voice.enabled },
+      ...(S.site.view ? [{ id: 'site', label: 'Maqueta', active: S.site.visible }] : []),
       ...(isCenter() ? [{ id: 'recenter', label: 'Recentrar' }] : []),
     ],
     rounds: tl.rounds, items: tl.items,
@@ -1094,6 +1163,7 @@ function syncCopilotRound(round) {
   // Si otro visor ya puso el panel en esta ronda (sincronización), se respeta su estado.
   if (S.crisis && round.copilot && S.crisis.roundId !== round.id) S.crisis.setRoundBaseline(S.copilot.st, `la ronda ${round.number}`, round.id);
   updateCopilot(true);
+  updateSite(true);
 }
 
 function updateCopilot(force = false) {
@@ -1215,6 +1285,12 @@ function handleAction(id) {
   if (id === 'start') { countdown(); return; }
   if (id === 'recalibrate') { beginCalibration(); return; }
   if (id === 'recenter') { recenter(); return; }
+  if (id === 'site') {
+    S.site.visible = !S.site.visible;
+    showSite(S.site.visible);
+    if (S.session) S.session.log('site_toggled', { visible: S.site.visible });
+    updateHud(true); return;
+  }
   if (id === 'menu') { openMenu(); return; }
   if (id === 'voice') { voice.setEnabled(!voice.enabled); updateHud(true); return; }
   if (id === 'copilot') {
@@ -1234,7 +1310,7 @@ function handleAction(id) {
       case 'menu:prevRound': goTo(roundStartIndex(i, -1), 'manual_navigation'); return;
       case 'menu:nextRound': goTo(roundStartIndex(i, 1), 'manual_navigation'); return;
       case 'menu:recalibrate': S.phase = 'calibrate'; beginCalibration(() => { S.phase = 'run'; runStepResume(); }); return;
-      case 'menu:recenter': captureRig(); placeCrisis(); updateCopilot(true); runStepResume(); return;
+      case 'menu:recenter': captureRig(); placeCrisis(); updateCopilot(true); if (S.site.view && S.site.view.group.visible) placeSite(); runStepResume(); return;
       case 'menu:exit': exitRun(); return;
     }
   }
@@ -1380,6 +1456,16 @@ function loop(time, frame) {
   else if (m.visible && m.userData.pulse) m.scale.setScalar(m.userData.baseScale * (1 + 0.04 * Math.sin(time * 0.012)));
   else if (m.visible && m.userData.baseScale) m.scale.setScalar(m.userData.baseScale);
   if (S.crisis && S.crisis.mesh.visible) animateAppear(S.crisis.mesh, S.crisis.mesh.material, now);
+  if (S.site.view && S.site.view.group.visible) {
+    const g = S.site.view.group;
+    if (g.userData.appearAt) {
+      const t = Math.min(1, (now - g.userData.appearAt) / 400);
+      g.scale.setScalar(0.85 + 0.15 * (1 - Math.pow(1 - t, 3)));
+      if (t >= 1) g.userData.appearAt = 0;
+    }
+    S.site.view.tick(time);
+    updateSite();
+  }
 
   updateHud();
   updateCopilot();

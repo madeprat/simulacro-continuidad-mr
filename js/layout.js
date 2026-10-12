@@ -13,6 +13,7 @@ export const SLOTS = {
   action: { angle: -9, dist: 1.1, dy: -0.1, scale: 0.8 }, // instrucción junto al Panel de Crisis
   crisis: { angle: -58, dist: 1.3, dy: 0, scale: 0.8 }, // Panel de Crisis a la izquierda
   cards: { angle: 68, dist: 1.15, dy: 0.02, scale: 0.85 }, // tarjetas de resumen del rol a la derecha
+  model: { angle: -45, dist: 0.95, dy: -0.55, scale: 1 }, // maqueta de la organización, «sobre la mesa» bajo el Panel de Crisis
 };
 
 // Anclas del formato de pack (pensadas para una sala) → posiciones del arco.

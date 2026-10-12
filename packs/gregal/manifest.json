@@ -1,0 +1,19 @@
+{
+  "schema": "crisis.exercise/1.0",
+  "exercise_id": "GREGAL",
+  "name": "Ejercicio de continuidad GREGAL",
+  "version": "1.0",
+  "expected_players": 3,
+  "duration_minutes": 45,
+  "round_count": 3,
+  "decision_count": 6,
+  "language": "es-ES",
+  "files": {
+    "roles": "roles.json",
+    "rounds": "rounds.json",
+    "debrief": "debrief.json",
+    "site": "site.json"
+  },
+  "intro": "Ejercicio corto de continuidad: un temporal con inundación deja sin acceso la sede principal y, horas después, afecta a un proveedor crítico. Organización multisede con CPD en housing y plataforma en la nube. En la misma sala o cada uno desde su sitio; con los visores conectados, la decisión del rol activo aparece y se registra sola en los demás.",
+  "ending": "Fin del ejercicio. Salid de la realidad mixta para revisar el resumen y exportar el registro de sesión."
+}
