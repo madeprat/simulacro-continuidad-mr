@@ -11,6 +11,10 @@
     {
       "path": "packs/altamar/",
       "label": "ALTAMAR · colegio · 3 rondas · 6 decisiones"
+    },
+    {
+      "path": "packs/valdecierzo/",
+      "label": "VALDECIERZO · ayuntamiento · 3 rondas · 6 decisiones"
     }
   ]
 }

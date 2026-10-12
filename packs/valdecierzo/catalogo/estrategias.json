@@ -1,0 +1,118 @@
+{
+  "E1": [
+    {
+      "id": "9101",
+      "codigo": "EST01",
+      "nombre": "EST01-Trabajar en papel y en otra sede",
+      "descripcion": "Registro manual, bandos firmados y oficina en el centro social."
+    },
+    {
+      "id": "9103",
+      "codigo": "EST03",
+      "nombre": "EST03-Activar el comité municipal de emergencia",
+      "descripcion": "Alcaldía, secretaría, policía y servicios básicos con mando único."
+    }
+  ],
+  "E2": [
+    {
+      "id": "9102",
+      "codigo": "EST02",
+      "nombre": "EST02-Apoyo de otros municipios y voluntarios",
+      "descripcion": "Personal de la mancomunidad, Protección Civil y vecinos voluntarios."
+    },
+    {
+      "id": "9103",
+      "codigo": "EST03",
+      "nombre": "EST03-Activar el comité municipal de emergencia",
+      "descripcion": "Alcaldía, secretaría, policía y servicios básicos con mando único."
+    }
+  ],
+  "E3": [
+    {
+      "id": "9101",
+      "codigo": "EST01",
+      "nombre": "EST01-Trabajar en papel y en otra sede",
+      "descripcion": "Registro manual, bandos firmados y oficina en el centro social."
+    },
+    {
+      "id": "9105",
+      "codigo": "EST05",
+      "nombre": "EST05-Restaurar desde copias limpias",
+      "descripcion": "Recuperación con el servicio provincial de ciberseguridad."
+    },
+    {
+      "id": "9107",
+      "codigo": "EST07",
+      "nombre": "EST07-Operación manual",
+      "descripcion": "Bombas, válvulas y avisos operados a mano con turnos."
+    }
+  ],
+  "E4": [
+    {
+      "id": "9102",
+      "codigo": "EST02",
+      "nombre": "EST02-Apoyo de otros municipios y voluntarios",
+      "descripcion": "Personal de la mancomunidad, Protección Civil y vecinos voluntarios."
+    },
+    {
+      "id": "9103",
+      "codigo": "EST03",
+      "nombre": "EST03-Activar el comité municipal de emergencia",
+      "descripcion": "Alcaldía, secretaría, policía y servicios básicos con mando único."
+    }
+  ],
+  "E5": [
+    {
+      "id": "9104",
+      "codigo": "EST04",
+      "nombre": "EST04-Esperar y vigilar",
+      "descripcion": "Seguimiento con hora fija de revisión."
+    },
+    {
+      "id": "9105",
+      "codigo": "EST05",
+      "nombre": "EST05-Restaurar desde copias limpias",
+      "descripcion": "Recuperación con el servicio provincial de ciberseguridad."
+    }
+  ],
+  "E6": [
+    {
+      "id": "9103",
+      "codigo": "EST03",
+      "nombre": "EST03-Activar el comité municipal de emergencia",
+      "descripcion": "Alcaldía, secretaría, policía y servicios básicos con mando único."
+    },
+    {
+      "id": "9108",
+      "codigo": "EST08",
+      "nombre": "EST08-Aislar y conservar evidencias",
+      "descripcion": "Desconectar sin borrar y documentar para la investigación."
+    },
+    {
+      "id": "9105",
+      "codigo": "EST05",
+      "nombre": "EST05-Restaurar desde copias limpias",
+      "descripcion": "Recuperación con el servicio provincial de ciberseguridad."
+    },
+    {
+      "id": "9107",
+      "codigo": "EST07",
+      "nombre": "EST07-Operación manual",
+      "descripcion": "Bombas, válvulas y avisos operados a mano con turnos."
+    }
+  ],
+  "E7": [
+    {
+      "id": "9103",
+      "codigo": "EST03",
+      "nombre": "EST03-Activar el comité municipal de emergencia",
+      "descripcion": "Alcaldía, secretaría, policía y servicios básicos con mando único."
+    },
+    {
+      "id": "9106",
+      "codigo": "EST06",
+      "nombre": "EST06-Proveedor de respaldo",
+      "descripcion": "Empresa del agua o servicios de la diputación como respaldo."
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "schema": "crisis.exercise/1.0",
+  "exercise_id": "VALDECIERZO",
+  "name": "Simulacro municipal VALDECIERZO",
+  "version": "1.0",
+  "expected_players": 3,
+  "duration_minutes": 30,
+  "round_count": 3,
+  "decision_count": 6,
+  "language": "es-ES",
+  "files": {
+    "roles": "roles.json",
+    "rounds": "rounds.json",
+    "debrief": "debrief.json",
+    "site": "site.json",
+    "catalog": "catalogo/"
+  },
+  "intro": "Sois el equipo de emergencia del Ayuntamiento de Valdecierzo, un pueblo ficticio de 1.900 vecinos. Es viernes, hoy empiezan las fiestas y a las 09:05 todas las pantallas del ayuntamiento amanecen bloqueadas. Tres rondas, tres roles. Mirad la maqueta del pueblo: muestra qué depende de qué.",
+  "ending": "Fin del simulacro. Valdecierzo ha tenido verbena, agua y vecinos atendidos gracias a vuestras decisiones. Salid de la realidad mixta para ver el resumen y comparar con lo que recomienda un plan municipal de emergencia."
+}

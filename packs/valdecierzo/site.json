@@ -1,0 +1,165 @@
+{
+  "schema": "crisis.site/1.0",
+  "name": "Ayuntamiento de Valdecierzo",
+  "note": "Pueblo ficticio de 1.900 habitantes en fiestas: casa consistorial con el servidor municipal, depósito de agua con telecontrol, plaza de la verbena, consultorio, Policía Local y proveedores comarcales.",
+  "nodes": [
+    {
+      "id": "AYTO",
+      "type": "building",
+      "label": "Casa consistorial",
+      "floors": 2,
+      "x": -0.6,
+      "z": -1.6,
+      "w": 1.6,
+      "d": 1.0,
+      "scenarios": [
+        "E1"
+      ],
+      "services": [
+        "AYT-01",
+        "AYT-02",
+        "AYT-03",
+        "AYT-12",
+        "AYT-13"
+      ]
+    },
+    {
+      "id": "SERV",
+      "type": "room",
+      "label": "Servidor municipal",
+      "x": -2.4,
+      "z": -0.2,
+      "w": 0.9,
+      "d": 0.7,
+      "scenarios": [
+        "E3",
+        "E5",
+        "E6"
+      ],
+      "services": [
+        "AYT-11"
+      ]
+    },
+    {
+      "id": "DEP",
+      "type": "datacenter",
+      "label": "Depósito de agua",
+      "x": 1.6,
+      "z": -2.6,
+      "w": 1.1,
+      "d": 1.1,
+      "scenarios": [],
+      "services": [
+        "AYT-04"
+      ]
+    },
+    {
+      "id": "PLAZA",
+      "type": "room",
+      "label": "Plaza mayor (verbena)",
+      "x": 0.4,
+      "z": 1.0,
+      "w": 1.8,
+      "d": 1.2,
+      "scenarios": [],
+      "services": [
+        "AYT-09",
+        "AYT-05"
+      ]
+    },
+    {
+      "id": "CONS",
+      "type": "building",
+      "label": "Consultorio y centro social",
+      "floors": 1,
+      "role": "backup",
+      "x": 2.6,
+      "z": 1.4,
+      "w": 1.2,
+      "d": 0.8,
+      "scenarios": [],
+      "services": [
+        "AYT-07",
+        "AYT-14"
+      ]
+    },
+    {
+      "id": "POL",
+      "type": "room",
+      "label": "Policía Local y Protección Civil",
+      "x": -2.0,
+      "z": 2.2,
+      "w": 1.0,
+      "d": 0.7,
+      "scenarios": [
+        "E2"
+      ],
+      "services": [
+        "AYT-06",
+        "AYT-16"
+      ]
+    },
+    {
+      "id": "DIPU",
+      "type": "provider",
+      "label": "Servicio provincial (diputación)",
+      "x": -3.4,
+      "z": -2.6,
+      "scenarios": [
+        "E7"
+      ],
+      "services": [
+        "AYT-10"
+      ]
+    },
+    {
+      "id": "MANC",
+      "type": "provider",
+      "label": "Mancomunidad (residuos)",
+      "x": 3.6,
+      "z": 0.1,
+      "scenarios": [],
+      "services": [
+        "AYT-08",
+        "AYT-15"
+      ]
+    }
+  ],
+  "links": [
+    {
+      "from": "AYTO",
+      "to": "SERV",
+      "label": "Red municipal"
+    },
+    {
+      "from": "SERV",
+      "to": "DEP",
+      "label": "Telecontrol"
+    },
+    {
+      "from": "SERV",
+      "to": "DIPU",
+      "label": "Copias y web"
+    },
+    {
+      "from": "AYTO",
+      "to": "PLAZA",
+      "label": "Bandos y permisos"
+    },
+    {
+      "from": "POL",
+      "to": "PLAZA",
+      "label": "Seguridad de la verbena"
+    },
+    {
+      "from": "CONS",
+      "to": "AYTO",
+      "label": "Servicios sociales"
+    },
+    {
+      "from": "MANC",
+      "to": "PLAZA",
+      "label": "Limpieza"
+    }
+  ]
+}

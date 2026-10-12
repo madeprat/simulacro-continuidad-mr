@@ -1,0 +1,199 @@
+{
+  "contexts": [
+    {
+      "id": "ciber",
+      "label": "Ciberincidente"
+    },
+    {
+      "id": "vecinos",
+      "label": "Vecinos y fiestas"
+    },
+    {
+      "id": "datos",
+      "label": "Datos personales"
+    }
+  ],
+  "items": [
+    {
+      "id": "ci-1",
+      "ctx": [
+        "ciber"
+      ],
+      "order": 10,
+      "when": "Ahora",
+      "bucket": "now",
+      "mandatory": true,
+      "title": "Avisar al servicio provincial de ciberseguridad",
+      "quien": "Secretaría-Intervención",
+      "canal": "Teléfono de guardia de la diputación",
+      "plazo": "Sin demora",
+      "base": "Convenio de asistencia de la diputación",
+      "evidencia": "Hora del aviso y persona contactada",
+      "accion": "info",
+      "color": "critical",
+      "mail_asunto": "Avisar al servicio provincial de ciberseguridad",
+      "mail_cuerpo": "Avisar al servicio provincial de ciberseguridad."
+    },
+    {
+      "id": "ci-2",
+      "ctx": [
+        "ciber"
+      ],
+      "order": 20,
+      "when": "Ahora",
+      "bucket": "now",
+      "mandatory": true,
+      "title": "Notificar el incidente al CCN-CERT",
+      "quien": "Servicio provincial en nombre del ayuntamiento",
+      "canal": "Canal oficial de notificación",
+      "plazo": "Sin demora",
+      "base": "Esquema Nacional de Seguridad",
+      "evidencia": "Notificación enviada y número de caso",
+      "accion": "info",
+      "color": "critical",
+      "mail_asunto": "Notificar el incidente al CCN-CERT",
+      "mail_cuerpo": "Notificar el incidente al CCN-CERT."
+    },
+    {
+      "id": "ci-3",
+      "ctx": [
+        "ciber"
+      ],
+      "order": 30,
+      "when": "Hoy",
+      "bucket": "next",
+      "mandatory": false,
+      "title": "Valorar denuncia ante la Guardia Civil",
+      "quien": "Alcaldía con asesoría jurídica",
+      "canal": "Denuncia presencial o telemática",
+      "plazo": "Cuando haya evidencias preservadas",
+      "base": "Base penal",
+      "evidencia": "Copia de la denuncia y cadena de custodia",
+      "accion": "info",
+      "color": "warn",
+      "mail_asunto": "Valorar denuncia ante la Guardia Civil",
+      "mail_cuerpo": "Valorar denuncia ante la Guardia Civil."
+    },
+    {
+      "id": "ve-1",
+      "ctx": [
+        "vecinos"
+      ],
+      "order": 40,
+      "when": "Ahora",
+      "bucket": "now",
+      "mandatory": true,
+      "title": "Bando a los vecinos: oficina en papel y teléfono de urgencias",
+      "quien": "Alcaldía",
+      "canal": "Bando móvil, carteles y megafonía",
+      "plazo": "En la primera hora",
+      "base": "Plan municipal de emergencia",
+      "evidencia": "Texto, hora y canales usados",
+      "accion": "info",
+      "color": "critical",
+      "mail_asunto": "Bando a los vecinos: oficina en papel y teléfono de urgencias",
+      "mail_cuerpo": "Bando a los vecinos: oficina en papel y teléfono de urgencias."
+    },
+    {
+      "id": "ve-2",
+      "ctx": [
+        "vecinos"
+      ],
+      "order": 50,
+      "when": "Hoy",
+      "bucket": "next",
+      "mandatory": true,
+      "title": "Bando de fiestas: cortes de calle y plan de seguridad de la verbena",
+      "quien": "Alcaldía y Policía Local",
+      "canal": "Bando firmado en papel y carteles",
+      "plazo": "Antes de las 22:00",
+      "base": "Ordenanza de fiestas",
+      "evidencia": "Bando firmado y fotos de los carteles",
+      "accion": "info",
+      "color": "danger",
+      "mail_asunto": "Bando de fiestas: cortes de calle y plan de seguridad de la verbena",
+      "mail_cuerpo": "Bando de fiestas: cortes de calle y plan de seguridad de la verbena."
+    },
+    {
+      "id": "ve-3",
+      "ctx": [
+        "vecinos"
+      ],
+      "order": 60,
+      "when": "Cada pocas horas",
+      "bucket": "next",
+      "mandatory": false,
+      "title": "Actualización a hora fija en la web y el bando móvil",
+      "quien": "Alcaldía",
+      "canal": "Web municipal y bando móvil",
+      "plazo": "A la hora anunciada",
+      "base": "Plan municipal de emergencia",
+      "evidencia": "Registro de actualizaciones",
+      "accion": "info",
+      "color": "warn",
+      "mail_asunto": "Actualización a hora fija en la web y el bando móvil",
+      "mail_cuerpo": "Actualización a hora fija en la web y el bando móvil."
+    },
+    {
+      "id": "da-1",
+      "ctx": [
+        "datos"
+      ],
+      "order": 70,
+      "when": "Ahora",
+      "bucket": "now",
+      "mandatory": true,
+      "title": "Evaluar qué datos personales se han visto afectados",
+      "quien": "Secretaría con el delegado de protección de datos",
+      "canal": "Reunión y registro de la brecha",
+      "plazo": "Sin dilación",
+      "base": "RGPD art. 33",
+      "evidencia": "Evaluación inicial con hora de conocimiento",
+      "accion": "info",
+      "color": "critical",
+      "mail_asunto": "Evaluar qué datos personales se han visto afectados",
+      "mail_cuerpo": "Evaluar qué datos personales se han visto afectados."
+    },
+    {
+      "id": "da-2",
+      "ctx": [
+        "datos"
+      ],
+      "order": 80,
+      "when": "Antes de 72 h",
+      "bucket": "deadline",
+      "mandatory": true,
+      "title": "Notificar la brecha a la AEPD",
+      "quien": "Ayuntamiento como responsable del tratamiento",
+      "canal": "Sede electrónica de la AEPD",
+      "plazo": "Máximo 72 h desde el conocimiento",
+      "base": "RGPD art. 33.1",
+      "evidencia": "Justificante de notificación",
+      "accion": "info",
+      "color": "danger",
+      "mail_asunto": "Notificar la brecha a la AEPD",
+      "mail_cuerpo": "Notificar la brecha a la AEPD.",
+      "plazo_horas": 72
+    },
+    {
+      "id": "da-3",
+      "ctx": [
+        "datos"
+      ],
+      "order": 90,
+      "when": "Si hay alto riesgo",
+      "bucket": "deadline",
+      "mandatory": true,
+      "title": "Avisar a los vecinos afectados de cómo protegerse",
+      "quien": "Alcaldía",
+      "canal": "Bando, cartas y web",
+      "plazo": "Sin dilación si el riesgo es alto",
+      "base": "RGPD art. 34",
+      "evidencia": "Texto comunicado y fecha",
+      "accion": "info",
+      "color": "danger",
+      "mail_asunto": "Avisar a los vecinos afectados de cómo protegerse",
+      "mail_cuerpo": "Avisar a los vecinos afectados de cómo protegerse."
+    }
+  ]
+}

@@ -1,0 +1,288 @@
+{
+  "rounds": [
+    {
+      "id": "R01",
+      "number": 1,
+      "title": "Viernes de fiestas sin ordenadores",
+      "crisis_time": "T+0",
+      "copilot": {
+        "clock": "D0 09:12",
+        "scenarios": {}
+      },
+      "events": [
+        {
+          "id": "R01-E1",
+          "type": "ALERT",
+          "anchor": "FRONT",
+          "title": "Pantallas bloqueadas · 09:05",
+          "text": "Al encender los equipos, todas las pantallas del ayuntamiento muestran el mismo mensaje: «Vuestros archivos están cifrados. Pagad en 72 horas o los publicaremos». Valdecierzo tiene 1.900 vecinos y hoy empiezan las fiestas."
+        },
+        {
+          "id": "R01-E2",
+          "type": "MESSAGE",
+          "anchor": "DOOR",
+          "source": "Técnico informático (servicio provincial)",
+          "title": "09:10 h",
+          "text": "«Es un ransomware. Ha cifrado el servidor municipal y sigue activo en la red. Todavía no sé si las copias de seguridad están a salvo.»"
+        },
+        {
+          "id": "R01-E3",
+          "type": "PHONE",
+          "anchor": "DOOR",
+          "source": "Comisión de fiestas",
+          "title": "09:12 h",
+          "text": "«Esta noche esperamos 6.000 personas en la plaza. Necesitamos los permisos de la verbena y el bando para cortar calles, y todo estaba en el ordenador.»"
+        }
+      ],
+      "panel_actions": [
+        {
+          "id": "R01-A1",
+          "when": "after",
+          "tab": "⚡ Activación",
+          "text": "Declarad en el Panel de Crisis lo que está pasando y pulsad «Analizar impacto». Mirad en la maqueta qué depende del servidor municipal."
+        }
+      ],
+      "decisions": [
+        {
+          "id": "D1",
+          "role": "R1",
+          "question": "Son las 09:12. ¿Qué haces con los equipos del ayuntamiento?",
+          "answers": [
+            {
+              "id": "A",
+              "text": "Apagarlo todo y llamar a un técnico la semana que viene, cuando acaben las fiestas."
+            },
+            {
+              "id": "B",
+              "text": "Desconectar ya los equipos de la red sin borrar nada, activar el plan con el servicio provincial y conservar las evidencias."
+            },
+            {
+              "id": "C",
+              "text": "Pagar el rescate para tenerlo todo listo antes de la verbena."
+            },
+            {
+              "id": "D",
+              "text": "Seguir trabajando con los equipos que todavía funcionan."
+            }
+          ]
+        },
+        {
+          "id": "D2",
+          "role": "R2",
+          "question": "¿Qué declaras en el Panel de Crisis?",
+          "answers": [
+            {
+              "id": "A",
+              "text": "Nada: es un problema informático, no una emergencia."
+            },
+            {
+              "id": "B",
+              "text": "E6 (ciberataque) y E3 (sin sistemas), los dos en categoría 2: ataque confirmado y sin servidor durante la jornada."
+            },
+            {
+              "id": "C",
+              "text": "Solo E3 en categoría 1: se ha estropeado el ordenador."
+            },
+            {
+              "id": "D",
+              "text": "E1: hay que cerrar el ayuntamiento."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "R02",
+      "number": 2,
+      "title": "El agua y los mayores",
+      "crisis_time": "T+3 h",
+      "copilot": {
+        "clock": "D0 12:10",
+        "declared": "D0 09:12",
+        "onset": "D0 08:40",
+        "scenarios": {
+          "E6": 2,
+          "E3": 2
+        }
+      },
+      "events": [
+        {
+          "id": "R02-E1",
+          "type": "ALERT",
+          "anchor": "FRONT",
+          "title": "Depósito de agua · 11:58",
+          "text": "El telecontrol del depósito ha dejado de responder: estaba conectado a la red del ayuntamiento. El depósito está al 40 % y hoy se esperan 38 °C."
+        },
+        {
+          "id": "R02-E2",
+          "type": "MESSAGE",
+          "anchor": "TABLE",
+          "source": "Fontanero municipal",
+          "title": "A mano",
+          "text": "«Puedo mover las bombas a mano, pero alguien tiene que vigilar el nivel cada hora. Y esta noche tengo que estar con la toma de agua de la plaza.»"
+        },
+        {
+          "id": "R02-E3",
+          "type": "PHONE",
+          "anchor": "DOOR",
+          "source": "Trabajadora social",
+          "title": "12:05 h",
+          "text": "«La lista de mayores que viven solos estaba en el servidor. Con este calor hay que llamarles hoy, y no sé a quién.»"
+        }
+      ],
+      "panel_actions": [
+        {
+          "id": "R02-A1",
+          "when": "before",
+          "tab": "🧭 Servicios RTO",
+          "text": "Revisad en el panel los servicios por RTO: ¿qué servicio se acerca antes a su límite? Fijaos en el depósito de la maqueta."
+        }
+      ],
+      "decisions": [
+        {
+          "id": "D3",
+          "role": "R2",
+          "question": "¿Cómo garantizas el agua del pueblo?",
+          "answers": [
+            {
+              "id": "A",
+              "text": "Volver a conectar el telecontrol a la red para recuperarlo cuanto antes."
+            },
+            {
+              "id": "B",
+              "text": "Operación manual con turnos de vigilancia (fontanero y Protección Civil), telecontrol aislado hasta revisarlo y la empresa del agua de la diputación avisada como respaldo."
+            },
+            {
+              "id": "C",
+              "text": "Cortar el agua por la tarde para ahorrar."
+            },
+            {
+              "id": "D",
+              "text": "Confiar en que el depósito aguante hasta el lunes."
+            }
+          ]
+        },
+        {
+          "id": "D4",
+          "role": "R1",
+          "question": "¿Qué haces con los mayores que viven solos?",
+          "answers": [
+            {
+              "id": "A",
+              "text": "Esperar a recuperar el servidor para tener la lista."
+            },
+            {
+              "id": "B",
+              "text": "Rehacer la lista con lo que hay en papel, el consultorio y lo que sabe la trabajadora social, y que Protección Civil y voluntarios llamen o visiten hoy a cada persona."
+            },
+            {
+              "id": "C",
+              "text": "Pedir en redes sociales que cada vecino se ocupe de sus vecinos."
+            },
+            {
+              "id": "D",
+              "text": "Pedir la lista a la empresa de teleasistencia y esperar su respuesta."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "R03",
+      "number": 3,
+      "title": "La verbena y los datos",
+      "crisis_time": "T+9 h",
+      "copilot": {
+        "clock": "D0 18:10",
+        "declared": "D0 09:12",
+        "onset": "D0 08:40",
+        "scenarios": {
+          "E6": 3,
+          "E3": 2,
+          "E7": 1
+        }
+      },
+      "events": [
+        {
+          "id": "R03-E1",
+          "type": "MESSAGE",
+          "anchor": "DOOR",
+          "source": "Servicio provincial de ciberseguridad",
+          "title": "17:50 h",
+          "text": "«Los atacantes han publicado una muestra con nombres y direcciones del padrón. Buena noticia: las copias de la diputación están limpias y se puede restaurar en 48 horas.»"
+        },
+        {
+          "id": "R03-E2",
+          "type": "ALERT",
+          "anchor": "FRONT",
+          "title": "Verbena · 23:00",
+          "text": "Faltan cinco horas para la verbena. No hay bando de cortes de calle firmado y el depósito sigue en manual, al 32 %."
+        },
+        {
+          "id": "R03-E3",
+          "type": "PHONE",
+          "anchor": "DOOR",
+          "source": "Periódico comarcal",
+          "title": "18:05 h",
+          "text": "«¿Es verdad que han robado los datos de todo el pueblo? Lo publicamos en una hora.»"
+        }
+      ],
+      "panel_actions": [
+        {
+          "id": "R03-A1",
+          "when": "before",
+          "tab": "📡 Comunicaciones",
+          "text": "Abrid Comunicaciones, contexto «Datos personales»: mirad la cuenta atrás de 72 h para la AEPD. Después decidid."
+        }
+      ],
+      "decisions": [
+        {
+          "id": "D5",
+          "role": "R1",
+          "question": "¿Qué pasa con la verbena de esta noche?",
+          "answers": [
+            {
+              "id": "A",
+              "text": "Suspender las fiestas."
+            },
+            {
+              "id": "B",
+              "text": "Mantenerla con el bando firmado en papel, Policía Local y Protección Civil reforzados y el agua vigilada: si el depósito baja del 25 %, se corta la toma de la plaza."
+            },
+            {
+              "id": "C",
+              "text": "Celebrarla sin bando ni cortes de calle: no da tiempo."
+            },
+            {
+              "id": "D",
+              "text": "Aplazarla sin avisar hasta tener los sistemas."
+            }
+          ]
+        },
+        {
+          "id": "D6",
+          "role": "R3",
+          "question": "¿Qué dices al periódico y a los vecinos?",
+          "answers": [
+            {
+              "id": "A",
+              "text": "Que no ha pasado nada."
+            },
+            {
+              "id": "B",
+              "text": "Reconocer el ciberataque, explicar qué datos pueden estar afectados y qué deben vigilar (llamadas o mensajes que se hagan pasar por el ayuntamiento), que se ha avisado a las autoridades y cuándo habrá más información."
+            },
+            {
+              "id": "C",
+              "text": "Echar la culpa a la empresa informática."
+            },
+            {
+              "id": "D",
+              "text": "No decir nada hasta que termine la investigación."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
