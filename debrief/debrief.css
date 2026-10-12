@@ -65,3 +65,19 @@ td.q { min-width: 260px; }
   .finding-head select, .ffield input, .ffield textarea, .notes { background: #fff; color: #0f172a; border-color: #cbd5e1; }
   .banner { color: #92400e; background: #fffbeb; }
 }
+
+/* ── Informe, envío e histórico ── */
+.report-bar { display: grid; gap: 8px; background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 14px; }
+.report-bar .actions { margin: 4px 0 0; }
+.mail { display: grid; gap: 4px; font-size: 13px; color: var(--muted); }
+.mail input { font: inherit; font-size: 15px; color: var(--text); background: #0b1224; border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; width: 100%; }
+.small { font-size: 13px; margin: 0; }
+iframe.report { display: block; width: 100%; height: 80vh; min-height: 480px; margin-top: 16px; background: #fff; border: 1px solid var(--border); border-radius: 14px; }
+details.data { margin-top: 32px; border-top: 1px solid var(--border); padding-top: 12px; }
+details.data summary { cursor: pointer; font-weight: 700; color: var(--muted); padding: 8px 0; }
+.history { margin-top: 40px; border-top: 1px solid var(--border); padding-top: 8px; }
+.btn-like { display: inline-flex; align-items: center; font-weight: 600; background: #1e293b; border: 1px solid var(--border); border-radius: 12px; padding: 12px 18px; cursor: pointer; }
+.small-btn { padding: 6px 10px; font-size: 13px; border-radius: 8px; }
+.row-actions { display: flex; gap: 6px; justify-content: flex-end; white-space: nowrap; }
+tr.is-current td { background: rgba(219,242,102,.07); }
+@media print { .report-bar, iframe.report, .history, details.data { display: none; } }

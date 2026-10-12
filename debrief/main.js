@@ -1,6 +1,9 @@
-// Interfaz del consolidador de debrief.
+// Interfaz del debrief: consolida los registros, prepara el informe (vista previa, PDF, descarga y envío por
+// correo sin servidor) y guarda cada simulacro en el histórico local del facilitador.
 import { consolidate, validateLogs, toCSV, findingsCSV, sha256 } from './consolidar.js';
 import { verifyLog, shortPrint } from '../js/integrity.js';
+import { buildReport, reportSummary } from './informe.js';
+import { recordKey, saveRecord, getRecord, deleteRecord, listRecords, exportArchive, importArchive } from './historico.js';
 
 const $ = (id) => document.getElementById(id);
 const el = (tag, text, cls) => { const e = document.createElement(tag); if (text != null) e.textContent = text; if (cls) e.className = cls; return e; };
@@ -29,9 +32,12 @@ async function loadPack(exerciseId) {
       const manifest = await (await fetch(new URL('manifest.json', base))).json();
       if (manifest.exercise_id !== exerciseId) continue;
       const files = manifest.files || {};
-      const rounds = (await (await fetch(new URL(files.rounds || 'rounds.json', base))).json()).rounds;
-      const debrief = files.debrief ? await (await fetch(new URL(files.debrief, base))).json().catch(() => ({})) : {};
-      return { manifest, rounds, debrief };
+      const get = async (f, fallback) => { try { return await (await fetch(new URL(f, base))).json(); } catch { return fallback; } };
+      const rounds = (await get(files.rounds || 'rounds.json', {})).rounds || [];
+      const debrief = files.debrief ? await get(files.debrief, {}) : {};
+      const roles = (await get(files.roles || 'roles.json', {})).roles || [];
+      const site = files.site ? await get(files.site, null) : null;
+      return { manifest, rounds, debrief, roles, site };
     }
   } catch { /* sin pack: se consolida igualmente con lo que traen los registros */ }
   return null;
@@ -45,15 +51,112 @@ function loadEdits() {
   try { return JSON.parse(localStorage.getItem(storeKey()) || 'null'); } catch { return null; }
 }
 
+let saveTimer = null;
 function saveEdits() {
   try { localStorage.setItem(storeKey(), JSON.stringify({ findings: current.findings, notes: current.notes })); } catch { /* sin almacenamiento */ }
   current.result.findings = current.findings.filter((f) => f.include);
   current.result.facilitator_notes = current.notes;
+  // El informe y el histórico se actualizan poco después de dejar de escribir.
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => { renderReport(); saveToHistory(); }, 500);
+}
+
+/* ─────────────── Informe ─────────────── */
+
+const reportHTML = () => buildReport(current.result, { pack: current.pack, findings: current.findings, notes: current.notes });
+const reportName = () => `Informe_${current.result.exercise?.id}_${current.result.session_id}.html`.replace(/[^\w.-]+/g, '_');
+
+function renderReport() {
+  if (!current) return;
+  const frame = $('report');
+  const y = frame.contentWindow ? frame.contentWindow.scrollY : 0;
+  frame.srcdoc = reportHTML();
+  frame.onload = () => { try { frame.contentWindow.scrollTo(0, y); } catch { /* nada */ } };
+}
+
+function mailBody() {
+  const r = current.result;
+  const s = reportSummary(r);
+  const name = (current.pack && current.pack.manifest && current.pack.manifest.name) || r.exercise?.id;
+  const recs = current.findings.filter((f) => f.include && f.action).slice(0, 5).map((f) => `- ${f.capability}: ${f.action}`);
+  return [
+    `Informe del simulacro «${name}» (sesión ${r.session_id}).`,
+    '',
+    `Decisiones como la referencia: ${s.expected} de ${s.evaluated}${s.pct != null ? ` (${s.pct} %)` : ''}.`,
+    `Desviaciones graves: ${s.high_deviations}. Discrepancias entre visores: ${s.discrepancies}.`,
+    s.weak.length ? `Competencias a reforzar: ${s.weak.join(', ')}.` : 'Sin competencias con desviaciones.',
+    ...(recs.length ? ['', 'Principales recomendaciones:', ...recs] : []),
+    '',
+    `Se adjunta el informe completo (${reportName()}): cronología, decisiones con la respuesta de referencia y recomendaciones. Se abre en cualquier navegador y se puede imprimir como PDF.`,
+  ].join('\n');
+}
+
+async function sendReport() {
+  const to = $('mail-to').value.split(/[;,\s]+/).filter(Boolean);
+  try { localStorage.setItem('debrief:mailto', to.join(', ')); } catch { /* nada */ }
+  const status = $('send-status');
+  const html = reportHTML();
+  const file = new File([html], reportName(), { type: 'text/html' });
+  const subject = `Informe del simulacro · ${current.result.exercise?.id} · ${current.result.session_id}`;
+  // Móviles, tabletas y algunos visores: compartir el informe como adjunto con la app de correo.
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    try {
+      await navigator.share({ files: [file], title: subject, text: mailBody() });
+      status.textContent = 'Informe compartido.';
+      return;
+    } catch (e) { if (e && e.name === 'AbortError') return; }
+  }
+  // Ordenador: se descarga el informe y se abre el correo con destinatarios, asunto y resumen; solo falta adjuntarlo.
+  download(reportName(), html, 'text/html');
+  const a = document.createElement('a');
+  a.href = `mailto:${to.map(encodeURIComponent).join(',')}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(mailBody())}`;
+  document.body.append(a); a.click(); a.remove();
+  status.textContent = `Se ha descargado «${reportName()}» y se ha abierto tu correo: adjunta ese fichero y envía.`;
+}
+
+/* ─────────────── Histórico local ─────────────── */
+
+async function saveToHistory() {
+  if (!current) return;
+  const r = current.result;
+  const s = reportSummary(r);
+  try {
+    await saveRecord({
+      key: recordKey(r), exerciseId: r.exercise?.id, version: r.exercise?.version,
+      name: (current.pack && current.pack.manifest && current.pack.manifest.name) || r.exercise?.id,
+      session: r.session_id, startedAt: r.started_at || r.generated_at, roles: r.roles_loaded,
+      summary: { expected: s.expected, evaluated: s.evaluated, high: s.high_deviations },
+      logs: current.logs.map((l) => ({ name: l.name, text: l.text })),
+      findings: current.findings, notes: current.notes,
+    });
+    renderHistory();
+  } catch { /* sin histórico en este navegador */ }
+}
+
+async function renderHistory() {
+  let recs = [];
+  try { recs = await listRecords(); } catch (e) { $('history').replaceChildren(row(['—', e.message, '', '', '', '', ''])); return; }
+  if (!recs.length) { $('history').replaceChildren(row(['—', 'Aún no hay simulacros guardados.', '', '', '', '', ''])); return; }
+  $('history').replaceChildren(...recs.map((rec) => {
+    const open = el('button', 'Abrir', 'small-btn');
+    open.addEventListener('click', async () => { const full = await getRecord(rec.key); if (full) { await processLogs(full.logs, full); window.scrollTo({ top: 0, behavior: 'smooth' }); } });
+    const del = el('button', 'Borrar', 'small-btn');
+    del.addEventListener('click', async () => {
+      if (!confirm(`¿Borrar del histórico el simulacro ${rec.exerciseId} · ${rec.session}? Esta acción no se puede deshacer.`)) return;
+      await deleteRecord(rec.key); renderHistory();
+    });
+    const actions = document.createElement('div'); actions.className = 'row-actions'; actions.append(open, del);
+    const isCurrent = current && recordKey(current.result) === rec.key;
+    const tr = row([rec.startedAt ? new Date(rec.startedAt).toLocaleString('es-ES') : '—', rec.name || rec.exerciseId, rec.session, (rec.roles || []).join(' '),
+      rec.summary ? `${rec.summary.expected} / ${rec.summary.evaluated}` : '—', rec.summary ? String(rec.summary.high) : '—', actions]);
+    if (isCurrent) tr.className = 'is-current';
+    return tr;
+  }));
 }
 
 function renderFindings() {
   const wrap = $('findings');
-  if (!current.findings.length) { wrap.replaceChildren(el('p', 'Sin hallazgos propuestos: todas las decisiones coinciden con la referencia.', 'muted')); return; }
+  if (!current.findings.length) { wrap.replaceChildren(el('p', 'Sin recomendaciones propuestas: todas las decisiones coinciden con la referencia. Puedes añadir las tuyas.', 'muted')); return; }
   wrap.replaceChildren(...current.findings.map((f, i) => {
     const card = el('div', null, `finding sev-${f.severity}${f.include ? '' : ' excluded'}`);
     const head = el('div', null, 'finding-head');
@@ -85,12 +188,18 @@ function renderFindings() {
 /* ─────────────── Carga y pintado ─────────────── */
 
 async function handleFiles(fileList) {
+  const entries = [];
+  for (const f of fileList) entries.push({ name: f.name, text: await f.text() });
+  await processLogs(entries);
+}
+
+// entries: [{ name, text }] de los visores. saved: registro del histórico al reabrir (con sus ediciones).
+async function processLogs(entries, saved = null) {
   const msgs = $('messages');
   msgs.replaceChildren();
   const logs = [];
-  for (const f of fileList) {
-    const text = await f.text();
-    try { logs.push({ name: f.name, text, data: JSON.parse(text), hash: await sha256(text) }); }
+  for (const f of entries) {
+    try { logs.push({ name: f.name, text: f.text, data: JSON.parse(f.text), hash: await sha256(f.text) }); }
     catch { msgs.append(el('p', `${f.name}: no es un JSON válido.`, 'error')); }
   }
   for (const l of logs) {
@@ -106,12 +215,15 @@ async function handleFiles(fileList) {
   const result = consolidate(logs, pack);
   result.sources = logs.map((l) => ({ file: l.name, role: l.data.local_role, sha256: l.hash, chain: l.chain.status, chain_head: l.chain.head, chain_detail: l.chain.detail }));
   result.generated_at = new Date().toISOString();
-  current = { result, logs };
-  const edits = loadEdits();
-  current.findings = edits ? edits.findings : result.suggested_findings.map((f) => ({ ...f, include: true, owner: '', due: '' }));
-  current.notes = edits ? edits.notes : '';
+  current = { result, logs, pack };
+  if (!saved) { try { saved = await getRecord(recordKey(result)); } catch { saved = null; } }
+  const edits = saved || loadEdits();
+  current.findings = edits && edits.findings ? edits.findings : result.suggested_findings.map((f) => ({ ...f, include: true, owner: '', due: '' }));
+  current.notes = edits && edits.notes ? edits.notes : '';
+  if (saved) msgs.append(el('p', 'Simulacro abierto desde el histórico de este equipo.', 'muted'));
   saveEdits();
   render();
+  renderReport();
 }
 
 function render() {
@@ -176,10 +288,25 @@ const base = () => `${current.result.exercise.id}_${current.result.session_id}`;
 $('btn-json').addEventListener('click', () => { saveEdits(); download(`${base()}_consolidado.json`, JSON.stringify(current.result, null, 2), 'application/json'); });
 $('btn-csv').addEventListener('click', () => download(`${base()}_decisiones.csv`, toCSV(current.result), 'text/csv;charset=utf-8'));
 $('btn-actions-csv').addEventListener('click', () => { saveEdits(); download(`${base()}_acciones_mejora.csv`, findingsCSV(current.result), 'text/csv;charset=utf-8'); });
-$('btn-print').addEventListener('click', () => window.print());
+$('btn-pdf').addEventListener('click', () => { const w = $('report').contentWindow; if (w) { w.focus(); w.print(); } });
+$('btn-report').addEventListener('click', () => download(reportName(), reportHTML(), 'text/html'));
+$('btn-send').addEventListener('click', () => sendReport());
+try { $('mail-to').value = localStorage.getItem('debrief:mailto') || ''; } catch { /* nada */ }
+$('btn-export-archive').addEventListener('click', async () => {
+  try { download(`simulacros_${new Date().toISOString().slice(0, 10)}.json`, await exportArchive(), 'application/json'); }
+  catch (e) { $('messages').replaceChildren(el('p', e.message, 'error')); }
+});
+$('import-archive').addEventListener('change', async (e) => {
+  const f = e.target.files[0];
+  if (!f) return;
+  try { const n = await importArchive(await f.text()); $('messages').replaceChildren(el('p', `${n} simulacros importados al histórico.`, 'muted')); renderHistory(); }
+  catch (err) { $('messages').replaceChildren(el('p', err.message, 'error')); }
+  e.target.value = '';
+});
+renderHistory();
 
 // Gancho de pruebas automatizadas.
-if (new URLSearchParams(location.search).has('debug')) window.__debrief = { get current() { return current; } };
+if (new URLSearchParams(location.search).has('debug')) window.__debrief = { get current() { return current; }, reportHTML, mailBody };
 
 // Sin conexión también cuando el PC del facilitador solo abre el debrief.
 if ('serviceWorker' in navigator && location.protocol === 'https:') {

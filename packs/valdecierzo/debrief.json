@@ -17,37 +17,67 @@
       "preferred_response": "B",
       "capability": "deteccion_escalado",
       "severity_if_missed": "high",
-      "rationale": "Contener primero: desconectar sin borrar frena la propagación y conserva las evidencias. Pagar no garantiza nada y financia al atacante; seguir trabajando extiende el daño."
+      "rationale": "Contener primero: desconectar sin borrar frena la propagación y conserva las evidencias. Pagar no garantiza nada y financia al atacante; seguir trabajando extiende el daño.",
+      "why_not": {
+        "A": "Apagar y olvidarse destruye evidencias y deja la crisis sin gestionar durante las fiestas.",
+        "C": "Pagar no garantiza recuperar nada ni que no se publiquen los datos, y financia a los atacantes.",
+        "D": "Seguir trabajando con equipos de la red infectada extiende el daño."
+      }
     },
     "D2": {
       "preferred_response": "B",
       "capability": "decision",
       "severity_if_missed": "medium",
-      "rationale": "Hay un ataque confirmado (E6) y el ayuntamiento está sin sistemas (E3). Declararlo así activa las estrategias correctas; quedarse corto deja sin escalar un incidente que obliga a notificar."
+      "rationale": "Hay un ataque confirmado (E6) y el ayuntamiento está sin sistemas (E3). Declararlo así activa las estrategias correctas; quedarse corto deja sin escalar un incidente que obliga a notificar.",
+      "why_not": {
+        "A": "Un ataque que deja al ayuntamiento sin sistemas es una emergencia de servicio, aunque sea informática.",
+        "C": "Quedarse corto oculta el ataque confirmado y no activa las estrategias ni las notificaciones.",
+        "D": "El edificio se puede usar; cerrarlo no resuelve el problema y deja sin atención a los vecinos."
+      }
     },
     "D3": {
       "preferred_response": "B",
       "capability": "recuperacion",
       "severity_if_missed": "high",
-      "rationale": "El agua es el servicio con menos margen. La operación manual con vigilancia lo mantiene sin reconectar un sistema que podría estar comprometido, y el proveedor de respaldo cubre si falla."
+      "rationale": "El agua es el servicio con menos margen. La operación manual con vigilancia lo mantiene sin reconectar un sistema que podría estar comprometido, y el proveedor de respaldo cubre si falla.",
+      "why_not": {
+        "A": "Reconectar un sistema que puede estar comprometido lleva el ataque al control del agua.",
+        "C": "Cortar el agua con 38 °C perjudica a la población sin necesidad: hay alternativa manual.",
+        "D": "Confiar sin vigilar con el depósito al 40 % y el calor es dejarlo a la suerte."
+      }
     },
     "D4": {
       "preferred_response": "B",
       "capability": "informacion",
       "severity_if_missed": "high",
-      "rationale": "La información crítica existe fuera del servidor: papel, consultorio y memoria de las personas. Las personas vulnerables no pueden esperar a que vuelvan los sistemas."
+      "rationale": "La información crítica existe fuera del servidor: papel, consultorio y memoria de las personas. Las personas vulnerables no pueden esperar a que vuelvan los sistemas.",
+      "why_not": {
+        "A": "Las personas vulnerables no pueden esperar a que vuelvan los sistemas.",
+        "C": "Un llamamiento genérico no garantiza que nadie se quede sin atender.",
+        "D": "Esperar a un tercero cuando la información existe en el propio pueblo retrasa la ayuda."
+      }
     },
     "D5": {
       "preferred_response": "B",
       "capability": "autoridad",
       "severity_if_missed": "medium",
-      "rationale": "Decidir con condiciones claras: la fiesta sigue si la seguridad está cubierta, con un umbral objetivo (el 25 % del depósito) para cortar. Celebrarla sin bando o aplazarla sin avisar crea riesgos nuevos."
+      "rationale": "Decidir con condiciones claras: la fiesta sigue si la seguridad está cubierta, con un umbral objetivo (el 25 % del depósito) para cortar. Celebrarla sin bando o aplazarla sin avisar crea riesgos nuevos.",
+      "why_not": {
+        "A": "Suspender sin valorar las condiciones castiga al pueblo cuando la seguridad se puede cubrir.",
+        "C": "Una verbena sin bando ni cortes de calle es un riesgo de seguridad para miles de personas.",
+        "D": "Aplazar sin avisar provoca confusión y gente en la calle sin dispositivo de seguridad."
+      }
     },
     "D6": {
       "preferred_response": "B",
       "capability": "cumplimiento",
       "severity_if_missed": "high",
-      "rationale": "Con datos publicados hay obligación de notificar a la AEPD en 72 horas y, si el riesgo es alto, de avisar a los afectados. Reconocer el incidente y decir cómo protegerse frena las estafas que vendrán."
+      "rationale": "Con datos publicados hay obligación de notificar a la AEPD en 72 horas y, si el riesgo es alto, de avisar a los afectados. Reconocer el incidente y decir cómo protegerse frena las estafas que vendrán.",
+      "why_not": {
+        "A": "Negarlo es falso y deja a los vecinos expuestos a estafas sin saberlo.",
+        "C": "Culpar a otro no protege a nadie y la responsabilidad de los datos es del ayuntamiento.",
+        "D": "Callar mientras se publican datos impide que los vecinos se protejan."
+      }
     }
   }
 }

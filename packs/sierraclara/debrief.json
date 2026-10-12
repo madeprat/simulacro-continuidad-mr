@@ -17,37 +17,67 @@
       "preferred_response": "B",
       "capability": "deteccion_escalado",
       "severity_if_missed": "high",
-      "rationale": "Hay que pasar a papel de inmediato y escalar: la asistencia no puede esperar a la reparación. Cerrar Urgencias es desproporcionado y compartir fotos de informes por mensajería personal crea una brecha nueva."
+      "rationale": "Hay que pasar a papel de inmediato y escalar: la asistencia no puede esperar a la reparación. Cerrar Urgencias es desproporcionado y compartir fotos de informes por mensajería personal crea una brecha nueva.",
+      "why_not": {
+        "A": "La asistencia no puede esperar de 4 a 6 horas a una reparación: hay que pasar ya a papel.",
+        "C": "Cerrar Urgencias es desproporcionado: se puede seguir atendiendo en papel y desviar solo lo no crítico.",
+        "D": "Compartir fotos de informes por mensajería personal crea una brecha de datos de salud nueva."
+      }
     },
     "D2": {
       "preferred_response": "B",
       "capability": "decision",
       "severity_if_missed": "medium",
-      "rationale": "Lo que hay es pérdida de sistemas clínicos durante horas por un área inutilizable. Declarar un ataque sin indicios distorsiona la respuesta; no declarar nada impide activar las estrategias."
+      "rationale": "Lo que hay es pérdida de sistemas clínicos durante horas por un área inutilizable. Declarar un ataque sin indicios distorsiona la respuesta; no declarar nada impide activar las estrategias.",
+      "why_not": {
+        "A": "Sin sistemas clínicos durante horas, la causa da igual: es un incidente de continuidad.",
+        "C": "Declarar un ataque sin indicios distorsiona la respuesta y las notificaciones.",
+        "D": "El proveedor de climatización explica la causa, pero el impacto está en los sistemas clínicos."
+      }
     },
     "D3": {
       "preferred_response": "B",
       "capability": "recuperacion",
       "severity_if_missed": "high",
-      "rationale": "Cuatro a seis horas más sin sistemas clínicos es más riesgo que perder registros que existen en papel. La clave es reincorporarlos con verificación. Arrancar con calor puede dañar los equipos y los datos."
+      "rationale": "Cuatro a seis horas más sin sistemas clínicos es más riesgo que perder registros que existen en papel. La clave es reincorporarlos con verificación. Arrancar con calor puede dañar los equipos y los datos.",
+      "why_not": {
+        "A": "Seguir sin historia clínica de 4 a 6 horas más es más riesgo que reincorporar registros que existen en papel.",
+        "C": "Arrancar servidores con calor puede dañarlos y corromper los datos.",
+        "D": "Restaurar sin validar puede introducir datos erróneos en la historia clínica."
+      }
     },
     "D4": {
       "preferred_response": "B",
       "capability": "informacion",
       "severity_if_missed": "high",
-      "rationale": "El casi-incidente avisa de un fallo del circuito en papel. Un resultado crítico debe llegar a una persona concreta y quedar registrado."
+      "rationale": "El casi-incidente avisa de un fallo del circuito en papel. Un resultado crítico debe llegar a una persona concreta y quedar registrado.",
+      "why_not": {
+        "A": "El casi-incidente avisa de un fallo del circuito: si no se corrige, se repetirá.",
+        "C": "Un resultado crítico no puede depender de que alguien vaya a buscarlo «cuando pueda».",
+        "D": "Reducir analíticas no arregla cómo llegan los resultados críticos."
+      }
     },
     "D5": {
       "preferred_response": "B",
       "capability": "cumplimiento",
       "severity_if_missed": "high",
-      "rationale": "Una avería también es un incidente de seguridad si afecta a la disponibilidad, y una brecha de disponibilidad de datos de salud con efectos sobre pacientes es notificable. No hace falta un atacante para tener obligaciones."
+      "rationale": "Una avería también es un incidente de seguridad si afecta a la disponibilidad, y una brecha de disponibilidad de datos de salud con efectos sobre pacientes es notificable. No hace falta un atacante para tener obligaciones.",
+      "why_not": {
+        "A": "Una avería que afecta gravemente a la disponibilidad también es un incidente de seguridad notificable.",
+        "C": "Como servicio público hay que notificar al CCN-CERT además de valorar la brecha ante la AEPD.",
+        "D": "Los plazos corren desde el conocimiento; esperar al fabricante los incumple."
+      }
     },
     "D6": {
       "preferred_response": "B",
       "capability": "comunicacion",
       "severity_if_missed": "high",
-      "rationale": "Los estafadores aprovechan las crisis. La respuesta es un mensaje claro por canales oficiales que desactive el engaño, sin usar el mismo canal que el atacante."
+      "rationale": "Los estafadores aprovechan las crisis. La respuesta es un mensaje claro por canales oficiales que desactive el engaño, sin usar el mismo canal que el atacante.",
+      "why_not": {
+        "A": "Aunque el hospital no lo envíe, los pacientes lo asocian a él: hay que protegerlos.",
+        "C": "Usar el mismo canal que el atacante confunde a los pacientes y refuerza el engaño.",
+        "D": "Esperar a que pregunte un medio deja a los pacientes expuestos al fraude."
+      }
     }
   }
 }

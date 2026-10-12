@@ -17,37 +17,67 @@
       "preferred_response": "B",
       "capability": "deteccion_escalado",
       "severity_if_missed": "high",
-      "rationale": "Con fuego y humo en el edificio no se espera a nadie: se evacúa según el plan y se llama al 112. Evacuar solo una parte o llamar antes a las familias pone en riesgo a quien queda dentro."
+      "rationale": "Con fuego y humo en el edificio no se espera a nadie: se evacúa según el plan y se llama al 112. Evacuar solo una parte o llamar antes a las familias pone en riesgo a quien queda dentro.",
+      "why_not": {
+        "A": "Con fuego y humo dentro no se espera a nadie: el plan de autoprotección ordena evacuar ya.",
+        "C": "El humo se extiende y la alarma ya ha sonado: evacuar a medias deja a gente en riesgo y crea confusión.",
+        "D": "Primero se pone a salvo al alumnado; llamar a las familias trae coches y gente que dificultan la emergencia."
+      }
     },
     "D2": {
       "preferred_response": "B",
       "capability": "informacion",
       "severity_if_missed": "high",
-      "rationale": "Nadie entra en un edificio con humo. El recuento sirve para dar a los bomberos el dato que más necesitan: quién falta y dónde se le vio por última vez. Mandar a alumnos a buscar multiplica el riesgo."
+      "rationale": "Nadie entra en un edificio con humo. El recuento sirve para dar a los bomberos el dato que más necesitan: quién falta y dónde se le vio por última vez. Mandar a alumnos a buscar multiplica el riesgo.",
+      "why_not": {
+        "A": "Nadie entra en un edificio con humo: añadirías una víctima y dificultarías el trabajo de los bomberos.",
+        "C": "Suponer que están en otro grupo sin comprobarlo puede costar minutos vitales.",
+        "D": "Mandar a alumnos a buscar multiplica el riesgo y descontrola el recuento."
+      }
     },
     "D3": {
       "preferred_response": "B",
       "capability": "comunicacion",
       "severity_if_missed": "high",
-      "rationale": "El bulo corre más que la verdad: hay que llegar antes con un mensaje corto, cierto y útil (todos bien, cómo recoger, próxima actualización). Callar deja el espacio al vídeo viral."
+      "rationale": "El bulo corre más que la verdad: hay que llegar antes con un mensaje corto, cierto y útil (todos bien, cómo recoger, próxima actualización). Callar deja el espacio al vídeo viral.",
+      "why_not": {
+        "A": "Mientras callas, el vídeo viral cuenta otra historia; hay que llegar antes con lo que sí se sabe.",
+        "C": "Responder uno a uno amplifica el bulo y no llega a las familias que esperan noticias.",
+        "D": "Cada alumno contaría una versión distinta; el aviso oficial debe ser uno y del colegio."
+      }
     },
     "D4": {
       "preferred_response": "B",
       "capability": "terceros",
       "severity_if_missed": "medium",
-      "rationale": "El acceso de emergencia es prioritario y la entrega de menores se hace por listas. Pedir apoyo a la Policía Local y abrir otra salida resuelve las dos cosas."
+      "rationale": "El acceso de emergencia es prioritario y la entrega de menores se hace por listas. Pedir apoyo a la Policía Local y abrir otra salida resuelve las dos cosas.",
+      "why_not": {
+        "A": "El acceso de los bomberos es responsabilidad de quien coordina la emergencia; hay que pedir apoyo y organizarlo.",
+        "C": "Meter coches en el recinto bloquea aún más el acceso de emergencia.",
+        "D": "Entregar menores sin listas es inseguro y deja sin control quién se ha llevado a quién."
+      }
     },
     "D5": {
       "preferred_response": "B",
       "capability": "recuperacion",
       "severity_if_missed": "high",
-      "rationale": "Continuidad es seguir prestando lo esencial con lo que queda en pie: usar los espacios sanos, priorizar a quien tiene más en juego y revisar el plan. Cerrar un mes o volver a un edificio dañado son los dos extremos que hay que evitar."
+      "rationale": "Continuidad es seguir prestando lo esencial con lo que queda en pie: usar los espacios sanos, priorizar a quien tiene más en juego y revisar el plan. Cerrar un mes o volver a un edificio dañado son los dos extremos que hay que evitar.",
+      "why_not": {
+        "A": "Cerrar diez días cuando hay edificios sanos interrumpe la educación sin necesidad.",
+        "C": "Un edificio con daños por humo no es seguro hasta que lo certifiquen.",
+        "D": "Un mes en línea para todos ignora los espacios disponibles y perjudica a quien más necesita la presencialidad."
+      }
     },
     "D6": {
       "preferred_response": "B",
       "capability": "retorno",
       "severity_if_missed": "medium",
-      "rationale": "Un plan sin fechas ni responsables no tranquiliza a nadie. Lo que funciona es concretar qué cambia para cada familia, cuándo y a quién preguntar, y cumplir el plazo de la Inspección."
+      "rationale": "Un plan sin fechas ni responsables no tranquiliza a nadie. Lo que funciona es concretar qué cambia para cada familia, cuándo y a quién preguntar, y cumplir el plazo de la Inspección.",
+      "why_not": {
+        "A": "Un mensaje sin fechas ni detalles no responde a lo que preguntan las familias ni la Inspección.",
+        "C": "La Inspección ha puesto plazo hoy; esperar a la aseguradora lo incumple.",
+        "D": "Las redes no llegan a todas las familias ni son el canal oficial con la Inspección."
+      }
     }
   }
 }

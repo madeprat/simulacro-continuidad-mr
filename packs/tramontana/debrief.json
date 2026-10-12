@@ -17,175 +17,320 @@
       "preferred_response": "B",
       "capability": "deteccion_escalado",
       "severity_if_missed": "high",
-      "rationale": "Declarar pronto y proporcionado: E3 tiene base objetiva (SIEM degradado, ingesta perdida) y E6 se anuncia como hipótesis para recalcular. Esperar al forense retrasa todo; declarar al máximo «por si acaso» distorsiona el nivel."
+      "rationale": "Declarar pronto y proporcionado: E3 tiene base objetiva (SIEM degradado, ingesta perdida) y E6 se anuncia como hipótesis para recalcular. Esperar al forense retrasa todo; declarar al máximo «por si acaso» distorsiona el nivel.",
+      "why_not": {
+        "A": "Esperar al forense deja el reloj parado y sin estrategias activas mientras el daño avanza; hay base objetiva para declarar ya.",
+        "C": "Declarar al máximo «por si acaso» infla el nivel, moviliza recursos que no tocan y hace perder credibilidad al panel.",
+        "D": "Declarar solo la hipótesis más grave e ignorar lo que sí está comprobado (la degradación de sistemas) invierte el orden: primero lo que se sabe."
+      }
     },
     "D2": {
       "preferred_response": "C",
       "capability": "deteccion_escalado",
       "severity_if_missed": "medium",
-      "rationale": "El reloj debe empezar con el primer indicio real, no con la detección ni con el botón. De ello dependen RTO, MTPD, pérdidas y el plazo RGPD."
+      "rationale": "El reloj debe empezar con el primer indicio real, no con la detección ni con el botón. De ello dependen RTO, MTPD, pérdidas y el plazo RGPD.",
+      "why_not": {
+        "A": "Contar desde el botón subestima el tiempo real de impacto y hace que RTO, MTPD y plazos parezcan holgados cuando no lo son.",
+        "B": "La detección no es el inicio: el compromiso suele empezar antes, y los plazos se cuentan desde el primer indicio real.",
+        "D": "Una hora arbitraria no es un dato: exagera pérdidas y plazos sin base y no se puede justificar después."
+      }
     },
     "D3": {
       "preferred_response": "C",
       "capability": "autoridad",
       "severity_if_missed": "high",
-      "rationale": "Declara quien tiene la autoridad (o su suplente nominado si no es localizable), sobre sospecha razonable y dejando constancia de hora, declarante y base."
+      "rationale": "Declara quien tiene la autoridad (o su suplente nominado si no es localizable), sobre sospecha razonable y dejando constancia de hora, declarante y base.",
+      "why_not": {
+        "A": "Esperar a la certeza forense paraliza la respuesta; se declara sobre sospecha razonable y se ajusta después.",
+        "B": "Quien detecta informa y escala, pero no tiene la autoridad para declarar la situación.",
+        "D": "El comité aún no existe hasta que alguien declara; esperar a su primera reunión retrasa todo y diluye la responsabilidad."
+      }
     },
     "D4": {
       "preferred_response": "A",
       "capability": "cumplimiento",
       "severity_if_missed": "medium",
-      "rationale": "Aún no hay obligación de notificar, pero sí de prepararse: registro del incidente, borradores y matriz de contactos y obligaciones listos."
+      "rationale": "Aún no hay obligación de notificar, pero sí de prepararse: registro del incidente, borradores y matriz de contactos y obligaciones listos.",
+      "why_not": {
+        "B": "Notificar sin saber aún si hay brecha genera una notificación vacía; el plazo empieza con el conocimiento de la brecha, no antes.",
+        "C": "Un comunicado masivo antes de saber quién está afectado alarma a todos y obliga a rectificar.",
+        "D": "Cumplimiento actúa desde el primer momento: prepararse antes evita llegar tarde cuando nazca la obligación."
+      }
     },
     "D5": {
       "preferred_response": "C",
       "capability": "deteccion_escalado",
       "severity_if_missed": "medium",
-      "rationale": "El nivel solo es útil con su base: escenario, servicios afectados, RTO más exigente, pérdida por hora y escaladas automáticas disparadas."
+      "rationale": "El nivel solo es útil con su base: escenario, servicios afectados, RTO más exigente, pérdida por hora y escaladas automáticas disparadas.",
+      "why_not": {
+        "A": "Un nivel sin su base no permite decidir: hay que saber por qué es N3 y qué lo dispara.",
+        "B": "«Estamos en rojo» transmite urgencia pero ninguna información para decidir.",
+        "D": "La pérdida acumulada es un dato entre varios; sola no explica el nivel ni orienta la decisión."
+      }
     },
     "D6": {
       "preferred_response": "B",
       "capability": "autoridad",
       "severity_if_missed": "high",
-      "rationale": "La recomendación del panel es un cálculo; la escalada es un acto de autoridad que se declara y registra con hora y base."
+      "rationale": "La recomendación del panel es un cálculo; la escalada es un acto de autoridad que se declara y registra con hora y base.",
+      "why_not": {
+        "A": "El panel calcula y recomienda; activar el comité es una decisión de quien tiene la autoridad y tiene que quedar registrada.",
+        "C": "Esperar a que el daño se duplique para no activar en falso es justo lo contrario de una respuesta proporcionada y temprana.",
+        "D": "Trasladar la decisión hacia arriba cuando el plan te da la autoridad retrasa la respuesta y diluye la responsabilidad."
+      }
     },
     "D7": {
       "preferred_response": "A",
       "capability": "comunicacion",
       "severity_if_missed": "high",
-      "rationale": "Primera comunicación al cliente afectado: conocimiento, equipo asignado, interlocutor único, hora de la próxima actualización y contención inmediata, sin atribuir causa ni vector."
+      "rationale": "Primera comunicación al cliente afectado: conocimiento, equipo asignado, interlocutor único, hora de la próxima actualización y contención inmediata, sin atribuir causa ni vector.",
+      "why_not": {
+        "B": "Atribuir causa o asumir culpa antes de la investigación compromete jurídicamente y puede ser falso.",
+        "C": "Un cliente que está siendo cifrado necesita contención y un interlocutor ya, no dentro de días.",
+        "D": "El comercial no tiene información ni capacidad de respuesta; el cliente necesita un interlocutor único del equipo de crisis."
+      }
     },
     "D8": {
       "preferred_response": "D",
       "capability": "recuperacion",
       "severity_if_missed": "high",
-      "rationale": "Activar el plan es un conjunto de medidas en los primeros 30 minutos (declaración, convocatoria, canales alternativos, congelación de cambios, bitácora, retainers, aseguradora, portavoz), no un documento."
+      "rationale": "Activar el plan es un conjunto de medidas en los primeros 30 minutos (declaración, convocatoria, canales alternativos, congelación de cambios, bitácora, retainers, aseguradora, portavoz), no un documento.",
+      "why_not": {
+        "A": "La ficha es un apoyo, no la activación: activar el plan son medidas concretas en los primeros minutos.",
+        "B": "Convocar y esperar deja treinta minutos sin congelar cambios, sin bitácora y sin canales alternativos.",
+        "C": "Comunicar a todos los clientes antes de saber el alcance genera alarma y no forma parte de los primeros pasos."
+      }
     },
     "D9": {
       "preferred_response": "B",
       "capability": "autoridad",
       "severity_if_missed": "medium",
-      "rationale": "Comité reducido con quórum, suplentes con la misma autoridad, secretario con bitácora, cadencia fijada y separación entre quien decide y quien ejecuta."
+      "rationale": "Comité reducido con quórum, suplentes con la misma autoridad, secretario con bitácora, cadencia fijada y separación entre quien decide y quien ejecuta.",
+      "why_not": {
+        "A": "Un comité con todos los directores es lento y no decide; hace falta un núcleo reducido con quórum.",
+        "C": "Sin suplentes con autoridad, cualquier ausencia bloquea las decisiones.",
+        "D": "Convocar por correo, con el correo posiblemente comprometido, y esperar a todos retrasa la constitución."
+      }
     },
     "D10": {
       "preferred_response": "C",
       "capability": "comunicacion",
       "severity_if_missed": "medium",
-      "rationale": "Con el directorio comprometido, la convocatoria se duplica por un canal fuera de banda, verificable y con confirmación activa de recepción."
+      "rationale": "Con el directorio comprometido, la convocatoria se duplica por un canal fuera de banda, verificable y con confirmación activa de recepción.",
+      "why_not": {
+        "A": "Con el directorio comprometido, una convocatoria por el canal habitual puede no llegar o ser suplantada.",
+        "B": "No usar la herramienta en absoluto pierde el canal más rápido; lo correcto es usarla y verificar por otro canal.",
+        "D": "Una lista general amplía la exposición y puede alertar al atacante; la convocatoria va solo a quien corresponde."
+      }
     },
     "D11": {
       "preferred_response": "D",
       "capability": "decision",
       "severity_if_missed": "high",
-      "rationale": "Corte segmentado decidido por quien tiene autoridad, con modo degradado previo, comunicación a los afectados, criterios de reversión y registro; ni todo ni nada."
+      "rationale": "Corte segmentado decidido por quien tiene autoridad, con modo degradado previo, comunicación a los afectados, criterios de reversión y registro; ni todo ni nada.",
+      "why_not": {
+        "A": "Un corte total sin modo degradado deja a todos los clientes sin servicio, también a los que no están afectados.",
+        "B": "Esperar al forense mientras sigue la ejecución maliciosa multiplica el daño.",
+        "C": "Una medida con impacto en cientos de clientes es una decisión de autoridad, no solo técnica."
+      }
     },
     "D12": {
       "preferred_response": "B",
       "capability": "recuperacion",
       "severity_if_missed": "medium",
-      "rationale": "El panel solo ilumina las estrategias de los escenarios declarados (declarar de menos oculta opciones) y «No hacer nada» debe evaluarse y descartarse explícitamente."
+      "rationale": "El panel solo ilumina las estrategias de los escenarios declarados (declarar de menos oculta opciones) y «No hacer nada» debe evaluarse y descartarse explícitamente.",
+      "why_not": {
+        "A": "El panel solo ilumina lo asociado a los escenarios declarados, no todo lo disponible.",
+        "C": "«No hacer nada» es una opción real que hay que valorar y descartar de forma explícita.",
+        "D": "Que una estrategia no se ilumine indica que falta declarar un escenario, no que no pueda aplicarse."
+      }
     },
     "D13": {
       "preferred_response": "B",
       "capability": "comunicacion",
       "severity_if_missed": "high",
-      "rationale": "Comunicar antes o a la vez que el corte, con alcance, duración estimada e instrucciones, priorizando a quienes tienen indicio de afectación."
+      "rationale": "Comunicar antes o a la vez que el corte, con alcance, duración estimada e instrucciones, priorizando a quienes tienen indicio de afectación.",
+      "why_not": {
+        "A": "Comunicar después priva al cliente de prepararse y rompe la confianza.",
+        "C": "Todos los afectados por el corte tienen derecho a saberlo, no solo los de RTO más corto.",
+        "D": "Publicar en la web y esperar que lo lean no es comunicar a los afectados."
+      }
     },
     "D14": {
       "preferred_response": "C",
       "capability": "cumplimiento",
       "severity_if_missed": "high",
-      "rationale": "La lista del panel es un mínimo: faltan las obligaciones propias como proveedor, las cláusulas contractuales, empleados, medios y aseguradora."
+      "rationale": "La lista del panel es un mínimo: faltan las obligaciones propias como proveedor, las cláusulas contractuales, empleados, medios y aseguradora.",
+      "why_not": {
+        "A": "La lista del panel es un mínimo normativo; faltan obligaciones propias, contractuales y otras partes interesadas.",
+        "B": "Los plazos corren igual; esperar al forense hace incumplirlos.",
+        "D": "La Compañía tiene obligaciones propias como proveedor que no puede delegar en sus clientes."
+      }
     },
     "D15": {
       "preferred_response": "C",
       "capability": "cumplimiento",
       "severity_if_missed": "high",
-      "rationale": "Posición doble: responsable de los datos propios (AEPD en 72 h) y encargada de los de clientes (avisar sin dilación al cliente, que decide y notifica). Se determina cliente por cliente."
+      "rationale": "Posición doble: responsable de los datos propios (AEPD en 72 h) y encargada de los de clientes (avisar sin dilación al cliente, que decide y notifica). Se determina cliente por cliente.",
+      "why_not": {
+        "A": "La Compañía no es responsable de los datos de sus clientes; notificar en su nombre usurpa su decisión.",
+        "B": "Sobre sus propios datos la Compañía sí es responsable y sí notifica.",
+        "D": "El contrato no elimina las obligaciones del RGPD: las concreta."
+      }
     },
     "D16": {
       "preferred_response": "B",
       "capability": "cumplimiento",
       "severity_if_missed": "high",
-      "rationale": "Las 72 h cuentan desde que se tiene conocimiento de la brecha, aunque el alcance no esté confirmado."
+      "rationale": "Las 72 h cuentan desde que se tiene conocimiento de la brecha, aunque el alcance no esté confirmado.",
+      "why_not": {
+        "A": "Esperar a la confirmación forense hace incumplir el plazo; cuenta desde el conocimiento.",
+        "C": "La activación del comité es un hecho interno, no el inicio del plazo legal.",
+        "D": "El plazo no depende de que nadie lo pida."
+      }
     },
     "D17": {
       "preferred_response": "B",
       "capability": "comunicacion",
       "severity_if_missed": "high",
-      "rationale": "Mensaje externo breve y preestablecido, sin cifras no confirmadas, atribución, vector ni plazos; portavoz único y coordinación con jurídico y aseguradora."
+      "rationale": "Mensaje externo breve y preestablecido, sin cifras no confirmadas, atribución, vector ni plazos; portavoz único y coordinación con jurídico y aseguradora.",
+      "why_not": {
+        "A": "El silencio deja el relato a otros; hace falta un mensaje breve preestablecido.",
+        "C": "Dar cifras no confirmadas obliga a rectificar y puede contradecir la investigación.",
+        "D": "Varias voces generan mensajes contradictorios; portavoz único."
+      }
     },
     "D18": {
       "preferred_response": "C",
       "capability": "informacion",
       "severity_if_missed": "high",
-      "rationale": "Si cae el panel, se dirige con la copia fuera de banda del conjunto mínimo, fuera del dominio afectado y con fecha verificable."
+      "rationale": "Si cae el panel, se dirige con la copia fuera de banda del conjunto mínimo, fuera del dominio afectado y con fecha verificable.",
+      "why_not": {
+        "A": "Detener la gestión es justo lo que el plan debe evitar.",
+        "B": "La CMDB corporativa puede estar en el mismo dominio afectado y no ser fiable.",
+        "D": "Mientras el proveedor restaura hay que seguir dirigiendo; se necesita la copia fuera de banda."
+      }
     },
     "D19": {
       "preferred_response": "B",
       "capability": "decision",
       "severity_if_missed": "medium",
-      "rationale": "Decidir con lo disponible etiquetando qué es confirmado, preliminar o no verificado, y fijando cuándo se revisa la decisión."
+      "rationale": "Decidir con lo disponible etiquetando qué es confirmado, preliminar o no verificado, y fijando cuándo se revisa la decisión.",
+      "why_not": {
+        "A": "En crisis el dato completo casi nunca llega a tiempo; esperar es una decisión, y suele ser la peor.",
+        "C": "Presentar como confirmado lo que no lo está lleva a errores y destruye la credibilidad.",
+        "D": "Delegar en quien tiene el dato no traslada la autoridad para decidir."
+      }
     },
     "D20": {
       "preferred_response": "C",
       "capability": "recuperacion",
       "severity_if_missed": "high",
-      "rationale": "Priorizar primero MTPD superado con impacto crítico, luego obligación legal, luego RTO contractual; el volumen de negocio, lo último."
+      "rationale": "Priorizar primero MTPD superado con impacto crítico, luego obligación legal, luego RTO contractual; el volumen de negocio, lo último.",
+      "why_not": {
+        "A": "La pérdida por hora no es el primer criterio: antes van el daño irreversible y las obligaciones legales.",
+        "B": "El RTO más corto no indica qué daño ya se ha producido ni qué obligación legal pesa.",
+        "D": "Quien reclama no es necesariamente quien más lo necesita."
+      }
     },
     "D21": {
       "preferred_response": "C",
       "capability": "decision",
       "severity_if_missed": "medium",
-      "rationale": "Se decide explicitando qué eje pesa más y por qué; si se aplaza, se contiene el daño reputacional mientras tanto."
+      "rationale": "Se decide explicitando qué eje pesa más y por qué; si se aplaza, se contiene el daño reputacional mientras tanto.",
+      "why_not": {
+        "A": "Una pérdida económica pequeña no significa daño pequeño: hay que valorar el impacto reputacional.",
+        "B": "Ningún eje gana siempre; hay que enunciar cuál pesa más y por qué en cada caso.",
+        "D": "Una priorización entre servicios es una decisión del comité, no de cada responsable."
+      }
     },
     "D22": {
       "preferred_response": "B",
       "capability": "recuperacion",
       "severity_if_missed": "high",
-      "rationale": "Modo degradado concreto: consolas del cliente con accesos registrados, alcance reducido y comunicado, reasignación, relevos obligatorios e instancia limpia en red segregada."
+      "rationale": "Modo degradado concreto: consolas del cliente con accesos registrados, alcance reducido y comunicado, reasignación, relevos obligatorios e instancia limpia en red segregada.",
+      "why_not": {
+        "A": "Suspender el SOC deja a los clientes sin vigilancia en el peor momento.",
+        "C": "Trasladar la monitorización al cliente incumple el servicio comprometido.",
+        "D": "Mantener todo el alcance con el mismo equipo agota a las personas y aumenta los errores."
+      }
     },
     "D23": {
       "preferred_response": "B",
       "capability": "cumplimiento",
       "severity_if_missed": "medium",
-      "rationale": "Comunicar proactivamente con nueva estimación, activar penalizaciones y póliza, cuantificar y registrarlo como entrada al sistema de gestión."
+      "rationale": "Comunicar proactivamente con nueva estimación, activar penalizaciones y póliza, cuantificar y registrarlo como entrada al sistema de gestión.",
+      "why_not": {
+        "A": "Ocultar el incumplimiento agrava la relación y la posible responsabilidad.",
+        "C": "Invocar fuerza mayor de forma generalizada y sin análisis tiene poca base y deteriora la confianza.",
+        "D": "Ofrecer descuentos para evitar reclamaciones no sustituye la comunicación ni la gestión contractual."
+      }
     },
     "D24": {
       "preferred_response": "C",
       "capability": "terceros",
       "severity_if_missed": "high",
-      "rationale": "Primero lo irreversible (rotación de logs del cloud), luego lo que condiciona la cobertura (aseguradora y perito), después forense con alternativa en paralelo y el aviso del fabricante coordinado."
+      "rationale": "Primero lo irreversible (rotación de logs del cloud), luego lo que condiciona la cobertura (aseguradora y perito), después forense con alternativa en paralelo y el aviso del fabricante coordinado.",
+      "why_not": {
+        "A": "Si se pierden los logs del proveedor cloud, el forense no tendrá qué analizar: primero lo irreversible.",
+        "B": "El aviso del fabricante importa, pero no es lo más urgente ni lo irreversible.",
+        "D": "No todos necesitan la misma información ni en el mismo momento; el orden importa."
+      }
     },
     "D25": {
       "preferred_response": "C",
       "capability": "comunicacion",
       "severity_if_missed": "high",
-      "rationale": "Contactar en paralelo a los 40 y a los no listados, actualizar el mensaje público sin validar ni desmentir al atacante y reforzar la atención."
+      "rationale": "Contactar en paralelo a los 40 y a los no listados, actualizar el mensaje público sin validar ni desmentir al atacante y reforzar la atención.",
+      "why_not": {
+        "A": "Desmentir algo que puede ser verdad destruye la credibilidad.",
+        "B": "Confirmar el listado del atacante lo legitima como fuente y puede ser inexacto.",
+        "D": "Esperar a que llamen deja a los clientes enterándose por terceros."
+      }
     },
     "D26": {
       "preferred_response": "C",
       "capability": "autoridad",
       "severity_if_missed": "high",
-      "rationale": "La interlocución con el atacante la autoriza el órgano de gobierno con asesoramiento jurídico y de la aseguradora, según la postura previa del plan, y la ejecuta un negociador especializado."
+      "rationale": "La interlocución con el atacante la autoriza el órgano de gobierno con asesoramiento jurídico y de la aseguradora, según la postura previa del plan, y la ejecuta un negociador especializado.",
+      "why_not": {
+        "A": "Una decisión con implicaciones legales y éticas de ese calado no corresponde al equipo técnico.",
+        "B": "Excluirlo de antemano sin postura definida impide decidir con criterio si llega el caso.",
+        "D": "La decisión sobre la interlocución en el incidente de la Compañía es de su órgano de gobierno."
+      }
     },
     "D27": {
       "preferred_response": "B",
       "capability": "retorno",
       "severity_if_missed": "high",
-      "rationale": "No hay retorno con una vía de acceso sin explicar: erradicación verificada de forma independiente, rotación completa, reconstrucción desde imagen validada, monitorización reforzada y decisión formal."
+      "rationale": "No hay retorno con una vía de acceso sin explicar: erradicación verificada de forma independiente, rotación completa, reconstrucción desde imagen validada, monitorización reforzada y decisión formal.",
+      "why_not": {
+        "A": "Con una vía de acceso sin explicar, el atacante puede volver; la presión comercial no cambia eso.",
+        "C": "Declarar el retorno parcial sin condiciones expone a los clientes ya operativos.",
+        "D": "El forense aporta evidencias; la decisión de retorno es de la autoridad, y formal."
+      }
     },
     "D28": {
       "preferred_response": "B",
       "capability": "retorno",
       "severity_if_missed": "medium",
-      "rationale": "«Cerrar incidente» consolida el histórico del cálculo; no cierra la crisis ni las obligaciones. Antes se desactivan los escenarios resueltos y se registra la decisión de R1."
+      "rationale": "«Cerrar incidente» consolida el histórico del cálculo; no cierra la crisis ni las obligaciones. Antes se desactivan los escenarios resueltos y se registra la decisión de R1.",
+      "why_not": {
+        "A": "Cerrar el seguimiento del cálculo no cierra ni la crisis ni las obligaciones abiertas.",
+        "C": "Pulsarlo para detener pérdidas falsea el histórico del incidente.",
+        "D": "Cerrar requiere la decisión registrada de quien tiene la autoridad, no la impresión de cualquiera."
+      }
     },
     "D29": {
       "preferred_response": "B",
       "capability": "retorno",
       "severity_if_missed": "medium",
-      "rationale": "Pasa a ordinaria la operación; siguen abiertos forense, regulador, expedientes, remediación, seguimiento y reclamaciones, con traspaso formal y responsable por frente."
+      "rationale": "Pasa a ordinaria la operación; siguen abiertos forense, regulador, expedientes, remediación, seguimiento y reclamaciones, con traspaso formal y responsable por frente.",
+      "why_not": {
+        "A": "Quedan muchos frentes abiertos (forense, regulador, clientes, aseguradora); cerrarlo todo los deja sin responsable.",
+        "C": "Las lecciones aprendidas son solo uno de los frentes pendientes.",
+        "D": "Mantenerlo todo abierto impide volver a la operación ordinaria de lo que ya está recuperado."
+      }
     }
   }
 }

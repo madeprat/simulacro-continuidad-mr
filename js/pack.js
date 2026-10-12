@@ -113,6 +113,10 @@ export function validatePack(pack) {
   for (const [id, a] of Object.entries((pack.debrief && pack.debrief.assessments) || {})) {
     if (!decisionIds.has(id)) errors.push(`debrief.json: la decisión ${id} no existe en el pack.`);
     else if (a.preferred_response && !ANSWER_IDS.includes(a.preferred_response)) errors.push(`debrief.json/${id}: respuesta de referencia «${a.preferred_response}» no válida.`);
+    for (const [k, txt] of Object.entries(a.why_not || {})) {
+      if (!ANSWER_IDS.includes(k) || k === a.preferred_response) errors.push(`debrief.json/${id}: «why_not» solo admite las letras incorrectas (no ${k}).`);
+      else if (!txt) errors.push(`debrief.json/${id}: «why_not.${k}» vacío.`);
+    }
     if (a.severity_if_missed && !SEVERITIES.includes(a.severity_if_missed)) errors.push(`debrief.json/${id}: gravedad «${a.severity_if_missed}» no válida (high, medium o low).`);
     const caps = pack.debrief && pack.debrief.capabilities;
     if (a.capability && caps && !caps[a.capability]) errors.push(`debrief.json/${id}: la capacidad «${a.capability}» no tiene etiqueta en «capabilities».`);

@@ -8,7 +8,7 @@ con tres piezas que funcionan
 |---|---|---|
 | **Simulador MR** (`/`) | Navegador de Meta Quest (WebXR, passthrough) | **Centro de mando** alrededor de cada participante: rondas, injects, decisiones A–D por rol, **Panel de Crisis virtual** (el copiloto dentro de las gafas), barra de mando con línea de tiempo, voz narradora, audio 3D, registro de evidencias JSON/CSV |
 | **Copiloto de Continuidad web** (`/copiloto/`) | Opcional: portátil o TV | La misma lógica en versión web completa (con historial, ficha imprimible y catálogo desde Google Sheets). Modo ejercicio con reloj simulado |
-| **Debrief** (`/debrief/`) | PC del facilitador | Consolida los registros de R1/R2/R3: valoración por capacidad frente a la hoja de respuestas, hallazgos y acciones de mejora editables, actuaciones en el Panel de Crisis, discrepancias, tiempos y cronología; exporta JSON/CSV/PDF |
+| **Debrief** (`/debrief/`) | PC del facilitador | Consolida los registros de R1/R2/R3: informe con cronología de hechos y decisiones (con la clave de respuestas), gráfico por competencias y recomendaciones; envío por correo, PDF e histórico local de simulacros; exporta JSON/CSV |
 
 Todo el contenido es **ficticio y anónimo** (organización «la Compañía», buzones de rol en `compania.example`).
 
@@ -170,24 +170,41 @@ tras el primer análisis sin recargar; el impacto «Crítico» se reconoce con o
 ## Debrief
 
 1. Cada visor exporta su JSON al terminar; el facilitador los arrastra a `/debrief/`.
-2. El informe muestra, por **capacidad del SGCN** (detección y escalado, autoridad, recuperación, comunicaciones,
-   obligaciones, información, decisión con incertidumbre, terceros, retorno), cuántas decisiones coinciden con la
-   referencia y cuántas se desvían (y con qué gravedad). No hay nota global: el diseño pide leerlo por capacidad.
-3. **Hallazgos y acciones de mejora:** se proponen a partir de las desviaciones y discrepancias; el facilitador los
-   edita, descarta o añade (responsable y plazo). Se guardan en el navegador y salen en el JSON consolidado,
-   en un CSV de acciones de mejora y en el informe impreso/PDF.
-4. También: actuaciones reales en el Panel de Crisis por ronda, decisiones con la respuesta de referencia y su
-   justificación, tiempos por rol y cronología.
-5. **Integridad:** cada visor encadena sus eventos con SHA-256 (cada evento lleva el hash del anterior más el suyo).
+2. Se genera al momento un **informe** (vista previa en la página) con:
+   - **Portada:** organización, fecha, duración, roles y participantes.
+   - **Resumen y gráfico por competencias** del SGCN (detección y escalado, autoridad, recuperación,
+     comunicaciones, obligaciones, información, decisión con incertidumbre, terceros, retorno): decisiones como la
+     referencia, desviaciones y desviaciones graves. No hay nota global: se lee por competencia.
+   - **Cronología por ronda:** los hechos que recibió el equipo (alertas, llamadas, documentos), las actuaciones en el
+     Panel de Crisis y cada decisión con la **clave de respuestas**: si coincide, por qué es la adecuada; si no,
+     por qué la opción elegida no era la mejor, cuál era la de referencia y por qué.
+   - **Recomendaciones** por competencia, ordenadas por prioridad, con las decisiones que las justifican.
+   - Observaciones del facilitador y anexo de integridad de los registros.
+3. **Recomendaciones editables:** se proponen a partir de las desviaciones (acción tipo por competencia, que un pack
+   puede sustituir con `recommendations` en `debrief.json`); el facilitador las edita, descarta o añade con
+   responsable y plazo. El informe se actualiza al momento.
+4. **Envío por correo, sin servidor:** se escriben las direcciones y se pulsa «Enviar por correo».
+   - En móvil o tableta, se abre el menú de compartir con el informe ya adjunto.
+   - En ordenador, se descarga el informe (HTML que se abre en cualquier navegador) y se abre el programa de correo
+     con destinatarios, asunto y un resumen; solo hay que adjuntar el fichero.
+   - «Imprimir / guardar PDF» da la versión en PDF (A4).
+5. **Histórico:** cada debrief (registros, recomendaciones y observaciones) se guarda en el navegador del
+   facilitador (IndexedDB) y se puede reabrir o borrar. «Exportar archivo» genera un único JSON
+   (`crisis.debrief-archive/1.0`) para copia de seguridad o para pasarlo a otro equipo, donde se importa.
+   Nada sale del equipo salvo lo que el facilitador envíe o exporte.
+6. «Datos y evidencias del ejercicio» conserva las tablas de detalle (capacidades, decisiones por visor, tiempos por
+   rol, Panel de Crisis, cronología completa) y las descargas JSON/CSV.
+7. **Integridad:** cada visor encadena sus eventos con SHA-256 (cada evento lleva el hash del anterior más el suyo).
    Al exportar, las gafas muestran la **huella del registro** (p. ej. `810c df17 c5fc`): anotadla o fotografiadla.
    El debrief recalcula la cadena, comprueba que las decisiones cuadran con sus eventos y muestra la huella de cada
    registro; si alguien edita el JSON (una letra, un evento), la cadena aparece rota. Si alguien rehiciera la cadena
    entera, la huella dejaría de coincidir con la anotada. Los registros de versiones anteriores salen como
    «sin cadena».
-6. Los CSV neutralizan el texto que empieza por `=`, `+`, `-` o `@`, para que Excel no lo ejecute como fórmula.
+8. Los CSV neutralizan el texto que empieza por `=`, `+`, `-` o `@`, para que Excel no lo ejecute como fórmula.
 
 La hoja de respuestas vive en `packs/<pack>/debrief.json` (`preferred_response`, `capability`,
-`severity_if_missed`, `rationale`). Las de TRAMONTANA y GREGAL son **propuestas** (`"status": "propuesta"`) pendientes de
+`severity_if_missed`, `rationale` y `why_not`, que explica por qué no es adecuada cada opción distinta de la de
+referencia). Las de TRAMONTANA y GREGAL son **propuestas** (`"status": "propuesta"`) pendientes de
 validar; el debrief lo advierte. Nunca se muestra a los participantes durante el ejercicio.
 
 ## Formato de pack (`crisis.exercise/1.0`)
@@ -275,7 +292,7 @@ copiloto/                       Copiloto de Continuidad para la TV
   js/data.js, ejercicio.js      Catálogo (JSON/Sheets) y barra de ejercicio
   data/, data/plantilla/        Catálogo ficticio y plantillas CSV
   docs/                         Documentos de ejemplo (plan, estrategias, directorio)
-debrief/                        Consolidador de registros
+debrief/                        Consolidador, informe (informe.js) e histórico local (historico.js)
 packs/tramontana/               Pack de ejemplo (9 rondas): ciberataque, sede central con CPD propio
 packs/gregal/                   Pack corto (3 rondas): temporal e inundación, organización multisede con nube
 packs/altamar/                  Simulacro escolar (3 rondas): incendio en un colegio, con catálogo propio

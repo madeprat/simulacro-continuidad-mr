@@ -77,14 +77,19 @@ export function consolidate(logs, pack = null) {
       response_seconds: primary?.response_seconds ?? null, answered_at: primary?.answered_at ?? null,
       observed, status, reference_rating: rating, capability: assessment?.capability || null,
       preferred_response: assessment?.preferred_response || null, severity_if_missed: assessment?.severity_if_missed || null,
-      rationale: assessment?.rationale || null, sync_from: primary ? null : (logs.map((l) => l.data.decisions?.[decision.id]?.sync_from).find(Boolean) || null),
+      rationale: assessment?.rationale || null,
+      // Por qué no era la mejor la opción elegida (si hubo desviación) y la explicación de todas las incorrectas.
+      why_not_chosen: answer && assessment?.why_not ? assessment.why_not[answer] || null : null,
+      why_not: assessment?.why_not || null,
+      answers: decision.answers || null,
+      sync_from: primary ? null : (logs.map((l) => l.data.decisions?.[decision.id]?.sync_from).find(Boolean) || null),
     };
   });
 
   const capLabels = (pack && pack.debrief && pack.debrief.capabilities) || {};
   const capabilities = capabilitySummary(decisions, capLabels);
   const panel = panelEvidence(logs);
-  const findings = suggestFindings(decisions, capLabels);
+  const findings = suggestFindings(decisions, capLabels, (pack && pack.debrief && pack.debrief.recommendations) || {});
 
   // Los eventos comunes a todos los visores se toman de un único registro de referencia para no triplicarlos.
   const SHARED = ['round_started', 'round_completed', 'inject_shown', 'inject_acknowledged', 'decision_shown', 'panel_action_shown'];
@@ -113,8 +118,17 @@ export function consolidate(logs, pack = null) {
     }];
   }));
 
+  // Hechos del ejercicio (injects y comienzos de ronda) tomados del registro de referencia, para la cronología del informe.
+  const refEvents = (reference && reference.data.events) || [];
+  const facts = refEvents.filter((e) => e.type === 'inject_shown').map((e) => ({ at: e.at, round_id: e.round_id, inject_id: e.inject_id, inject_type: e.inject_type }));
+  const rounds_started = refEvents.filter((e) => e.type === 'round_started').map((e) => ({ at: e.at, round_id: e.round_id }));
+  const participants = Object.fromEntries(Object.entries(byRole).map(([role, l]) => [role, l.data.participant_label || null]));
+  const starts = logs.map((l) => l.data.started_at).filter(Boolean).sort();
+  const ends = logs.map((l) => l.data.completed_at).filter(Boolean).sort();
+
   const first = logs[0]?.data || {};
   return {
+    started_at: starts[0] || null, completed_at: ends[ends.length - 1] || null, participants, facts, rounds_started,
     schema: CONSOLIDATED_SCHEMA,
     exercise: first.exercise, session_id: first.session_id,
     roles_loaded: Object.keys(byRole).sort(),
@@ -172,16 +186,29 @@ export function panelEvidence(logs) {
   return out.sort((a, b) => (a.at < b.at ? -1 : a.at > b.at ? 1 : 0));
 }
 
+// Acción de mejora tipo por capacidad. Un pack puede sustituirlas con «recommendations» en debrief.json.
+export const CAP_ACTIONS = {
+  deteccion_escalado: 'Fijar umbrales objetivos de escalado y quién puede activar el plan sin esperar confirmación; ensayar el aviso escrito y con hora a dirección y organismos en los primeros minutos.',
+  autoridad: 'Revisar la matriz de roles y delegaciones del comité de crisis (titular, suplente y límites de decisión) y ensayarla en un ejercicio corto con los suplentes.',
+  recuperacion: 'Revisar el análisis de impacto (servicios prioritarios, RTO y estrategias alternativas) y comprobar que los procedimientos de recuperación están probados y al alcance del equipo.',
+  comunicacion: 'Preparar plantillas de mensajes por público (personal, clientes, población, medios) con una sola voz autorizada y un circuito de aprobación rápido.',
+  cumplimiento: 'Mantener una tabla de obligaciones de notificación (autoridad, plazo, contenido y responsable) y una lista de evidencias que se conservan desde el primer momento.',
+  informacion: 'Asegurar que la información crítica (contactos, inventario, planes) está disponible sin los sistemas afectados: copia fuera de línea y una persona responsable de mantenerla.',
+  decision: 'Practicar la decisión con información incompleta: registrar qué se sabe, qué se supone y cuándo se revisa, con puntos de revisión fijados de antemano.',
+  terceros: 'Revisar los acuerdos con proveedores y organismos clave (contactos, tiempos de respuesta, cláusulas de continuidad) y ejercitarlos con ellos.',
+  retorno: 'Definir criterios de vuelta a la normalidad y de cierre: verificación, comunicación del cierre, informe final y lecciones aprendidas.',
+};
+
 // Propuesta de hallazgos para que el facilitador los revise, edite o descarte.
-export function suggestFindings(decisions, labels = {}) {
+export function suggestFindings(decisions, labels = {}, actions = {}) {
   const out = [];
   for (const d of decisions) {
     const cap = labels[d.capability] || d.capability || 'General';
     if (d.reference_rating === 'desviacion') {
       out.push({
         id: 'F-' + d.decision_id, decision_id: d.decision_id, capability: cap, severity: d.severity_if_missed || 'medium',
-        text: `${d.decision_id} (${d.active_role}): se eligió ${d.answer}; la respuesta de referencia es ${d.preferred_response}.`,
-        action: d.rationale ? 'Reforzar: ' + d.rationale : 'Revisar el criterio en el plan y formar al rol.',
+        text: `${d.decision_id} (${d.active_role}) · ${d.question ? d.question + ' ' : ''}Se eligió ${d.answer} y la referencia es ${d.preferred_response}.${d.why_not_chosen ? ' ' + d.why_not_chosen : ''}`,
+        action: actions[d.capability] || CAP_ACTIONS[d.capability] || 'Revisar el criterio en el plan y formar al rol que decide.',
       });
     } else if (d.status === 'discrepancia') {
       out.push({ id: 'F-' + d.decision_id + '-sync', decision_id: d.decision_id, capability: cap, severity: 'low',
@@ -216,7 +243,7 @@ function describe(e) {
     case 'panel_analyzed': return `Panel: ${e.recalculated ? 'recalcula' : 'analiza'} impacto con ${Object.entries(e.scenarios || {}).map(([k, v]) => k + ' C' + v).join(' + ')}`;
     case 'panel_onset_set': return `Panel: inicio real ${e.onset_minutes_before_analysis} min antes del análisis`;
     case 'panel_status': return `Panel: seguimiento ${({ contained: 'pausado', active: 'reanudado', closed: 'cerrado' })[e.status] || e.status}`;
-    case 'panel_disaster': return `Panel: condición de desastre (${e.loss_total} €)`;
+    case 'panel_disaster': return `Panel: condición de desastre (${Number(e.loss_total).toLocaleString('es-ES', { maximumFractionDigits: 0 })} € de pérdida acumulada)`;
     case 'panel_comm_marked': return `Panel: comunicación ${e.comm_id} marcada como notificada`;
     case 'panel_committee_convened': return 'Panel: convocatoria al comité';
     case 'panel_sync': return `Panel actualizado por ${e.from} (${e.action})`;
