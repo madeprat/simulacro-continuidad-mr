@@ -1,0 +1,53 @@
+{
+  "status": "propuesta",
+  "note": "Hoja de respuestas PROPUESTA para el ejercicio municipal; debe validarla quien dirija el ejercicio. No se muestra durante el juego.",
+  "capabilities": {
+    "deteccion_escalado": "Detección y escalado",
+    "autoridad": "Roles y autoridad",
+    "recuperacion": "Continuidad y recuperación",
+    "comunicacion": "Comunicaciones",
+    "cumplimiento": "Obligaciones legales y contractuales",
+    "informacion": "Disponibilidad de información",
+    "decision": "Toma de decisiones con incertidumbre",
+    "terceros": "Coordinación con terceros",
+    "retorno": "Retorno a la normalidad"
+  },
+  "assessments": {
+    "D1": {
+      "preferred_response": "B",
+      "capability": "deteccion_escalado",
+      "severity_if_missed": "high",
+      "rationale": "Contener primero: desconectar sin borrar frena la propagación y conserva las evidencias. Pagar no garantiza nada y financia al atacante; seguir trabajando extiende el daño."
+    },
+    "D2": {
+      "preferred_response": "B",
+      "capability": "decision",
+      "severity_if_missed": "medium",
+      "rationale": "Hay un ataque confirmado (E6) y el ayuntamiento está sin sistemas (E3). Declararlo así activa las estrategias correctas; quedarse corto deja sin escalar un incidente que obliga a notificar."
+    },
+    "D3": {
+      "preferred_response": "B",
+      "capability": "recuperacion",
+      "severity_if_missed": "high",
+      "rationale": "El agua es el servicio con menos margen. La operación manual con vigilancia lo mantiene sin reconectar un sistema que podría estar comprometido, y el proveedor de respaldo cubre si falla."
+    },
+    "D4": {
+      "preferred_response": "B",
+      "capability": "informacion",
+      "severity_if_missed": "high",
+      "rationale": "La información crítica existe fuera del servidor: papel, consultorio y memoria de las personas. Las personas vulnerables no pueden esperar a que vuelvan los sistemas."
+    },
+    "D5": {
+      "preferred_response": "B",
+      "capability": "autoridad",
+      "severity_if_missed": "medium",
+      "rationale": "Decidir con condiciones claras: la fiesta sigue si la seguridad está cubierta, con un umbral objetivo (el 25 % del depósito) para cortar. Celebrarla sin bando o aplazarla sin avisar crea riesgos nuevos."
+    },
+    "D6": {
+      "preferred_response": "B",
+      "capability": "cumplimiento",
+      "severity_if_missed": "high",
+      "rationale": "Con datos publicados hay obligación de notificar a la AEPD en 72 horas y, si el riesgo es alto, de avisar a los afectados. Reconocer el incidente y decir cómo protegerse frena las estafas que vendrán."
+    }
+  }
+}

@@ -23,7 +23,8 @@ export async function loadCopilotData(base = 'copiloto/data/') {
   };
   const [config, services, scenarios, estrategias] = await Promise.all(['config.json', 'servicios.json', 'escenarios.json', 'estrategias.json'].map(get));
   // Opcional: comunicaciones propias del catálogo ({ contexts: [{id,label}], items: [...] }).
-  const commsRes = await fetch(base + 'comunicaciones.json', { cache: 'no-cache' }).catch(() => null);
+  // (el catálogo general no trae este fichero: no se pide, para no generar un 404 en cada carga)
+  const commsRes = base === 'copiloto/data/' ? null : await fetch(base + 'comunicaciones.json', { cache: 'no-cache' }).catch(() => null);
   const comms = commsRes && commsRes.ok ? await commsRes.json() : null;
   const data = { config, services, scenarios, estrategias, comms };
   data.fingerprint = core.catalogFingerprint(data, sha256Hex);

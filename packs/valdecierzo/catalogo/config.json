@@ -1,0 +1,126 @@
+{
+  "lead_name": "Alcaldía",
+  "lead_role": "Dirección del plan municipal de emergencia",
+  "lead_email": "alcaldia@ayuntamiento.example",
+  "operator_label": "Secretaría-Intervención",
+  "umbral_perdida_eur": 4000,
+  "umbral_criticos_mtpd": 1,
+  "umbral_prob_pct": 75,
+  "history_limit": 20,
+  "links": {},
+  "sheets": {},
+  "documents": [
+    "Plan territorial de emergencias municipal",
+    "Listado de personas vulnerables",
+    "Contactos de la diputación y de Protección Civil"
+  ],
+  "scenarios": {
+    "E1": {
+      "title": "Un edificio municipal no se puede usar",
+      "short": "Un edificio municipal no se puede usar",
+      "icon": "🏛️",
+      "pattern": "Cerrado toda la jornada",
+      "strategies": [
+        "EST01",
+        "EST03"
+      ]
+    },
+    "E2": {
+      "title": "Falta personal clave del ayuntamiento",
+      "short": "Falta personal clave del ayuntamiento",
+      "icon": "👥",
+      "pattern": "Sin secretaría o sin fontanero durante la jornada",
+      "strategies": [
+        "EST02",
+        "EST03"
+      ]
+    },
+    "E3": {
+      "title": "Sin sistemas informáticos municipales",
+      "short": "Sin sistemas informáticos municipales",
+      "icon": "💻",
+      "pattern": "Sin servidor, correo ni sede durante la jornada",
+      "strategies": [
+        "EST01",
+        "EST05",
+        "EST07"
+      ]
+    },
+    "E4": {
+      "title": "El pueblo queda incomunicado por carretera",
+      "short": "El pueblo queda incomunicado por carretera",
+      "icon": "🛣️",
+      "pattern": "Accesos cortados durante la jornada",
+      "strategies": [
+        "EST02",
+        "EST03"
+      ]
+    },
+    "E5": {
+      "title": "Error en los sistemas municipales",
+      "short": "Error en los sistemas municipales",
+      "icon": "⚙️",
+      "pattern": "Error que impide trabajar horas",
+      "strategies": [
+        "EST04",
+        "EST05"
+      ]
+    },
+    "E6": {
+      "title": "Ciberataque o acción hostil",
+      "short": "Ciberataque o acción hostil",
+      "icon": "🛡️",
+      "pattern": "Ataque confirmado con sistemas cifrados",
+      "strategies": [
+        "EST03",
+        "EST08",
+        "EST05",
+        "EST07"
+      ]
+    },
+    "E7": {
+      "title": "Falla un proveedor (diputación, mancomunidad, empresa del agua)",
+      "short": "Falla un proveedor (diputación, mancomunidad, empresa del agua)",
+      "icon": "🔗",
+      "pattern": "Servicio caído durante la jornada",
+      "strategies": [
+        "EST03",
+        "EST06"
+      ]
+    }
+  },
+  "strategies": {
+    "EST01": {
+      "title": "Trabajar en papel y en otra sede",
+      "detail": "Registro manual, bandos firmados y oficina en el centro social."
+    },
+    "EST02": {
+      "title": "Apoyo de otros municipios y voluntarios",
+      "detail": "Personal de la mancomunidad, Protección Civil y vecinos voluntarios."
+    },
+    "EST03": {
+      "title": "Activar el comité municipal de emergencia",
+      "detail": "Alcaldía, secretaría, policía y servicios básicos con mando único."
+    },
+    "EST04": {
+      "title": "Esperar y vigilar",
+      "detail": "Seguimiento con hora fija de revisión."
+    },
+    "EST05": {
+      "title": "Restaurar desde copias limpias",
+      "detail": "Recuperación con el servicio provincial de ciberseguridad."
+    },
+    "EST06": {
+      "title": "Proveedor de respaldo",
+      "detail": "Empresa del agua o servicios de la diputación como respaldo."
+    },
+    "EST07": {
+      "title": "Operación manual",
+      "detail": "Bombas, válvulas y avisos operados a mano con turnos."
+    },
+    "EST08": {
+      "title": "Aislar y conservar evidencias",
+      "detail": "Desconectar sin borrar y documentar para la investigación."
+    }
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "roles": [
+    {
+      "id": "R1",
+      "name": "R1 · Alcaldía",
+      "functions": [
+        "Dirige la emergencia municipal y firma los bandos.",
+        "Decide sobre fiestas, cortes y servicios.",
+        "Es la cara del ayuntamiento ante vecinos y prensa."
+      ],
+      "rules": [
+        "Solo respondes cuando la decisión es de R1.",
+        "Si los visores no están conectados, di tu letra en voz alta (o por teléfono) antes de confirmar."
+      ]
+    },
+    {
+      "id": "R2",
+      "name": "R2 · Secretaría-Intervención y Panel de Crisis",
+      "functions": [
+        "Opera el Panel de Crisis y lee la maqueta del pueblo.",
+        "Coordina al técnico de la diputación, al fontanero y a la Policía Local.",
+        "Mantiene en marcha lo administrativo, aunque sea en papel."
+      ],
+      "rules": [
+        "Solo respondes cuando la decisión es de R2.",
+        "Si los visores no están conectados, di tu letra en voz alta (o por teléfono) antes de confirmar."
+      ]
+    },
+    {
+      "id": "R3",
+      "name": "R3 · Comunicación y protección de datos",
+      "functions": [
+        "Redacta los avisos a vecinos y atiende a la prensa local.",
+        "Controla las notificaciones obligatorias (CCN-CERT, AEPD).",
+        "Vigila bulos y suplantaciones del ayuntamiento."
+      ],
+      "rules": [
+        "Solo respondes cuando la decisión es de R3.",
+        "Si los visores no están conectados, di tu letra en voz alta (o por teléfono) antes de confirmar."
+      ]
+    }
+  ]
+}
