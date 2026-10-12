@@ -58,11 +58,47 @@ test('capacidades, evidencia del panel y hallazgos propuestos', async () => {
   assert.deepEqual([cap.label, cap.expected, cap.deviations, cap.high_deviations, cap.status], ['Roles y autoridad', 1, 1, 1, 'mejorar']);
   assert.equal(r.suggested_findings.length, 1);
   assert.equal(r.suggested_findings[0].severity, 'high');
-  assert.match(r.suggested_findings[0].action, /Porque sí/);
+  assert.match(r.suggested_findings[0].action, /matriz de roles/);
+  assert.match(r.suggested_findings[0].text, /referencia es B/);
+  pack2.debrief.recommendations = { autoridad: 'Acción propia del pack.' };
+  assert.equal(consolidate(logs, pack2).suggested_findings[0].action, 'Acción propia del pack.');
   assert.equal(r.panel_evidence.filter((e) => e.type === 'panel_disaster').length, 1);
   r.findings = r.suggested_findings;
   assert.match(findingsCSV(r), /F-D1/);
   assert.equal(typeof capabilitySummary, 'function');
   assert.equal(typeof suggestFindings, 'function');
   assert.equal(typeof panelEvidence, 'function');
+});
+
+test('informe: cronología con clave de respuestas, gráfico por competencias y recomendaciones', async () => {
+  const { buildReport, reportSummary, competencyChart } = await import('../debrief/informe.js');
+  const pack3 = {
+    manifest: { title: 'Ejercicio de prueba' },
+    roles: [{ id: 'R1', name: 'Dirección' }],
+    rounds: [{ id: 'R01', title: 'Primera hora', events: [{ id: 'E01', type: 'ALERT', title: 'Corte eléctrico', text: 'Se va la luz <b>en planta</b>.' }],
+      decisions: [
+        { id: 'D1', role: 'R1', question: '¿Quién decide?', answers: [{ id: 'A', text: 'Esperar' }, { id: 'B', text: 'Activar el comité' }, { id: 'C', text: 'C' }, { id: 'D', text: 'D' }] },
+        { id: 'D2', role: 'R1', question: '¿Qué se comunica?', answers: [{ id: 'A', text: 'A' }, { id: 'B', text: 'B' }, { id: 'C', text: 'Mensaje único' }, { id: 'D', text: 'D' }] }] }],
+    debrief: { status: 'propuesta', capabilities: { autoridad: 'Roles y autoridad', comunicacion: 'Comunicación' },
+      assessments: {
+        D1: { preferred_response: 'B', capability: 'autoridad', severity_if_missed: 'high', rationale: 'El comité tiene la autoridad.', why_not: { A: 'Esperar deja el incidente sin dueño.', C: 'x', D: 'y' } },
+        D2: { preferred_response: 'C', capability: 'comunicacion', severity_if_missed: 'medium', rationale: 'Una sola voz.' } } },
+  };
+  const logs = [log('R1', { D1: rec('D1', 'R1', 'A', 'own', 20), D2: rec('D2', 'R1', 'C', 'own', 10) }, {
+    events: [{ type: 'inject_shown', at: '2026-01-01T10:01:00Z', round_id: 'R01', inject_id: 'E01', inject_type: 'ALERT' }] })];
+  const r = consolidate(logs, pack3);
+  const s = reportSummary(r);
+  assert.equal(typeof s, 'object');
+  const svg = competencyChart(r.capabilities);
+  assert.match(svg, /<svg/);
+  assert.match(svg, /Roles y autoridad/);
+  assert.match(svg, /Comunicación/);
+  const html = buildReport(r, { pack: pack3, findings: r.suggested_findings, notes: 'Buen ritmo <script>' });
+  assert.match(html, /^<!doctype html>/i);
+  assert.match(html, /Esperar deja el incidente sin dueño/);   // por qué la elegida no era la mejor
+  assert.match(html, /Activar el comité/);                     // cuál era la de referencia
+  assert.match(html, /El comité tiene la autoridad/);          // y por qué
+  assert.match(html, /Corte eléctrico/);                       // hechos en la cronología
+  assert.ok(!html.includes('<b>en planta</b>') && !html.includes('<script>'), 'el texto del pack y las notas se escapan');
+  assert.ok(html.indexOf('Corte eléctrico') < html.indexOf('¿Quién decide?'), 'los hechos van antes que las decisiones');
 });

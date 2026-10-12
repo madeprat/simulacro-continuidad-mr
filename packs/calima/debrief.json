@@ -17,37 +17,67 @@
       "preferred_response": "B",
       "capability": "deteccion_escalado",
       "severity_if_missed": "high",
-      "rationale": "Un servicio esencial no se pone de perfil: decide prioridades con criterios humanitarios y de seguridad, y se coordina. Cortar sin aviso o esperar instrucciones convierte un problema de capacidad en una crisis humanitaria."
+      "rationale": "Un servicio esencial no se pone de perfil: decide prioridades con criterios humanitarios y de seguridad, y se coordina. Cortar sin aviso o esperar instrucciones convierte un problema de capacidad en una crisis humanitaria.",
+      "why_not": {
+        "A": "Un servicio esencial no se pone de perfil en una crisis humanitaria: sostiene a todo el mundo.",
+        "C": "Cortar sin aviso convierte un problema de capacidad en una crisis humanitaria y de orden público.",
+        "D": "Esperar instrucciones mientras falta agua retrasa lo que la empresa puede y debe decidir."
+      }
     },
     "D2": {
       "preferred_response": "B",
       "capability": "decision",
       "severity_if_missed": "medium",
-      "rationale": "La amenaza para el servicio es la capacidad, no un fallo técnico, y el puerto condiciona los suministros. Llamar «ataque» a una situación humanitaria distorsiona la respuesta."
+      "rationale": "La amenaza para el servicio es la capacidad, no un fallo técnico, y el puerto condiciona los suministros. Llamar «ataque» a una situación humanitaria distorsiona la respuesta.",
+      "why_not": {
+        "A": "La amenaza es la capacidad: no declararla impide priorizar y activar apoyos.",
+        "C": "Llamar ataque a una situación humanitaria distorsiona la respuesta y alimenta la tensión.",
+        "D": "Cerrar la única fuente de agua de la ciudad sería el peor resultado posible."
+      }
     },
     "D3": {
       "preferred_response": "B",
       "capability": "recuperacion",
       "severity_if_missed": "high",
-      "rationale": "Con la planta crítica al límite, un acceso dudoso es inaceptable, pero apagarla es peor. Operar en local y cortar terceros contiene el riesgo sin parar el servicio. Las cuentas compartidas son parte del problema."
+      "rationale": "Con la planta crítica al límite, un acceso dudoso es inaceptable, pero apagarla es peor. Operar en local y cortar terceros contiene el riesgo sin parar el servicio. Las cuentas compartidas son parte del problema.",
+      "why_not": {
+        "A": "Un acceso dudoso a un sistema crítico al límite es un riesgo inaceptable.",
+        "C": "Apagar la desaladora deja sin agua a toda la ciudad; operar en local contiene el riesgo sin parar.",
+        "D": "Quien puede estar comprometido no puede ser quien investigue."
+      }
     },
     "D4": {
       "preferred_response": "B",
       "capability": "cumplimiento",
       "severity_if_missed": "high",
-      "rationale": "En NIS2 la alerta temprana sirve precisamente para avisar pronto y sin todos los datos. Un acceso no autorizado a sistemas de control de un servicio esencial es significativo aunque no haya causado daño todavía."
+      "rationale": "En NIS2 la alerta temprana sirve precisamente para avisar pronto y sin todos los datos. Un acceso no autorizado a sistemas de control de un servicio esencial es significativo aunque no haya causado daño todavía.",
+      "why_not": {
+        "A": "Un acceso no autorizado a sistemas de control de un servicio esencial es significativo aunque aún no haya daño.",
+        "C": "La obligación no depende de la prensa.",
+        "D": "La obligación de notificar es de la entidad esencial, no del proveedor."
+      }
     },
     "D5": {
       "preferred_response": "B",
       "capability": "decision",
       "severity_if_missed": "high",
-      "rationale": "Restringir con reglas claras, anunciadas y revisables es lo que mantiene la confianza. Cortar a quien está más expuesto o por sorpresa genera más tensión y más riesgo."
+      "rationale": "Restringir con reglas claras, anunciadas y revisables es lo que mantiene la confianza. Cortar a quien está más expuesto o por sorpresa genera más tensión y más riesgo.",
+      "why_not": {
+        "A": "Con el depósito bajando un 4 % al día, no hacer nada lleva a quedarse sin agua.",
+        "C": "Los cortes sorpresa generan desconfianza, acaparamiento y tensión.",
+        "D": "Cortar a quien está más expuesto es inhumano y agrava la crisis."
+      }
     },
     "D6": {
       "preferred_response": "B",
       "capability": "comunicacion",
       "severity_if_missed": "high",
-      "rationale": "Contra un bulo funcionan los datos verificables, un portavoz creíble y la constancia. Buscar culpables entre los más vulnerables es falso y agrava la crisis."
+      "rationale": "Contra un bulo funcionan los datos verificables, un portavoz creíble y la constancia. Buscar culpables entre los más vulnerables es falso y agrava la crisis.",
+      "why_not": {
+        "A": "Un bulo sobre el agua no se apaga solo: provoca acaparamiento y protestas.",
+        "C": "Desmentir sin datos no convence a quien ya tiene miedo.",
+        "D": "Señalar a los más vulnerables es falso y alimenta el odio y la tensión."
+      }
     }
   }
 }

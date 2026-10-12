@@ -160,3 +160,19 @@ test('catálogo propio de un pack: servicios, escenarios, estrategias y comunica
   }
   assert.ok(packs >= 1);
 });
+
+test('hoja de respuestas: cada opción incorrecta explica por qué no', () => {
+  const index = JSON.parse(fs.readFileSync(new URL('../packs/index.json', import.meta.url)));
+  for (const p of index.packs) {
+    const name = p.path.replace(/^packs\//, '').replace(/\/$/, '');
+    const pack = readPack(name);
+    for (const r of pack.rounds) for (const d of r.decisions) {
+      const a = pack.debrief.assessments[d.id];
+      assert.ok(a && a.preferred_response && a.rationale, `${name} ${d.id}: falta respuesta de referencia o justificación`);
+      for (const opt of d.answers) {
+        if (opt.id === a.preferred_response) continue;
+        assert.ok(a.why_not && a.why_not[opt.id] && a.why_not[opt.id].length > 20, `${name} ${d.id}: falta el porqué de la opción ${opt.id}`);
+      }
+    }
+  }
+});

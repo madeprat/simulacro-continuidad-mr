@@ -17,37 +17,67 @@
       "preferred_response": "B",
       "capability": "deteccion_escalado",
       "severity_if_missed": "high",
-      "rationale": "Los datos que tiene la empresa (caudales, instalaciones en zona inundable) son los que necesita quien decide los avisos. Escalar pronto, por escrito y con hora protege a la gente y a quien decide: el momento de cada decisión se revisará después."
+      "rationale": "Los datos que tiene la empresa (caudales, instalaciones en zona inundable) son los que necesita quien decide los avisos. Escalar pronto, por escrito y con hora protege a la gente y a quien decide: el momento de cada decisión se revisará después.",
+      "why_not": {
+        "A": "La empresa tiene datos que quien decide los avisos necesita; callarlos retrasa la protección de la población.",
+        "C": "Una llamada informal no queda registrada ni garantiza que la información llegue a quien decide.",
+        "D": "Parar la planta sin avisar puede dejar sin agua a la población sin que nadie lo sepa ni lo prepare."
+      }
     },
     "D2": {
       "preferred_response": "B",
       "capability": "decision",
       "severity_if_missed": "medium",
-      "rationale": "Se declara lo que indican los datos y se anuncia que se recalculará. Esperar a que llueva aquí es mirar el sitio equivocado: el agua viene de cabecera."
+      "rationale": "Se declara lo que indican los datos y se anuncia que se recalculará. Esperar a que llueva aquí es mirar el sitio equivocado: el agua viene de cabecera.",
+      "why_not": {
+        "A": "El agua viene de cabecera: que aquí no llueva no significa que no haya riesgo.",
+        "C": "Sin análisis no se puede afirmar contaminación; declararla al máximo distorsiona la respuesta.",
+        "D": "Declarar un ataque sin ningún indicio confunde la respuesta."
+      }
     },
     "D3": {
       "preferred_response": "B",
       "capability": "comunicacion",
       "severity_if_missed": "high",
-      "rationale": "Un aviso útil dice qué hacer, dónde y hasta cuándo. Diluirlo para no alarmar, o esperar a la certeza, hace que llegue tarde."
+      "rationale": "Un aviso útil dice qué hacer, dónde y hasta cuándo. Diluirlo para no alarmar, o esperar a la certeza, hace que llegue tarde.",
+      "why_not": {
+        "A": "La población debe saber también qué hacer con el agua: es una protección más.",
+        "C": "Un aviso genérico no dice qué hacer, ni dónde, ni hasta cuándo.",
+        "D": "Esperar a la certeza hace que el aviso llegue tarde."
+      }
     },
     "D4": {
       "preferred_response": "B",
       "capability": "recuperacion",
       "severity_if_missed": "high",
-      "rationale": "Primero las personas que no pueden esperar, con una lista priorizada; y proteger la parte de la red que aún está sana. Bombear agua sin tratar cambia un problema de presión por uno de salud."
+      "rationale": "Primero las personas que no pueden esperar, con una lista priorizada; y proteger la parte de la red que aún está sana. Bombear agua sin tratar cambia un problema de presión por uno de salud.",
+      "why_not": {
+        "A": "Hospitales y residencias no pueden esperar a que se repare la planta.",
+        "C": "Repartir por orden de llamada deja sin agua a quien más la necesita y no puede llamar.",
+        "D": "Bombear agua sin tratar cambia un problema de presión por uno de salud pública."
+      }
     },
     "D5": {
       "preferred_response": "B",
       "capability": "cumplimiento",
       "severity_if_missed": "high",
-      "rationale": "La mejor prueba de una buena gestión es un registro hecho en el momento. Reconstruirlo después o seleccionar documentos le quita todo el valor y puede agravar la responsabilidad."
+      "rationale": "La mejor prueba de una buena gestión es un registro hecho en el momento. Reconstruirlo después o seleccionar documentos le quita todo el valor y puede agravar la responsabilidad.",
+      "why_not": {
+        "A": "Un resumen reconstruido después no tiene el valor de un registro hecho en el momento.",
+        "C": "Retrasar meses la entrega obstaculiza la investigación y agrava la posición de la empresa.",
+        "D": "Seleccionar documentos falsea los hechos y puede constituir un delito."
+      }
     },
     "D6": {
       "preferred_response": "B",
       "capability": "autoridad",
       "severity_if_missed": "medium",
-      "rationale": "La dirección no puede delegar la responsabilidad del riesgo: aprueba, supervisa y se forma. La respuesta útil es revisar qué estaba aprobado y ejercitado y llevar al consejo las lecciones aprendidas."
+      "rationale": "La dirección no puede delegar la responsabilidad del riesgo: aprueba, supervisa y se forma. La respuesta útil es revisar qué estaba aprobado y ejercitado y llevar al consejo las lecciones aprendidas.",
+      "why_not": {
+        "A": "NIS2 hace responsables a los órganos de dirección: no es solo cosa de las administraciones.",
+        "C": "La aseguradora cubre consecuencias, pero no sustituye la responsabilidad de supervisar.",
+        "D": "Dimitir no elimina la responsabilidad por lo ocurrido ni ayuda a mejorar."
+      }
     }
   }
 }
