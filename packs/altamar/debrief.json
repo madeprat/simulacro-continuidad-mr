@@ -1,0 +1,53 @@
+{
+  "status": "propuesta",
+  "note": "Hoja de respuestas PROPUESTA para el ejercicio escolar; debe validarla quien dirija el ejercicio. No se muestra durante el juego.",
+  "capabilities": {
+    "deteccion_escalado": "Detección y escalado",
+    "autoridad": "Roles y autoridad",
+    "recuperacion": "Continuidad y recuperación",
+    "comunicacion": "Comunicaciones",
+    "cumplimiento": "Obligaciones legales y contractuales",
+    "informacion": "Disponibilidad de información",
+    "decision": "Toma de decisiones con incertidumbre",
+    "terceros": "Coordinación con terceros",
+    "retorno": "Retorno a la normalidad"
+  },
+  "assessments": {
+    "D1": {
+      "preferred_response": "B",
+      "capability": "deteccion_escalado",
+      "severity_if_missed": "high",
+      "rationale": "Con fuego y humo en el edificio no se espera a nadie: se evacúa según el plan y se llama al 112. Evacuar solo una parte o llamar antes a las familias pone en riesgo a quien queda dentro."
+    },
+    "D2": {
+      "preferred_response": "B",
+      "capability": "informacion",
+      "severity_if_missed": "high",
+      "rationale": "Nadie entra en un edificio con humo. El recuento sirve para dar a los bomberos el dato que más necesitan: quién falta y dónde se le vio por última vez. Mandar a alumnos a buscar multiplica el riesgo."
+    },
+    "D3": {
+      "preferred_response": "B",
+      "capability": "comunicacion",
+      "severity_if_missed": "high",
+      "rationale": "El bulo corre más que la verdad: hay que llegar antes con un mensaje corto, cierto y útil (todos bien, cómo recoger, próxima actualización). Callar deja el espacio al vídeo viral."
+    },
+    "D4": {
+      "preferred_response": "B",
+      "capability": "terceros",
+      "severity_if_missed": "medium",
+      "rationale": "El acceso de emergencia es prioritario y la entrega de menores se hace por listas. Pedir apoyo a la Policía Local y abrir otra salida resuelve las dos cosas."
+    },
+    "D5": {
+      "preferred_response": "B",
+      "capability": "recuperacion",
+      "severity_if_missed": "high",
+      "rationale": "Continuidad es seguir prestando lo esencial con lo que queda en pie: usar los espacios sanos, priorizar a quien tiene más en juego y revisar el plan. Cerrar un mes o volver a un edificio dañado son los dos extremos que hay que evitar."
+    },
+    "D6": {
+      "preferred_response": "B",
+      "capability": "retorno",
+      "severity_if_missed": "medium",
+      "rationale": "Un plan sin fechas ni responsables no tranquiliza a nadie. Lo que funciona es concretar qué cambia para cada familia, cuándo y a quién preguntar, y cumplir el plazo de la Inspección."
+    }
+  }
+}

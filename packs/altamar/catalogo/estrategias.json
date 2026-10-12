@@ -1,0 +1,136 @@
+{
+  "E1": [
+    {
+      "id": "7001",
+      "codigo": "EST01",
+      "nombre": "EST01-Espacios alternativos",
+      "descripcion": "Polideportivo, aulas del edificio de Primaria o locales municipales cedidos."
+    },
+    {
+      "id": "7002",
+      "codigo": "EST02",
+      "nombre": "EST02-Reorganizar horarios y grupos",
+      "descripcion": "Turnos, horario reducido y agrupación de cursos."
+    },
+    {
+      "id": "7003",
+      "codigo": "EST03",
+      "nombre": "EST03-Escalar al equipo de emergencia",
+      "descripcion": "Dirección, coordinación de emergencias y comunicación al mando."
+    },
+    {
+      "id": "7007",
+      "codigo": "EST07",
+      "nombre": "EST07-Clases en línea",
+      "descripcion": "Docencia desde casa con la plataforma del colegio."
+    }
+  ],
+  "E2": [
+    {
+      "id": "7002",
+      "codigo": "EST02",
+      "nombre": "EST02-Reorganizar horarios y grupos",
+      "descripcion": "Turnos, horario reducido y agrupación de cursos."
+    },
+    {
+      "id": "7003",
+      "codigo": "EST03",
+      "nombre": "EST03-Escalar al equipo de emergencia",
+      "descripcion": "Dirección, coordinación de emergencias y comunicación al mando."
+    },
+    {
+      "id": "7008",
+      "codigo": "EST08",
+      "nombre": "EST08-Refuerzo de personal",
+      "descripcion": "Guardias extra, profesorado de otras etapas y personal no docente."
+    }
+  ],
+  "E3": [
+    {
+      "id": "7003",
+      "codigo": "EST03",
+      "nombre": "EST03-Escalar al equipo de emergencia",
+      "descripcion": "Dirección, coordinación de emergencias y comunicación al mando."
+    },
+    {
+      "id": "7004",
+      "codigo": "EST04",
+      "nombre": "EST04-Esperar y vigilar",
+      "descripcion": "No actuar todavía, con seguimiento y hora fija de revisión."
+    },
+    {
+      "id": "7005",
+      "codigo": "EST05",
+      "nombre": "EST05-Recuperar red y plataforma",
+      "descripcion": "Restablecer conectividad, cuentas y la app de familias."
+    }
+  ],
+  "E4": [
+    {
+      "id": "7002",
+      "codigo": "EST02",
+      "nombre": "EST02-Reorganizar horarios y grupos",
+      "descripcion": "Turnos, horario reducido y agrupación de cursos."
+    },
+    {
+      "id": "7006",
+      "codigo": "EST06",
+      "nombre": "EST06-Proveedor alternativo",
+      "descripcion": "Catering o autobuses de reserva contratados de urgencia."
+    },
+    {
+      "id": "7007",
+      "codigo": "EST07",
+      "nombre": "EST07-Clases en línea",
+      "descripcion": "Docencia desde casa con la plataforma del colegio."
+    }
+  ],
+  "E5": [
+    {
+      "id": "7004",
+      "codigo": "EST04",
+      "nombre": "EST04-Esperar y vigilar",
+      "descripcion": "No actuar todavía, con seguimiento y hora fija de revisión."
+    },
+    {
+      "id": "7005",
+      "codigo": "EST05",
+      "nombre": "EST05-Recuperar red y plataforma",
+      "descripcion": "Restablecer conectividad, cuentas y la app de familias."
+    }
+  ],
+  "E6": [
+    {
+      "id": "7003",
+      "codigo": "EST03",
+      "nombre": "EST03-Escalar al equipo de emergencia",
+      "descripcion": "Dirección, coordinación de emergencias y comunicación al mando."
+    },
+    {
+      "id": "7005",
+      "codigo": "EST05",
+      "nombre": "EST05-Recuperar red y plataforma",
+      "descripcion": "Restablecer conectividad, cuentas y la app de familias."
+    },
+    {
+      "id": "7001",
+      "codigo": "EST01",
+      "nombre": "EST01-Espacios alternativos",
+      "descripcion": "Polideportivo, aulas del edificio de Primaria o locales municipales cedidos."
+    }
+  ],
+  "E7": [
+    {
+      "id": "7003",
+      "codigo": "EST03",
+      "nombre": "EST03-Escalar al equipo de emergencia",
+      "descripcion": "Dirección, coordinación de emergencias y comunicación al mando."
+    },
+    {
+      "id": "7006",
+      "codigo": "EST06",
+      "nombre": "EST06-Proveedor alternativo",
+      "descripcion": "Catering o autobuses de reserva contratados de urgencia."
+    }
+  ]
+}

@@ -1,0 +1,129 @@
+{
+  "lead_name": "Dirección del colegio",
+  "lead_role": "Mando del plan de autoprotección",
+  "lead_email": "direccion@colegio.example",
+  "operator_label": "Coordinación de emergencias",
+  "umbral_perdida_eur": 5000,
+  "umbral_criticos_mtpd": 1,
+  "umbral_prob_pct": 75,
+  "history_limit": 20,
+  "links": {},
+  "sheets": {},
+  "documents": [
+    "Plan de autoprotección",
+    "Listas de alumnos y puntos de encuentro",
+    "Directorio de familias y emergencias"
+  ],
+  "scenarios": {
+    "E1": {
+      "title": "Un edificio del colegio no se puede usar",
+      "short": "Un edificio del colegio no se puede usar",
+      "icon": "🏫",
+      "pattern": "Inutilizable el resto de la jornada",
+      "strategies": [
+        "EST01",
+        "EST02",
+        "EST03",
+        "EST07"
+      ]
+    },
+    "E2": {
+      "title": "Falta profesorado o personal clave",
+      "short": "Falta profesorado o personal clave",
+      "icon": "👥",
+      "pattern": "Ausencias que obligan a juntar o anular grupos",
+      "strategies": [
+        "EST02",
+        "EST03",
+        "EST08"
+      ]
+    },
+    "E3": {
+      "title": "Caída de la red, la plataforma o la app de familias",
+      "short": "Caída de la red, la plataforma o la app de familias",
+      "icon": "📶",
+      "pattern": "Sin red ni plataforma en un edificio durante horas",
+      "strategies": [
+        "EST03",
+        "EST04",
+        "EST05"
+      ]
+    },
+    "E4": {
+      "title": "No se puede llegar al colegio",
+      "short": "No se puede llegar al colegio",
+      "icon": "🚌",
+      "pattern": "Rutas suspendidas o accesos cortados durante la jornada",
+      "strategies": [
+        "EST02",
+        "EST06",
+        "EST07"
+      ]
+    },
+    "E5": {
+      "title": "Error en los sistemas del centro",
+      "short": "Error en los sistemas del centro",
+      "icon": "⚙️",
+      "pattern": "Error que impide trabajar durante horas",
+      "strategies": [
+        "EST04",
+        "EST05"
+      ]
+    },
+    "E6": {
+      "title": "Acción hostil (intrusión, amenaza o ciberataque)",
+      "short": "Acción hostil (intrusión, amenaza o ciberataque)",
+      "icon": "🛡️",
+      "pattern": "Incidente confirmado contenido",
+      "strategies": [
+        "EST03",
+        "EST05",
+        "EST01"
+      ]
+    },
+    "E7": {
+      "title": "Falla un proveedor (comedor, autobuses, plataforma)",
+      "short": "Falla un proveedor (comedor, autobuses, plataforma)",
+      "icon": "🔗",
+      "pattern": "Servicio caído durante la jornada",
+      "strategies": [
+        "EST03",
+        "EST06"
+      ]
+    }
+  },
+  "strategies": {
+    "EST01": {
+      "title": "Espacios alternativos",
+      "detail": "Polideportivo, aulas del edificio de Primaria o locales municipales cedidos."
+    },
+    "EST02": {
+      "title": "Reorganizar horarios y grupos",
+      "detail": "Turnos, horario reducido y agrupación de cursos."
+    },
+    "EST03": {
+      "title": "Escalar al equipo de emergencia",
+      "detail": "Dirección, coordinación de emergencias y comunicación al mando."
+    },
+    "EST04": {
+      "title": "Esperar y vigilar",
+      "detail": "No actuar todavía, con seguimiento y hora fija de revisión."
+    },
+    "EST05": {
+      "title": "Recuperar red y plataforma",
+      "detail": "Restablecer conectividad, cuentas y la app de familias."
+    },
+    "EST06": {
+      "title": "Proveedor alternativo",
+      "detail": "Catering o autobuses de reserva contratados de urgencia."
+    },
+    "EST07": {
+      "title": "Clases en línea",
+      "detail": "Docencia desde casa con la plataforma del colegio."
+    },
+    "EST08": {
+      "title": "Refuerzo de personal",
+      "detail": "Guardias extra, profesorado de otras etapas y personal no docente."
+    }
+  }
+}

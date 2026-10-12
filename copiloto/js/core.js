@@ -6,7 +6,7 @@
 // Huella corta del catálogo: si la TV importó otra hoja, no coincide con la de las gafas y se nota.
 // sha256: función (texto → hex) que aporta quien llama, para no atar el motor a una implementación.
 export function catalogFingerprint(data, sha256) {
-  const body = JSON.stringify({ config: data.config, services: data.services, scenarios: data.scenarios, estrategias: data.estrategias });
+  const body = JSON.stringify({ config: data.config, services: data.services, scenarios: data.scenarios, estrategias: data.estrategias, ...(data.comms ? { comms: data.comms } : {}) });
   return sha256(body).slice(0, 12);
 }
 
@@ -386,9 +386,12 @@ export const COMMS_TABLE = [
   { id: 'priv-3', ctx: ['privacidad'], order: 110, when: 'Si hay alto riesgo para los afectados', bucket: 'deadline', mandatory: true, title: 'Comunicar la brecha a los interesados', quien: 'Responsable del tratamiento + DPD / Legal / Seguridad', canal: 'Canal directo a los afectados', plazo: 'Sin dilación si el riesgo es alto', base: 'RGPD art. 34', evidencia: 'Texto comunicado, fecha, colectivos afectados, mitigaciones ofrecidas', accion: 'mailto', color: 'danger', mail_asunto: 'Comunicación a los interesados afectados por la brecha', mail_cuerpo: 'La brecha detectada presenta un alto riesgo para los derechos y libertades de los afectados. Es necesario comunicárselo sin dilación. Preparad la comunicación con lenguaje claro, no técnico, indicando: qué ha ocurrido, qué datos están afectados, qué medidas se están tomando y cómo pueden protegerse.' },
 ];
 
-export function getCommsForCtx(ctx) {
-  return COMMS_TABLE.filter((c) => c.ctx.indexOf(ctx) !== -1).sort((a, b) => a.order - b.order);
+// table: comunicaciones propias del catálogo del pack (comunicaciones.json); por defecto, las de un incidente de seguridad.
+export function getCommsForCtx(ctx, table = COMMS_TABLE) {
+  return table.filter((c) => c.ctx.indexOf(ctx) !== -1).sort((a, b) => a.order - b.order);
 }
+
+export const COMMS_CONTEXTS = [{ id: 'seguridad', label: 'Incidente de seguridad' }, { id: 'publico', label: 'Afecta a cliente público' }, { id: 'privacidad', label: 'Datos personales en riesgo' }];
 
 export function getCommsStatus(item, elapsedMin) {
   if (elapsedMin === null || elapsedMin === undefined || !isFinite(elapsedMin)) return { key: 'planning', label: 'Sin cronómetro' };

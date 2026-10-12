@@ -108,6 +108,11 @@ async function selectPack(path) {
   $('pack-errors').replaceChildren();
   try {
     S.pack = await loadPack(path);
+    // Catálogo propio del pack (servicios, escenarios, estrategias y comunicaciones) o el general.
+    const cat = S.pack.manifest.files && S.pack.manifest.files.catalog;
+    if (cat) {
+      try { useCatalog(await loadCopilotData(S.pack.base + cat.replace(/\/?$/, '/'))); } catch (e) { S.pack.errors.push('Catálogo del pack: ' + e.message); }
+    } else if (S.defaultCatalog) useCatalog(await S.defaultCatalog);
   } catch (e) {
     S.pack = null;
     $('pack-status').textContent = 'Error al cargar el pack: ' + e.message;
@@ -452,6 +457,15 @@ function standOff(point, head, meters = 0.15) {
 }
 
 /* ─────────────────────────── Panel de Crisis virtual ─────────────────────────── */
+
+// Cambia el catálogo con el que calculan el Panel de Crisis, las tarjetas y la maqueta.
+function useCatalog(data) {
+  if (!data || S.copilot.data === data) return;
+  S.copilot.data = data;
+  S.copilot.round = null;
+  if (S.crisis) { if (world) world.remove(S.crisis.mesh); S.crisis = null; }
+  ensureCrisis();
+}
 
 function ensureCrisis() {
   if (S.crisis || !S.copilot.data || !world) return;
@@ -1175,7 +1189,7 @@ function updateCopilot(force = false) {
   if (!force && second === c.lastSecond) return;
   c.lastSecond = second;
   const snap = S.crisis ? S.crisis.snapshot() : computeSnapshot(c.data, c.st, elapsedReal);
-  const specs = widgetSpecs(S.role, snap, c.data.config);
+  const specs = widgetSpecs(S.role, snap, c.data.config, c.data.comms);
   copilotPanels.forEach((p, i) => { if (specs[i]) p.set(specs[i]); p.mesh.visible = !!specs[i]; });
   placeCopilot();
 }
@@ -1478,7 +1492,8 @@ async function main() {
   $('engine-version').textContent = ENGINE_VERSION;
   wireButtons();
   voice.init();
-  loadCopilotData().then((d) => { S.copilot.data = d; ensureCrisis(); }).catch(() => { /* sin copiloto: el simulacro sigue */ });
+  S.defaultCatalog = loadCopilotData().catch(() => null); // catálogo general (si el pack no trae el suyo)
+  if (!S.copilot.data) S.defaultCatalog.then((d) => { if (d && !S.copilot.data) useCatalog(d); });
   await initSetup();
   initThree();
   initMouse();

@@ -1,0 +1,199 @@
+{
+  "contexts": [
+    {
+      "id": "emergencia",
+      "label": "Emergencia en el centro"
+    },
+    {
+      "id": "familias",
+      "label": "Familias y alumnado"
+    },
+    {
+      "id": "autoridades",
+      "label": "Autoridades y terceros"
+    }
+  ],
+  "items": [
+    {
+      "id": "em-1",
+      "ctx": [
+        "emergencia"
+      ],
+      "order": 10,
+      "when": "Ahora",
+      "bucket": "now",
+      "mandatory": true,
+      "title": "Llamar al 112 y activar el plan de autoprotección",
+      "quien": "Dirección o quien detecte la emergencia",
+      "canal": "Teléfono 112 y megafonía",
+      "plazo": "Sin demora",
+      "base": "Plan de autoprotección",
+      "evidencia": "Hora de la llamada, quién llamó y qué se pidió",
+      "accion": "info",
+      "color": "critical",
+      "mail_asunto": "Llamar al 112 y activar el plan de autoprotección",
+      "mail_cuerpo": "Llamar al 112 y activar el plan de autoprotección."
+    },
+    {
+      "id": "em-2",
+      "ctx": [
+        "emergencia"
+      ],
+      "order": 20,
+      "when": "Ahora",
+      "bucket": "now",
+      "mandatory": true,
+      "title": "Recuento por grupos en el punto de encuentro",
+      "quien": "Profesorado de cada grupo",
+      "canal": "Listas en papel y en la app",
+      "plazo": "En cuanto se llega al punto de encuentro",
+      "base": "Plan de autoprotección",
+      "evidencia": "Listas firmadas con hora y ausencias",
+      "accion": "info",
+      "color": "critical",
+      "mail_asunto": "Recuento por grupos en el punto de encuentro",
+      "mail_cuerpo": "Recuento por grupos en el punto de encuentro."
+    },
+    {
+      "id": "em-3",
+      "ctx": [
+        "emergencia"
+      ],
+      "order": 30,
+      "when": "Ahora",
+      "bucket": "now",
+      "mandatory": true,
+      "title": "Informar a bomberos de quién falta y dónde se le vio por última vez",
+      "quien": "Coordinación de emergencias",
+      "canal": "En persona, al jefe de bomberos",
+      "plazo": "A su llegada",
+      "base": "Plan de autoprotección",
+      "evidencia": "Nombre, curso y última ubicación conocida",
+      "accion": "info",
+      "color": "critical",
+      "mail_asunto": "Informar a bomberos de quién falta y dónde se le vio por última vez",
+      "mail_cuerpo": "Informar a bomberos de quién falta y dónde se le vio por última vez."
+    },
+    {
+      "id": "fam-1",
+      "ctx": [
+        "familias"
+      ],
+      "order": 40,
+      "when": "Ahora",
+      "bucket": "now",
+      "mandatory": true,
+      "title": "Primer aviso a todas las familias",
+      "quien": "Dirección (texto) y Secretaría (envío)",
+      "canal": "App de familias y SMS",
+      "plazo": "En los primeros 30 minutos",
+      "base": "Protocolo de comunicación del centro",
+      "evidencia": "Texto enviado, hora y número de destinatarios",
+      "accion": "info",
+      "color": "critical",
+      "mail_asunto": "Primer aviso a todas las familias",
+      "mail_cuerpo": "Primer aviso a todas las familias."
+    },
+    {
+      "id": "fam-2",
+      "ctx": [
+        "familias"
+      ],
+      "order": 50,
+      "when": "Durante la emergencia",
+      "bucket": "now",
+      "mandatory": false,
+      "title": "Mismo mensaje en la web y en las redes del colegio",
+      "quien": "Comunicación",
+      "canal": "Web y redes sociales",
+      "plazo": "Justo después del primer aviso",
+      "base": "Protocolo de comunicación del centro",
+      "evidencia": "Capturas con hora de publicación",
+      "accion": "info",
+      "color": "warn",
+      "mail_asunto": "Mismo mensaje en la web y en las redes del colegio",
+      "mail_cuerpo": "Mismo mensaje en la web y en las redes del colegio."
+    },
+    {
+      "id": "fam-3",
+      "ctx": [
+        "familias"
+      ],
+      "order": 60,
+      "when": "Cada hora",
+      "bucket": "next",
+      "mandatory": true,
+      "title": "Actualización a hora fija aunque no haya novedades",
+      "quien": "Dirección",
+      "canal": "App de familias",
+      "plazo": "A la hora anunciada",
+      "base": "Protocolo de comunicación del centro",
+      "evidencia": "Registro de actualizaciones",
+      "accion": "info",
+      "color": "danger",
+      "mail_asunto": "Actualización a hora fija aunque no haya novedades",
+      "mail_cuerpo": "Actualización a hora fija aunque no haya novedades."
+    },
+    {
+      "id": "aut-1",
+      "ctx": [
+        "autoridades"
+      ],
+      "order": 70,
+      "when": "Ahora",
+      "bucket": "now",
+      "mandatory": true,
+      "title": "Comunicar la emergencia a la Inspección educativa",
+      "quien": "Dirección",
+      "canal": "Teléfono y correo oficial",
+      "plazo": "En la misma mañana",
+      "base": "Normativa educativa",
+      "evidencia": "Hora y persona contactada",
+      "accion": "info",
+      "color": "critical",
+      "mail_asunto": "Comunicar la emergencia a la Inspección educativa",
+      "mail_cuerpo": "Comunicar la emergencia a la Inspección educativa."
+    },
+    {
+      "id": "aut-2",
+      "ctx": [
+        "autoridades"
+      ],
+      "order": 80,
+      "when": "Hoy",
+      "bucket": "deadline",
+      "mandatory": true,
+      "title": "Plan de reanudación a la Inspección",
+      "quien": "Dirección y Jefatura de estudios",
+      "canal": "Correo oficial",
+      "plazo": "Antes de las 20:00",
+      "base": "Requerimiento de la Inspección",
+      "evidencia": "Plan enviado y acuse",
+      "accion": "info",
+      "color": "danger",
+      "mail_asunto": "Plan de reanudación a la Inspección",
+      "mail_cuerpo": "Plan de reanudación a la Inspección.",
+      "plazo_horas": 9
+    },
+    {
+      "id": "aut-3",
+      "ctx": [
+        "autoridades"
+      ],
+      "order": 90,
+      "when": "Hoy",
+      "bucket": "next",
+      "mandatory": false,
+      "title": "Parte a la aseguradora",
+      "quien": "Administración",
+      "canal": "Teléfono y formulario de siniestros",
+      "plazo": "En 24 horas",
+      "base": "Póliza del centro",
+      "evidencia": "Número de siniestro y fotos de daños",
+      "accion": "info",
+      "color": "warn",
+      "mail_asunto": "Parte a la aseguradora",
+      "mail_cuerpo": "Parte a la aseguradora."
+    }
+  ]
+}

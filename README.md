@@ -200,6 +200,28 @@ validar; el debrief lo advierte. Nunca se muestra a los participantes durante el
   `{"clock": "D0 07:33", "declared": "D0 07:08", "onset": "D0 06:02", "scenarios": {"E3": 1, "E6": 2}}`
   (día relativo del ejercicio + hora; escenario → categoría 1–3).
 
+### Catálogo propio del pack (`catalog`, opcional)
+
+Por defecto el Panel de Crisis calcula con el catálogo general (`copiloto/data/`, una empresa de servicios de
+ciberseguridad). Un pack de otro sector puede traer el suyo declarando `"catalog": "catalogo/"` en `manifest.files`;
+esa carpeta lleva los mismos ficheros que `copiloto/data/` (`config.json`, `servicios.json`, `escenarios.json`,
+`estrategias.json`) y, opcionalmente, `comunicaciones.json`:
+
+```json
+{
+  "contexts": [{ "id": "emergencia", "label": "Emergencia en el centro" }, { "id": "familias", "label": "Familias y alumnado" }],
+  "items": [{ "id": "em-1", "ctx": ["emergencia"], "order": 10, "when": "Ahora", "bucket": "now", "mandatory": true,
+              "title": "Llamar al 112 y activar el plan de autoprotección", "quien": "Dirección", "canal": "Teléfono 112",
+              "plazo": "Sin demora", "base": "Plan de autoprotección", "evidencia": "Hora de la llamada", "color": "critical" }]
+}
+```
+
+Hasta tres contextos; `plazo_horas` añade una cuenta atrás desde el inicio del incidente. `config.documents` cambia
+la lista de documentos de la pestaña Comité. Con catálogo propio cambian el cálculo de impacto y nivel, las
+estrategias, las comunicaciones, las tarjetas del rol y la maqueta; la huella del catálogo identifica cuál se usó.
+El copiloto web de la TV sigue calculando con el catálogo general (lo avisa al elegir un pack así): estos packs se
+juegan en las gafas.
+
 ### Maqueta (`site.json`, `crisis.site/1.0`, opcional)
 
 Se declara en `manifest.files.site`. Ejemplo mínimo:
@@ -256,6 +278,7 @@ copiloto/                       Copiloto de Continuidad para la TV
 debrief/                        Consolidador de registros
 packs/tramontana/               Pack de ejemplo (9 rondas): ciberataque, sede central con CPD propio
 packs/gregal/                   Pack corto (3 rondas): temporal e inundación, organización multisede con nube
+packs/altamar/                  Simulacro escolar (3 rondas): incendio en un colegio, con catálogo propio
 tools/generar_catalogo.py       Genera el catálogo ficticio
 tools/comprobar-anonimato.mjs   Control de anonimato (también en CI)
 tests/                          Pruebas del motor, del consolidador, de los packs y del simulador (npm test)
