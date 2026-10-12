@@ -1,6 +1,9 @@
 // Catálogo del copiloto: JSON incluido en la app o, si se ha importado, hojas publicadas de Google Sheets (CSV).
 // La importación se guarda en el navegador, así que el ejercicio sigue funcionando sin conexión.
 
+import { catalogFingerprint } from './core.js';
+import { sha256Hex } from '../../js/integrity.js';
+
 const KEY = 'copiloto:catalogo';
 const SHEETS_KEY = 'copiloto:sheets';
 
@@ -22,6 +25,7 @@ export async function loadDataset(base = 'data/') {
         source: `Google Sheets · importado ${new Date(override.loadedAt).toLocaleString('es-ES')}` });
     }
   } catch { /* sin almacenamiento */ }
+  ds.fingerprint = catalogFingerprint(ds, sha256Hex);
   return ds;
 }
 

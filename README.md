@@ -22,7 +22,8 @@ Después:
   `?vista=lectura` muestra solo la pestaña Impacto, sin controles).
 - Facilitador: `https://<usuario>.github.io/<repo>/debrief/`
 
-Tras la primera visita todo queda en caché (service worker) y funciona sin red. En local basta con
+Tras la primera visita todo queda en caché (service worker) y funciona sin red; si la red de la sala tarda más de
+3 s en responder, se sirve lo guardado y se actualiza en segundo plano. En local basta con
 `python3 -m http.server 8080` (las gafas necesitan HTTPS o `adb reverse tcp:8080 tcp:8080`).
 
 ## Centro de mando (sin pared ni calibración)
@@ -86,7 +87,10 @@ código de sesión** forman una sala:
 - **Panel de Crisis compartido:** lo que cualquiera opera (escenarios, categorías, analizar, hora de inicio,
   pausar/cerrar, comunicaciones notificadas, convocatoria) aparece al instante en los demás, con aviso
   («R2 ha analizado el impacto») y voz. La pestaña abierta es de cada uno. Un visor que llega tarde recibe el estado
-  actual y el estado de referencia de la ronda no pisa lo ya operado.
+  actual y el estado de referencia de la ronda no pisa lo ya operado. La versión del estado es un **reloj lógico**,
+  no la hora de cada gafa (un visor con el reloj desajustado no se impone), y los campos se fusionan: escenarios e
+  incidente siguen al cambio más reciente, y las comunicaciones notificadas y la convocatoria se acumulan, así dos
+  actuaciones casi simultáneas no se pisan (`js/shared-state.js`). Los mensajes con forma inesperada se descartan.
 - **Decisiones:** cuando el rol activo confirma, su elección aparece resaltada en los demás visores
   («R2 ha elegido C · registrada automáticamente»), se registra sola como observada con `sync_from` y el visor avanza
   al siguiente paso a los pocos segundos (o al pulsar *Continuar*). Si un visor llega a la decisión cuando ya estaba
@@ -144,6 +148,9 @@ tras el primer análisis sin recargar; el impacto «Crítico» se reconoce con o
   pestaña como CSV (*Archivo → Compartir → Publicar en la web*) y pega las tres URL en la barra de ejercicio →
   *Importar*. Se guarda en el navegador y sigue funcionando offline. Basta con permiso de lectura
   (la publicación es pública para quien tenga el enlace: usa solo datos ficticios).
+- **Huella del catálogo:** la barra de ejercicio de la TV y la pantalla de inicio de las gafas muestran una huella
+  corta del catálogo con el que calculan. Las gafas usan siempre el catálogo incluido; si la TV importó otra hoja,
+  las huellas no coinciden. Cada registro guarda la suya y el debrief avisa si los visores usaron catálogos distintos.
 
 ## Debrief
 
@@ -155,7 +162,14 @@ tras el primer análisis sin recargar; el impacto «Crítico» se reconoce con o
    edita, descarta o añade (responsable y plazo). Se guardan en el navegador y salen en el JSON consolidado,
    en un CSV de acciones de mejora y en el informe impreso/PDF.
 4. También: actuaciones reales en el Panel de Crisis por ronda, decisiones con la respuesta de referencia y su
-   justificación, tiempos por rol, cronología e integridad SHA-256 de cada registro.
+   justificación, tiempos por rol y cronología.
+5. **Integridad:** cada visor encadena sus eventos con SHA-256 (cada evento lleva el hash del anterior más el suyo).
+   Al exportar, las gafas muestran la **huella del registro** (p. ej. `810c df17 c5fc`): anotadla o fotografiadla.
+   El debrief recalcula la cadena, comprueba que las decisiones cuadran con sus eventos y muestra la huella de cada
+   registro; si alguien edita el JSON (una letra, un evento), la cadena aparece rota. Si alguien rehiciera la cadena
+   entera, la huella dejaría de coincidir con la anotada. Los registros de versiones anteriores salen como
+   «sin cadena».
+6. Los CSV neutralizan el texto que empieza por `=`, `+`, `-` o `@`, para que Excel no lo ejecute como fórmula.
 
 La hoja de respuestas vive en `packs/<pack>/debrief.json` (`preferred_response`, `capability`,
 `severity_if_missed`, `rationale`). La de TRAMONTANA es una **propuesta** (`"status": "propuesta"`) pendiente de
@@ -171,6 +185,10 @@ validar; el debrief lo advierte. Nunca se muestra a los participantes durante el
   `{"clock": "D0 07:33", "declared": "D0 07:08", "onset": "D0 06:02", "scenarios": {"E3": 1, "E6": 2}}`
   (día relativo del ejercicio + hora; escenario → categoría 1–3).
 
+Al cargar un pack se valida, además de la estructura: el formato de las horas y las categorías del bloque `copilot`,
+que la pestaña de cada actuación exista en el Panel de Crisis, y en `debrief.json` las letras de referencia, la
+gravedad (`high`/`medium`/`low`) y que cada capacidad tenga etiqueta. Un pack con errores no se puede iniciar.
+
 ## Estructura
 
 ```
@@ -181,6 +199,9 @@ js/command-bar.js               Barra de mando y línea de tiempo de la ronda
 js/copilot-view.js              Tarjetas de resumen por rol
 js/voice.js                     Voz narradora (SpeechSynthesis)
 js/sync.js                      Sincronización entre visores (PeerJS/WebRTC o pestañas locales)
+js/shared-state.js              Versión y fusión del estado compartido del Panel de Crisis
+js/integrity.js                 SHA-256 y cadena de integridad del registro (visor y debrief)
+js/csv.js                       Celdas CSV seguras (visor y debrief)
 copiloto/                       Copiloto de Continuidad para la TV
   js/core.js                    Motor de cálculo común (TV y gafas)
   js/copiloto.js                Interfaz portada del panel original
@@ -208,7 +229,7 @@ La integración continua (`.github/workflows/comprobaciones.yml`) ejecuta ambas 
 
 - Lecturas del Panel (R2) con teclado en MR y consultas documentales cronometradas.
 - Multimedia en injects (audio de llamadas, recortes de prensa ficticios) y consecuencias condicionales.
-- Hoja de respuestas en `debrief.json` para la valoración de referencia.
+- Validar con el equipo la hoja de respuestas de TRAMONTANA (`debrief.json`, hoy en estado «propuesta»).
 - Sincronización opcional TV ↔ gafas por red local.
 - Consola del facilitador para lanzar rondas e injects a todos a la vez (ejercicios en remoto).
 - Maqueta esquemática de sedes y dependencias en el centro de mando, generada desde el pack.

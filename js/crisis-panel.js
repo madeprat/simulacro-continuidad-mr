@@ -4,6 +4,7 @@
 import * as THREE from '../vendor/three.module.min.js';
 import * as core from '../copiloto/js/core.js';
 import { THEME, makeTexture, wrap, roundRect } from './panel.js';
+import { validShared, mergeShared } from './shared-state.js';
 
 const W = 1920;
 const H = 1200;
@@ -23,17 +24,8 @@ export const TABS = [
 const CTX = [{ id: 'seguridad', label: 'Incidente de seguridad' }, { id: 'publico', label: 'Afecta a cliente público' }, { id: 'privacidad', label: 'Datos personales en riesgo' }];
 const SVC_PAGE = 8;
 
-// Traduce la pestaña que nombra una actuación del pack («⚡ Activación», «🗂 Historial»…) a una pestaña del panel.
-export function tabFor(label = '') {
-  const l = label.toLowerCase();
-  if (l.includes('activ')) return 'activation';
-  if (l.includes('impacto') || l.includes('historial')) return 'impact';
-  if (l.includes('nivel')) return 'level';
-  if (l.includes('servicio')) return 'services';
-  if (l.includes('comit')) return 'committee';
-  if (l.includes('comunica')) return 'comms';
-  return null;
-}
+// La traducción de pestañas vive en pack.js (la usa también la validación del pack).
+export { tabFor } from './pack.js';
 
 const hhmm = (ms) => new Date(ms).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
 
@@ -44,7 +36,10 @@ export class CrisisPanel {
     this.onEvent = onEvent;
     this.onChange = onChange; // se llama tras cada cambio compartible (para sincronizar con los otros visores)
     this.roundId = null;
-    this.changedAt = 0;
+    // Versión del estado compartido: reloj lógico + id de este visor (ver shared-state.js).
+    this.id = Math.random().toString(36).slice(2, 10);
+    this.clock = 0;
+    this.rev = null;
     this.canvas = document.createElement('canvas');
     this.canvas.width = W;
     this.canvas.height = H;
@@ -84,7 +79,7 @@ export class CrisisPanel {
       : null;
     this.state.svcPage = 0;
     this.state.notice = codes.length ? `Panel actualizado al estado de referencia de ${roundLabel}.` : 'Panel sin incidente declarado.';
-    this.changedAt = Date.now();
+    this.bump();
     this.draw();
     this.onChange('baseline');
   }
@@ -93,25 +88,40 @@ export class CrisisPanel {
 
   // Lo que ven todos: escenarios, incidente, comunicaciones notificadas, convocatoria y reloj del ejercicio.
   // La pestaña abierta y la paginación son de cada visor.
+  // ¿Se ha operado (o ajustado a una ronda) el panel en este visor?
+  get changed() { return !!this.rev; }
+
+  bump() {
+    this.clock += 1;
+    this.rev = { n: this.clock, by: this.id };
+  }
+
   getShared() {
     const st = this.state;
     return {
-      roundId: this.roundId, simNow: this.now(), changedAt: this.changedAt,
+      roundId: this.roundId, simNow: this.now(), rev: this.rev,
       selected: { ...st.selected }, act: st.act ? { ...st.act, scenarios: { ...st.act.scenarios } } : null,
       sent: { ...st.sent }, convened: st.convened,
     };
   }
 
-  // Aplica el estado recibido de otro visor si es más reciente que el propio.
+  // Fusiona el estado recibido de otro visor: escenarios e incidente si su versión es posterior; las
+  // comunicaciones notificadas y la convocatoria se acumulan siempre. Devuelve true si algo ha cambiado.
   applyShared(shared, from, action) {
-    if (!shared || shared.changedAt <= this.changedAt) return false;
+    if (!validShared(shared)) return false;
+    this.clock = Math.max(this.clock, shared.rev.n);
     // Un estado de referencia de la misma ronda no pisa lo que ya se ha operado en ella.
     if (action === 'baseline' && shared.roundId && shared.roundId === this.roundId) return false;
-    this.roundId = shared.roundId;
-    this.changedAt = shared.changedAt;
-    this.base = { ...(this.base || {}), nowMs: shared.simNow };
-    this.roundStartReal = Date.now();
-    Object.assign(this.state, { selected: { ...shared.selected }, act: shared.act, sent: { ...shared.sent }, convened: shared.convened });
+    const m = mergeShared(this.getShared(), shared);
+    if (!m.changed) return false;
+    if (m.incomingWins) {
+      this.roundId = m.state.roundId;
+      this.rev = m.state.rev;
+      this.base = { ...(this.base || {}), nowMs: m.state.simNow };
+      this.roundStartReal = Date.now();
+      Object.assign(this.state, { selected: m.state.selected, act: m.state.act });
+    }
+    Object.assign(this.state, { sent: m.state.sent, convened: m.state.convened });
     const what = { analyze: 'ha analizado el impacto', onset: 'ha ajustado la hora de inicio', contain: 'ha pausado el seguimiento',
       resume: 'ha reanudado el seguimiento', close: 'ha cerrado el incidente', sent: 'ha marcado una comunicación',
       convene: 'ha convocado al comité', sc: 'ha cambiado los escenarios', cat: 'ha cambiado una categoría' }[action];
@@ -220,7 +230,7 @@ export class CrisisPanel {
       st.notice = 'Convocatoria registrada. Duplícala por un canal fuera de banda y confirma la recepción.';
     } else return false;
     if (!['tab', 'svc', 'ctx', 'comm'].includes(kind)) {
-      this.changedAt = Date.now();
+      this.bump();
       this.onChange(kind);
     }
     this.draw();
