@@ -23,6 +23,14 @@
     {
       "path": "packs/siroco/",
       "label": "SIROCO · banco (DORA) · 3 rondas · 6 decisiones"
+    },
+    {
+      "path": "packs/marjal/",
+      "label": "MARJAL · aguas y riada (NIS2) · 3 rondas · 6 decisiones"
+    },
+    {
+      "path": "packs/calima/",
+      "label": "CALIMA · agua y energía, ciudad aislada (NIS2) · 3 rondas · 6 decisiones"
     }
   ]
 }

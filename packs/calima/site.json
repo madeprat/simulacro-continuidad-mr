@@ -1,0 +1,191 @@
+{
+  "schema": "crisis.site/1.0",
+  "name": "Energía y Aguas de Calima",
+  "note": "Empresa ficticia de agua y energía de una ciudad portuaria de 80.000 habitantes con sistema eléctrico aislado y agua desalada.",
+  "nodes": [
+    {
+      "id": "DESAL",
+      "type": "datacenter",
+      "label": "Desaladora",
+      "x": -2.0,
+      "z": -1.8,
+      "w": 1.4,
+      "d": 1.0,
+      "scenarios": [
+        "E1"
+      ],
+      "services": [
+        "EAC-01",
+        "EAC-14"
+      ]
+    },
+    {
+      "id": "CENTRAL",
+      "type": "building",
+      "label": "Central eléctrica (sistema aislado)",
+      "floors": 2,
+      "x": 1.6,
+      "z": -2.2,
+      "w": 1.4,
+      "d": 0.9,
+      "scenarios": [
+        "E1"
+      ],
+      "services": [
+        "EAC-03"
+      ]
+    },
+    {
+      "id": "DEPO",
+      "type": "room",
+      "label": "Depósito general",
+      "x": -2.8,
+      "z": 0.8,
+      "w": 1.0,
+      "d": 1.0,
+      "scenarios": [
+        "E5"
+      ],
+      "services": [
+        "EAC-02",
+        "EAC-08"
+      ]
+    },
+    {
+      "id": "CTRL",
+      "type": "room",
+      "label": "Centro de control",
+      "x": 0.2,
+      "z": -0.4,
+      "w": 1.0,
+      "d": 0.7,
+      "scenarios": [
+        "E3",
+        "E6"
+      ],
+      "services": [
+        "EAC-05",
+        "EAC-10"
+      ]
+    },
+    {
+      "id": "HOSP",
+      "type": "building",
+      "label": "Hospital y servicios esenciales",
+      "floors": 3,
+      "x": 2.6,
+      "z": 0.6,
+      "w": 1.1,
+      "d": 0.8,
+      "scenarios": [],
+      "services": [
+        "EAC-06",
+        "EAC-04"
+      ]
+    },
+    {
+      "id": "ACOG",
+      "type": "room",
+      "label": "Centro de atención y puntos de agua",
+      "x": -0.6,
+      "z": 2.0,
+      "w": 1.6,
+      "d": 0.9,
+      "scenarios": [
+        "E5"
+      ],
+      "services": [
+        "EAC-07",
+        "EAC-11"
+      ]
+    },
+    {
+      "id": "SEDE",
+      "type": "building",
+      "label": "Sede y atención al cliente",
+      "floors": 2,
+      "x": 1.8,
+      "z": 2.6,
+      "w": 1.0,
+      "d": 0.7,
+      "scenarios": [],
+      "services": [
+        "EAC-09",
+        "EAC-15"
+      ]
+    },
+    {
+      "id": "PUERTO",
+      "type": "provider",
+      "label": "Puerto (combustible y reactivos)",
+      "x": 3.6,
+      "z": -1.0,
+      "scenarios": [
+        "E4",
+        "E7"
+      ],
+      "services": [
+        "EAC-12",
+        "EAC-13"
+      ]
+    },
+    {
+      "id": "MANT",
+      "type": "provider",
+      "label": "Proveedor de mantenimiento remoto",
+      "x": -3.4,
+      "z": -2.8,
+      "scenarios": [
+        "E6"
+      ],
+      "services": []
+    }
+  ],
+  "links": [
+    {
+      "from": "DESAL",
+      "to": "DEPO",
+      "label": "Agua producto"
+    },
+    {
+      "from": "DEPO",
+      "to": "ACOG",
+      "label": "Distribución"
+    },
+    {
+      "from": "DEPO",
+      "to": "HOSP",
+      "label": "Distribución"
+    },
+    {
+      "from": "CENTRAL",
+      "to": "DESAL",
+      "label": "Energía"
+    },
+    {
+      "from": "CENTRAL",
+      "to": "HOSP",
+      "label": "Energía"
+    },
+    {
+      "from": "CTRL",
+      "to": "DESAL",
+      "label": "Telecontrol"
+    },
+    {
+      "from": "CTRL",
+      "to": "CENTRAL",
+      "label": "Telecontrol"
+    },
+    {
+      "from": "MANT",
+      "to": "DESAL",
+      "label": "Acceso remoto"
+    },
+    {
+      "from": "PUERTO",
+      "to": "CENTRAL",
+      "label": "Combustible"
+    }
+  ]
+}

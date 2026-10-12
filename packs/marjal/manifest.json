@@ -1,0 +1,20 @@
+{
+  "schema": "crisis.exercise/1.0",
+  "exercise_id": "MARJAL",
+  "name": "Simulacro MARJAL · aguas y riada (NIS2)",
+  "version": "1.0",
+  "expected_players": 3,
+  "duration_minutes": 30,
+  "round_count": 3,
+  "decision_count": 6,
+  "language": "es-ES",
+  "files": {
+    "roles": "roles.json",
+    "rounds": "rounds.json",
+    "debrief": "debrief.json",
+    "site": "site.json",
+    "catalog": "catalogo/"
+  },
+  "intro": "Sois la dirección de crisis de Aguas del Marjal, una empresa ficticia que abastece a 14 municipios y es entidad esencial NIS2. Aviso rojo desde la mañana; en la costa apenas llueve. Tres rondas y tres roles, la última diez días después. Lo que decidáis, y cuándo, quedará en el registro.",
+  "ending": "Fin del simulacro. Lo que queda de una emergencia son las personas protegidas y el registro de lo que se decidió y cuándo. Salid de la realidad mixta para ver el resumen."
+}

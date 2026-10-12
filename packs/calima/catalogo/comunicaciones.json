@@ -1,0 +1,200 @@
+{
+  "contexts": [
+    {
+      "id": "nis2",
+      "label": "NIS2 (CSIRT)"
+    },
+    {
+      "id": "poblacion",
+      "label": "Población"
+    },
+    {
+      "id": "autoridades",
+      "label": "Autoridades y sector"
+    }
+  ],
+  "items": [
+    {
+      "id": "nis-1",
+      "ctx": [
+        "nis2"
+      ],
+      "order": 10,
+      "when": "Antes de 24 h",
+      "bucket": "deadline",
+      "mandatory": true,
+      "title": "Alerta temprana al CSIRT de referencia (indicando si se sospecha acto malicioso)",
+      "quien": "Responsable de seguridad",
+      "canal": "Plataforma de notificación del CSIRT",
+      "plazo": "24 h desde que se tiene conocimiento",
+      "base": "Directiva NIS2 (UE) 2022/2555, art. 23",
+      "evidencia": "Alerta enviada con hora y acuse",
+      "accion": "info",
+      "color": "critical",
+      "mail_asunto": "Alerta temprana al CSIRT de referencia (indicando si se sospecha acto malicioso)",
+      "mail_cuerpo": "Alerta temprana al CSIRT de referencia (indicando si se sospecha acto malicioso).",
+      "plazo_horas": 24
+    },
+    {
+      "id": "nis-2",
+      "ctx": [
+        "nis2"
+      ],
+      "order": 20,
+      "when": "Antes de 72 h",
+      "bucket": "deadline",
+      "mandatory": true,
+      "title": "Notificación del incidente significativo",
+      "quien": "Responsable de seguridad",
+      "canal": "Plataforma de notificación del CSIRT",
+      "plazo": "72 h desde que se tiene conocimiento",
+      "base": "Directiva NIS2 (UE) 2022/2555, art. 23",
+      "evidencia": "Notificación con evaluación inicial e indicadores de compromiso",
+      "accion": "info",
+      "color": "danger",
+      "mail_asunto": "Notificación del incidente significativo",
+      "mail_cuerpo": "Notificación del incidente significativo.",
+      "plazo_horas": 72
+    },
+    {
+      "id": "nis-3",
+      "ctx": [
+        "nis2"
+      ],
+      "order": 30,
+      "when": "Post-incidente",
+      "bucket": "post",
+      "mandatory": true,
+      "title": "Informe final",
+      "quien": "Dirección con el responsable de seguridad",
+      "canal": "Plataforma de notificación del CSIRT",
+      "plazo": "Un mes desde la notificación",
+      "base": "Directiva NIS2 (UE) 2022/2555, art. 23",
+      "evidencia": "Informe con causa raíz y medidas",
+      "accion": "info",
+      "color": "ok",
+      "mail_asunto": "Informe final",
+      "mail_cuerpo": "Informe final."
+    },
+    {
+      "id": "pob-1",
+      "ctx": [
+        "poblacion"
+      ],
+      "order": 40,
+      "when": "Ahora",
+      "bucket": "now",
+      "mandatory": true,
+      "title": "Informar de los puntos de agua y del suministro garantizado",
+      "quien": "Comunicación",
+      "canal": "Web, radio, carteles y megafonía, en varios idiomas",
+      "plazo": "En la primera hora",
+      "base": "Plan de emergencia",
+      "evidencia": "Textos, idiomas y hora",
+      "accion": "info",
+      "color": "critical",
+      "mail_asunto": "Informar de los puntos de agua y del suministro garantizado",
+      "mail_cuerpo": "Informar de los puntos de agua y del suministro garantizado."
+    },
+    {
+      "id": "pob-2",
+      "ctx": [
+        "poblacion"
+      ],
+      "order": 50,
+      "when": "Si hay restricciones",
+      "bucket": "deadline",
+      "mandatory": true,
+      "title": "Anunciar las restricciones con antelación (zonas y horarios)",
+      "quien": "Dirección con Comunicación",
+      "canal": "Todos los canales, en varios idiomas",
+      "plazo": "24 h antes de aplicarlas",
+      "base": "Plan de suministro mínimo",
+      "evidencia": "Anuncio y calendario publicados",
+      "accion": "info",
+      "color": "danger",
+      "mail_asunto": "Anunciar las restricciones con antelación (zonas y horarios)",
+      "mail_cuerpo": "Anunciar las restricciones con antelación (zonas y horarios)."
+    },
+    {
+      "id": "pob-3",
+      "ctx": [
+        "poblacion"
+      ],
+      "order": 60,
+      "when": "Si hay bulos",
+      "bucket": "next",
+      "mandatory": true,
+      "title": "Desmentir con datos (análisis con hora y punto de muestreo)",
+      "quien": "Portavoz único con Calidad",
+      "canal": "Web, redes y medios",
+      "plazo": "En cuanto se detecte el bulo",
+      "base": "Protocolo de comunicación",
+      "evidencia": "Publicación y análisis enlazados",
+      "accion": "info",
+      "color": "danger",
+      "mail_asunto": "Desmentir con datos (análisis con hora y punto de muestreo)",
+      "mail_cuerpo": "Desmentir con datos (análisis con hora y punto de muestreo)."
+    },
+    {
+      "id": "aut-1",
+      "ctx": [
+        "autoridades"
+      ],
+      "order": 70,
+      "when": "Ahora",
+      "bucket": "now",
+      "mandatory": true,
+      "title": "Coordinarse con el gobierno de la ciudad y la delegación del Gobierno",
+      "quien": "Dirección general",
+      "canal": "Canal oficial y por escrito",
+      "plazo": "Sin demora",
+      "base": "Plan territorial de emergencias",
+      "evidencia": "Mensajes con hora y acuse",
+      "accion": "info",
+      "color": "critical",
+      "mail_asunto": "Coordinarse con el gobierno de la ciudad y la delegación del Gobierno",
+      "mail_cuerpo": "Coordinarse con el gobierno de la ciudad y la delegación del Gobierno."
+    },
+    {
+      "id": "aut-2",
+      "ctx": [
+        "autoridades"
+      ],
+      "order": 80,
+      "when": "Hoy",
+      "bucket": "next",
+      "mandatory": true,
+      "title": "Informar a la autoridad competente del sector (energía y agua)",
+      "quien": "Dirección general",
+      "canal": "Canal oficial",
+      "plazo": "En la jornada",
+      "base": "Directiva NIS2 (UE) 2022/2555, art. 23",
+      "evidencia": "Comunicación enviada",
+      "accion": "info",
+      "color": "warn",
+      "mail_asunto": "Informar a la autoridad competente del sector (energía y agua)",
+      "mail_cuerpo": "Informar a la autoridad competente del sector (energía y agua)."
+    },
+    {
+      "id": "aut-3",
+      "ctx": [
+        "autoridades"
+      ],
+      "order": 90,
+      "when": "Durante toda la emergencia",
+      "bucket": "now",
+      "mandatory": true,
+      "title": "Llevar el libro de decisiones (hora, quién decide, qué se sabía)",
+      "quien": "Secretaría del comité",
+      "canal": "Libro de decisiones",
+      "plazo": "En tiempo real",
+      "base": "Plan de emergencia y buen gobierno",
+      "evidencia": "Libro firmado y conservado",
+      "accion": "info",
+      "color": "danger",
+      "mail_asunto": "Llevar el libro de decisiones (hora, quién decide, qué se sabía)",
+      "mail_cuerpo": "Llevar el libro de decisiones (hora, quién decide, qué se sabía)."
+    }
+  ]
+}

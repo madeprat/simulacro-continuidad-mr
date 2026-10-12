@@ -1,0 +1,43 @@
+{
+  "roles": [
+    {
+      "id": "R1",
+      "name": "R1 · Dirección general",
+      "functions": [
+        "Dirige la emergencia y firma las decisiones de alto impacto.",
+        "Habla con emergencias, ayuntamientos y el consejo.",
+        "Responde de lo que se decidió y cuándo."
+      ],
+      "rules": [
+        "Solo respondes cuando la decisión es de R1.",
+        "Si los visores no están conectados, di tu letra en voz alta (o por teléfono) antes de confirmar."
+      ]
+    },
+    {
+      "id": "R2",
+      "name": "R2 · Operaciones, continuidad y Panel de Crisis",
+      "functions": [
+        "Opera el Panel de Crisis y lee la maqueta de la red.",
+        "Gestiona plantas, brigadas, cisternas y la sectorización.",
+        "Lleva los datos de caudal, calidad y telecontrol."
+      ],
+      "rules": [
+        "Solo respondes cuando la decisión es de R2.",
+        "Si los visores no están conectados, di tu letra en voz alta (o por teléfono) antes de confirmar."
+      ]
+    },
+    {
+      "id": "R3",
+      "name": "R3 · Comunicación y cumplimiento NIS2",
+      "functions": [
+        "Prepara los avisos a la población y a los municipios.",
+        "Controla las notificaciones al CSIRT y a las autoridades.",
+        "Lleva el libro de decisiones."
+      ],
+      "rules": [
+        "Solo respondes cuando la decisión es de R3.",
+        "Si los visores no están conectados, di tu letra en voz alta (o por teléfono) antes de confirmar."
+      ]
+    }
+  ]
+}

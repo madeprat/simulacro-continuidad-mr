@@ -1,0 +1,127 @@
+{
+  "lead_name": "Dirección general",
+  "lead_role": "Dirección del plan de emergencia",
+  "lead_email": "direccion@aguas.example",
+  "operator_label": "Operaciones y continuidad",
+  "umbral_perdida_eur": 60000,
+  "umbral_criticos_mtpd": 1,
+  "umbral_prob_pct": 75,
+  "history_limit": 20,
+  "links": {},
+  "sheets": {},
+  "documents": [
+    "Plan de emergencia ante inundaciones",
+    "Libro de decisiones de la emergencia",
+    "Protocolo de coordinación con emergencias y sanidad"
+  ],
+  "scenarios": {
+    "E1": {
+      "title": "Una instalación inundada o inaccesible",
+      "short": "Una instalación inundada o inaccesible",
+      "icon": "🌊",
+      "pattern": "Instalación fuera de servicio durante la jornada",
+      "strategies": [
+        "EST01",
+        "EST02",
+        "EST03",
+        "EST05"
+      ]
+    },
+    "E2": {
+      "title": "Falta personal clave",
+      "short": "Falta personal clave",
+      "icon": "👥",
+      "pattern": "Turnos sin cubrir en operación",
+      "strategies": [
+        "EST03",
+        "EST06"
+      ]
+    },
+    "E3": {
+      "title": "Sin telecontrol ni sistemas",
+      "short": "Sin telecontrol ni sistemas",
+      "icon": "💻",
+      "pattern": "Sin telecontrol durante horas",
+      "strategies": [
+        "EST01",
+        "EST03"
+      ]
+    },
+    "E4": {
+      "title": "Carreteras cortadas y accesos imposibles",
+      "short": "Carreteras cortadas y accesos imposibles",
+      "icon": "🛣️",
+      "pattern": "Accesos cortados durante la jornada",
+      "strategies": [
+        "EST05",
+        "EST06"
+      ]
+    },
+    "E5": {
+      "title": "Agua no apta o fallo del proceso",
+      "short": "Agua no apta o fallo del proceso",
+      "icon": "🧪",
+      "pattern": "Agua no apta en varios municipios",
+      "strategies": [
+        "EST02",
+        "EST05",
+        "EST07"
+      ]
+    },
+    "E6": {
+      "title": "Ciberataque o acción hostil",
+      "short": "Ciberataque o acción hostil",
+      "icon": "🛡️",
+      "pattern": "Ataque confirmado contenido",
+      "strategies": [
+        "EST01",
+        "EST03",
+        "EST08"
+      ]
+    },
+    "E7": {
+      "title": "Falla un proveedor crítico",
+      "short": "Falla un proveedor crítico",
+      "icon": "🔗",
+      "pattern": "Servicio caído durante la jornada",
+      "strategies": [
+        "EST03",
+        "EST06"
+      ]
+    }
+  },
+  "strategies": {
+    "EST01": {
+      "title": "Operación manual en planta",
+      "detail": "Personal en planta y válvulas a mano cuando no hay telecontrol."
+    },
+    "EST02": {
+      "title": "Sectorizar la red",
+      "detail": "Aislar zonas afectadas para proteger el resto."
+    },
+    "EST03": {
+      "title": "Activar el plan de emergencia",
+      "detail": "Dirección, operaciones, calidad y comunicación con mando único y libro de decisiones."
+    },
+    "EST04": {
+      "title": "Vigilar y reevaluar",
+      "detail": "Seguimiento con hora fija."
+    },
+    "EST05": {
+      "title": "Suministro alternativo",
+      "detail": "Cisternas, agua embotellada y conexiones con redes vecinas."
+    },
+    "EST06": {
+      "title": "Proveedor de respaldo",
+      "detail": "Grupos electrógenos y logística de respaldo."
+    },
+    "EST07": {
+      "title": "Aviso de no consumo",
+      "detail": "Recomendar a emergencias y municipios el aviso a la población."
+    },
+    "EST08": {
+      "title": "Aislar y conservar evidencias",
+      "detail": "Para ciberincidentes en el control de la red."
+    }
+  }
+}

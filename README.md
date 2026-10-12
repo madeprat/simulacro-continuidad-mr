@@ -282,6 +282,8 @@ packs/altamar/                  Simulacro escolar (3 rondas): incendio en un col
 packs/valdecierzo/              Simulacro municipal (3 rondas): ciberataque en un pueblo en fiestas, con catálogo propio
 packs/sierraclara/              Simulacro hospitalario (3 rondas, ENS): caída del CPD por calor, con catálogo propio
 packs/siroco/                   Simulacro bancario (3 rondas, DORA): proveedor TIC crítico caído, con catálogo propio
+packs/marjal/                   Simulacro NIS2 (3 rondas): empresa de aguas ante una riada, con registro de decisiones
+packs/calima/                   Simulacro NIS2 (3 rondas): agua y energía de una ciudad aislada ante una llegada masiva
 tools/generar_catalogo.py       Genera el catálogo ficticio
 tools/comprobar-anonimato.mjs   Control de anonimato (también en CI)
 tests/                          Pruebas del motor, del consolidador, de los packs y del simulador (npm test)

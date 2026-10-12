@@ -1,0 +1,200 @@
+{
+  "contexts": [
+    {
+      "id": "nis2",
+      "label": "NIS2 (CSIRT)"
+    },
+    {
+      "id": "poblacion",
+      "label": "Población y municipios"
+    },
+    {
+      "id": "autoridades",
+      "label": "Emergencias y autoridades"
+    }
+  ],
+  "items": [
+    {
+      "id": "nis-1",
+      "ctx": [
+        "nis2"
+      ],
+      "order": 10,
+      "when": "Antes de 24 h",
+      "bucket": "deadline",
+      "mandatory": true,
+      "title": "Alerta temprana al CSIRT de referencia",
+      "quien": "Responsable de seguridad con Operaciones",
+      "canal": "Plataforma de notificación del CSIRT",
+      "plazo": "24 h desde que se tiene conocimiento",
+      "base": "Directiva NIS2 (UE) 2022/2555, art. 23",
+      "evidencia": "Alerta enviada con hora y acuse",
+      "accion": "info",
+      "color": "critical",
+      "mail_asunto": "Alerta temprana al CSIRT de referencia",
+      "mail_cuerpo": "Alerta temprana al CSIRT de referencia.",
+      "plazo_horas": 24
+    },
+    {
+      "id": "nis-2",
+      "ctx": [
+        "nis2"
+      ],
+      "order": 20,
+      "when": "Antes de 72 h",
+      "bucket": "deadline",
+      "mandatory": true,
+      "title": "Notificación del incidente significativo",
+      "quien": "Responsable de seguridad",
+      "canal": "Plataforma de notificación del CSIRT",
+      "plazo": "72 h desde que se tiene conocimiento",
+      "base": "Directiva NIS2 (UE) 2022/2555, art. 23",
+      "evidencia": "Notificación con evaluación inicial, gravedad e impacto",
+      "accion": "info",
+      "color": "danger",
+      "mail_asunto": "Notificación del incidente significativo",
+      "mail_cuerpo": "Notificación del incidente significativo.",
+      "plazo_horas": 72
+    },
+    {
+      "id": "nis-3",
+      "ctx": [
+        "nis2"
+      ],
+      "order": 30,
+      "when": "Post-incidente",
+      "bucket": "post",
+      "mandatory": true,
+      "title": "Informe final",
+      "quien": "Dirección con el responsable de seguridad",
+      "canal": "Plataforma de notificación del CSIRT",
+      "plazo": "Un mes desde la notificación",
+      "base": "Directiva NIS2 (UE) 2022/2555, art. 23",
+      "evidencia": "Informe con causa, medidas y efectos transfronterizos",
+      "accion": "info",
+      "color": "ok",
+      "mail_asunto": "Informe final",
+      "mail_cuerpo": "Informe final."
+    },
+    {
+      "id": "pob-1",
+      "ctx": [
+        "poblacion"
+      ],
+      "order": 40,
+      "when": "Ahora",
+      "bucket": "now",
+      "mandatory": true,
+      "title": "Recomendar a emergencias el aviso de no consumo de agua del grifo",
+      "quien": "Dirección con Calidad",
+      "canal": "Por escrito al centro de coordinación de emergencias",
+      "plazo": "En cuanto no se pueda garantizar la potabilidad",
+      "base": "Normativa sanitaria del agua de consumo",
+      "evidencia": "Recomendación enviada, hora y acuse",
+      "accion": "info",
+      "color": "critical",
+      "mail_asunto": "Recomendar a emergencias el aviso de no consumo de agua del grifo",
+      "mail_cuerpo": "Recomendar a emergencias el aviso de no consumo de agua del grifo."
+    },
+    {
+      "id": "pob-2",
+      "ctx": [
+        "poblacion"
+      ],
+      "order": 50,
+      "when": "Ahora",
+      "bucket": "now",
+      "mandatory": true,
+      "title": "Avisar a los ayuntamientos afectados con la lista de municipios",
+      "quien": "Atención 24 h",
+      "canal": "Teléfono y correo a cada alcaldía",
+      "plazo": "Sin demora",
+      "base": "Protocolo de coordinación municipal",
+      "evidencia": "Lista de llamadas con hora y persona",
+      "accion": "info",
+      "color": "danger",
+      "mail_asunto": "Avisar a los ayuntamientos afectados con la lista de municipios",
+      "mail_cuerpo": "Avisar a los ayuntamientos afectados con la lista de municipios."
+    },
+    {
+      "id": "pob-3",
+      "ctx": [
+        "poblacion"
+      ],
+      "order": 60,
+      "when": "Hoy",
+      "bucket": "next",
+      "mandatory": true,
+      "title": "Publicar puntos de agua y cómo saber si tu calle está afectada",
+      "quien": "Comunicación",
+      "canal": "Web, redes y radio",
+      "plazo": "En cuanto haya cisternas operativas",
+      "base": "Plan de emergencia",
+      "evidencia": "Capturas con hora",
+      "accion": "info",
+      "color": "warn",
+      "mail_asunto": "Publicar puntos de agua y cómo saber si tu calle está afectada",
+      "mail_cuerpo": "Publicar puntos de agua y cómo saber si tu calle está afectada."
+    },
+    {
+      "id": "aut-1",
+      "ctx": [
+        "autoridades"
+      ],
+      "order": 70,
+      "when": "Ahora",
+      "bucket": "now",
+      "mandatory": true,
+      "title": "Informar al centro de coordinación de emergencias con datos de caudal e instalaciones en riesgo",
+      "quien": "Dirección general",
+      "canal": "Canal oficial y por escrito",
+      "plazo": "En cuanto haya riesgo",
+      "base": "Plan territorial de emergencias",
+      "evidencia": "Mensaje enviado con hora y acuse",
+      "accion": "info",
+      "color": "critical",
+      "mail_asunto": "Informar al centro de coordinación de emergencias con datos de caudal e instalaciones en riesgo",
+      "mail_cuerpo": "Informar al centro de coordinación de emergencias con datos de caudal e instalaciones en riesgo."
+    },
+    {
+      "id": "aut-2",
+      "ctx": [
+        "autoridades"
+      ],
+      "order": 80,
+      "when": "Ahora",
+      "bucket": "now",
+      "mandatory": true,
+      "title": "Informar a la autoridad sanitaria de la pérdida de calidad del agua",
+      "quien": "Jefatura de Calidad",
+      "canal": "Canal oficial de sanidad ambiental",
+      "plazo": "Sin demora",
+      "base": "Normativa sanitaria del agua de consumo",
+      "evidencia": "Comunicación y resultados analíticos",
+      "accion": "info",
+      "color": "critical",
+      "mail_asunto": "Informar a la autoridad sanitaria de la pérdida de calidad del agua",
+      "mail_cuerpo": "Informar a la autoridad sanitaria de la pérdida de calidad del agua."
+    },
+    {
+      "id": "aut-3",
+      "ctx": [
+        "autoridades"
+      ],
+      "order": 90,
+      "when": "Durante toda la emergencia",
+      "bucket": "now",
+      "mandatory": true,
+      "title": "Llevar el libro de decisiones (hora, quién decide, qué se sabía)",
+      "quien": "Secretaría del comité de emergencia",
+      "canal": "Libro de decisiones",
+      "plazo": "En tiempo real",
+      "base": "Plan de emergencia y buen gobierno",
+      "evidencia": "Libro firmado y conservado",
+      "accion": "info",
+      "color": "danger",
+      "mail_asunto": "Llevar el libro de decisiones (hora, quién decide, qué se sabía)",
+      "mail_cuerpo": "Llevar el libro de decisiones (hora, quién decide, qué se sabía)."
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "status": "propuesta",
+  "note": "Hoja de respuestas PROPUESTA (entidad esencial NIS2, sectores energía y agua); debe validarla quien dirija el ejercicio. No se muestra durante el juego.",
+  "capabilities": {
+    "deteccion_escalado": "Detección y escalado",
+    "autoridad": "Roles y autoridad",
+    "recuperacion": "Continuidad y recuperación",
+    "comunicacion": "Comunicaciones",
+    "cumplimiento": "Obligaciones legales y contractuales",
+    "informacion": "Disponibilidad de información",
+    "decision": "Toma de decisiones con incertidumbre",
+    "terceros": "Coordinación con terceros",
+    "retorno": "Retorno a la normalidad"
+  },
+  "assessments": {
+    "D1": {
+      "preferred_response": "B",
+      "capability": "deteccion_escalado",
+      "severity_if_missed": "high",
+      "rationale": "Un servicio esencial no se pone de perfil: decide prioridades con criterios humanitarios y de seguridad, y se coordina. Cortar sin aviso o esperar instrucciones convierte un problema de capacidad en una crisis humanitaria."
+    },
+    "D2": {
+      "preferred_response": "B",
+      "capability": "decision",
+      "severity_if_missed": "medium",
+      "rationale": "La amenaza para el servicio es la capacidad, no un fallo técnico, y el puerto condiciona los suministros. Llamar «ataque» a una situación humanitaria distorsiona la respuesta."
+    },
+    "D3": {
+      "preferred_response": "B",
+      "capability": "recuperacion",
+      "severity_if_missed": "high",
+      "rationale": "Con la planta crítica al límite, un acceso dudoso es inaceptable, pero apagarla es peor. Operar en local y cortar terceros contiene el riesgo sin parar el servicio. Las cuentas compartidas son parte del problema."
+    },
+    "D4": {
+      "preferred_response": "B",
+      "capability": "cumplimiento",
+      "severity_if_missed": "high",
+      "rationale": "En NIS2 la alerta temprana sirve precisamente para avisar pronto y sin todos los datos. Un acceso no autorizado a sistemas de control de un servicio esencial es significativo aunque no haya causado daño todavía."
+    },
+    "D5": {
+      "preferred_response": "B",
+      "capability": "decision",
+      "severity_if_missed": "high",
+      "rationale": "Restringir con reglas claras, anunciadas y revisables es lo que mantiene la confianza. Cortar a quien está más expuesto o por sorpresa genera más tensión y más riesgo."
+    },
+    "D6": {
+      "preferred_response": "B",
+      "capability": "comunicacion",
+      "severity_if_missed": "high",
+      "rationale": "Contra un bulo funcionan los datos verificables, un portavoz creíble y la constancia. Buscar culpables entre los más vulnerables es falso y agrava la crisis."
+    }
+  }
+}

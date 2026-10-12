@@ -1,0 +1,43 @@
+{
+  "roles": [
+    {
+      "id": "R1",
+      "name": "R1 · Dirección general",
+      "functions": [
+        "Dirige la emergencia y decide prioridades y restricciones.",
+        "Se coordina con el gobierno de la ciudad y la delegación del Gobierno.",
+        "Responde de lo decidido ante el consejo y las autoridades."
+      ],
+      "rules": [
+        "Solo respondes cuando la decisión es de R1.",
+        "Si los visores no están conectados, di tu letra en voz alta (o por teléfono) antes de confirmar."
+      ]
+    },
+    {
+      "id": "R2",
+      "name": "R2 · Operación de red, desaladora y Panel de Crisis",
+      "functions": [
+        "Opera el Panel de Crisis y lee la maqueta de la ciudad.",
+        "Gestiona desaladora, central, brigadas y proveedores.",
+        "Decide sobre accesos remotos y operación local."
+      ],
+      "rules": [
+        "Solo respondes cuando la decisión es de R2.",
+        "Si los visores no están conectados, di tu letra en voz alta (o por teléfono) antes de confirmar."
+      ]
+    },
+    {
+      "id": "R3",
+      "name": "R3 · Ciberseguridad, cumplimiento NIS2 y comunicación",
+      "functions": [
+        "Controla las notificaciones al CSIRT y a la autoridad del sector.",
+        "Prepara mensajes claros y en varios idiomas.",
+        "Vigila bulos y desinformación."
+      ],
+      "rules": [
+        "Solo respondes cuando la decisión es de R3.",
+        "Si los visores no están conectados, di tu letra en voz alta (o por teléfono) antes de confirmar."
+      ]
+    }
+  ]
+}

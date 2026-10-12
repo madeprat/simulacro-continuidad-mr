@@ -1,0 +1,127 @@
+{
+  "lead_name": "Dirección general",
+  "lead_role": "Dirección del plan de emergencia",
+  "lead_email": "direccion@calima.example",
+  "operator_label": "Operación de red y desaladora",
+  "umbral_perdida_eur": 80000,
+  "umbral_criticos_mtpd": 1,
+  "umbral_prob_pct": 75,
+  "history_limit": 20,
+  "links": {},
+  "sheets": {},
+  "documents": [
+    "Plan de emergencia y de suministro mínimo",
+    "Libro de decisiones de la emergencia",
+    "Registro de accesos de proveedores"
+  ],
+  "scenarios": {
+    "E1": {
+      "title": "Una instalación no se puede usar",
+      "short": "Una instalación no se puede usar",
+      "icon": "🏭",
+      "pattern": "Instalación fuera de servicio durante la jornada",
+      "strategies": [
+        "EST01",
+        "EST03",
+        "EST06"
+      ]
+    },
+    "E2": {
+      "title": "Falta personal clave",
+      "short": "Falta personal clave",
+      "icon": "👥",
+      "pattern": "Turnos críticos sin cubrir",
+      "strategies": [
+        "EST03",
+        "EST06"
+      ]
+    },
+    "E3": {
+      "title": "Sin sistemas de control",
+      "short": "Sin sistemas de control",
+      "icon": "💻",
+      "pattern": "Sin telecontrol durante horas",
+      "strategies": [
+        "EST01",
+        "EST03"
+      ]
+    },
+    "E4": {
+      "title": "Puerto o accesos restringidos",
+      "short": "Puerto o accesos restringidos",
+      "icon": "⚓",
+      "pattern": "Puerto cerrado durante la jornada",
+      "strategies": [
+        "EST06",
+        "EST05"
+      ]
+    },
+    "E5": {
+      "title": "Demanda por encima de la capacidad",
+      "short": "Demanda por encima de la capacidad",
+      "icon": "📈",
+      "pattern": "Demanda por encima de la capacidad durante días",
+      "strategies": [
+        "EST02",
+        "EST05",
+        "EST06"
+      ]
+    },
+    "E6": {
+      "title": "Ciberataque o acción hostil",
+      "short": "Ciberataque o acción hostil",
+      "icon": "🛡️",
+      "pattern": "Accesos no autorizados a sistemas de control",
+      "strategies": [
+        "EST03",
+        "EST07",
+        "EST08",
+        "EST01"
+      ]
+    },
+    "E7": {
+      "title": "Falla un proveedor crítico",
+      "short": "Falla un proveedor crítico",
+      "icon": "🔗",
+      "pattern": "Suministro interrumpido durante la jornada",
+      "strategies": [
+        "EST03",
+        "EST06"
+      ]
+    }
+  },
+  "strategies": {
+    "EST01": {
+      "title": "Operación local en planta",
+      "detail": "Sin accesos remotos: personal propio en desaladora y central."
+    },
+    "EST02": {
+      "title": "Priorizar consumos esenciales",
+      "detail": "Hospital, centros de atención, puntos humanitarios y seguridad primero."
+    },
+    "EST03": {
+      "title": "Activar el plan de emergencia",
+      "detail": "Dirección, operación, seguridad y comunicación con mando único y libro de decisiones."
+    },
+    "EST04": {
+      "title": "Vigilar y reevaluar",
+      "detail": "Seguimiento con hora fija."
+    },
+    "EST05": {
+      "title": "Restricciones escalonadas y anunciadas",
+      "detail": "Reducir presión por zonas y horarios con aviso previo."
+    },
+    "EST06": {
+      "title": "Apoyo exterior",
+      "detail": "Buques cisterna, grupos electrógenos y combustible de reserva."
+    },
+    "EST07": {
+      "title": "Cortar accesos de terceros",
+      "detail": "Revocar accesos remotos y usar cuentas nominales."
+    },
+    "EST08": {
+      "title": "Aislar y conservar evidencias",
+      "detail": "Contener sin borrar para la investigación."
+    }
+  }
+}

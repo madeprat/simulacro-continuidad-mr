@@ -1,0 +1,53 @@
+{
+  "status": "propuesta",
+  "note": "Hoja de respuestas PROPUESTA (entidad esencial NIS2, sector agua); debe validarla quien dirija el ejercicio. No se muestra durante el juego.",
+  "capabilities": {
+    "deteccion_escalado": "Detección y escalado",
+    "autoridad": "Roles y autoridad",
+    "recuperacion": "Continuidad y recuperación",
+    "comunicacion": "Comunicaciones",
+    "cumplimiento": "Obligaciones legales y contractuales",
+    "informacion": "Disponibilidad de información",
+    "decision": "Toma de decisiones con incertidumbre",
+    "terceros": "Coordinación con terceros",
+    "retorno": "Retorno a la normalidad"
+  },
+  "assessments": {
+    "D1": {
+      "preferred_response": "B",
+      "capability": "deteccion_escalado",
+      "severity_if_missed": "high",
+      "rationale": "Los datos que tiene la empresa (caudales, instalaciones en zona inundable) son los que necesita quien decide los avisos. Escalar pronto, por escrito y con hora protege a la gente y a quien decide: el momento de cada decisión se revisará después."
+    },
+    "D2": {
+      "preferred_response": "B",
+      "capability": "decision",
+      "severity_if_missed": "medium",
+      "rationale": "Se declara lo que indican los datos y se anuncia que se recalculará. Esperar a que llueva aquí es mirar el sitio equivocado: el agua viene de cabecera."
+    },
+    "D3": {
+      "preferred_response": "B",
+      "capability": "comunicacion",
+      "severity_if_missed": "high",
+      "rationale": "Un aviso útil dice qué hacer, dónde y hasta cuándo. Diluirlo para no alarmar, o esperar a la certeza, hace que llegue tarde."
+    },
+    "D4": {
+      "preferred_response": "B",
+      "capability": "recuperacion",
+      "severity_if_missed": "high",
+      "rationale": "Primero las personas que no pueden esperar, con una lista priorizada; y proteger la parte de la red que aún está sana. Bombear agua sin tratar cambia un problema de presión por uno de salud."
+    },
+    "D5": {
+      "preferred_response": "B",
+      "capability": "cumplimiento",
+      "severity_if_missed": "high",
+      "rationale": "La mejor prueba de una buena gestión es un registro hecho en el momento. Reconstruirlo después o seleccionar documentos le quita todo el valor y puede agravar la responsabilidad."
+    },
+    "D6": {
+      "preferred_response": "B",
+      "capability": "autoridad",
+      "severity_if_missed": "medium",
+      "rationale": "La dirección no puede delegar la responsabilidad del riesgo: aprueba, supervisa y se forma. La respuesta útil es revisar qué estaba aprobado y ejercitado y llevar al consejo las lecciones aprendidas."
+    }
+  }
+}

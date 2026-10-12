@@ -1,0 +1,124 @@
+{
+  "E1": [
+    {
+      "id": "40201",
+      "codigo": "EST01",
+      "nombre": "EST01-Operación local en planta",
+      "descripcion": "Sin accesos remotos: personal propio en desaladora y central."
+    },
+    {
+      "id": "40203",
+      "codigo": "EST03",
+      "nombre": "EST03-Activar el plan de emergencia",
+      "descripcion": "Dirección, operación, seguridad y comunicación con mando único y libro de decisiones."
+    },
+    {
+      "id": "40206",
+      "codigo": "EST06",
+      "nombre": "EST06-Apoyo exterior",
+      "descripcion": "Buques cisterna, grupos electrógenos y combustible de reserva."
+    }
+  ],
+  "E2": [
+    {
+      "id": "40203",
+      "codigo": "EST03",
+      "nombre": "EST03-Activar el plan de emergencia",
+      "descripcion": "Dirección, operación, seguridad y comunicación con mando único y libro de decisiones."
+    },
+    {
+      "id": "40206",
+      "codigo": "EST06",
+      "nombre": "EST06-Apoyo exterior",
+      "descripcion": "Buques cisterna, grupos electrógenos y combustible de reserva."
+    }
+  ],
+  "E3": [
+    {
+      "id": "40201",
+      "codigo": "EST01",
+      "nombre": "EST01-Operación local en planta",
+      "descripcion": "Sin accesos remotos: personal propio en desaladora y central."
+    },
+    {
+      "id": "40203",
+      "codigo": "EST03",
+      "nombre": "EST03-Activar el plan de emergencia",
+      "descripcion": "Dirección, operación, seguridad y comunicación con mando único y libro de decisiones."
+    }
+  ],
+  "E4": [
+    {
+      "id": "40206",
+      "codigo": "EST06",
+      "nombre": "EST06-Apoyo exterior",
+      "descripcion": "Buques cisterna, grupos electrógenos y combustible de reserva."
+    },
+    {
+      "id": "40205",
+      "codigo": "EST05",
+      "nombre": "EST05-Restricciones escalonadas y anunciadas",
+      "descripcion": "Reducir presión por zonas y horarios con aviso previo."
+    }
+  ],
+  "E5": [
+    {
+      "id": "40202",
+      "codigo": "EST02",
+      "nombre": "EST02-Priorizar consumos esenciales",
+      "descripcion": "Hospital, centros de atención, puntos humanitarios y seguridad primero."
+    },
+    {
+      "id": "40205",
+      "codigo": "EST05",
+      "nombre": "EST05-Restricciones escalonadas y anunciadas",
+      "descripcion": "Reducir presión por zonas y horarios con aviso previo."
+    },
+    {
+      "id": "40206",
+      "codigo": "EST06",
+      "nombre": "EST06-Apoyo exterior",
+      "descripcion": "Buques cisterna, grupos electrógenos y combustible de reserva."
+    }
+  ],
+  "E6": [
+    {
+      "id": "40203",
+      "codigo": "EST03",
+      "nombre": "EST03-Activar el plan de emergencia",
+      "descripcion": "Dirección, operación, seguridad y comunicación con mando único y libro de decisiones."
+    },
+    {
+      "id": "40207",
+      "codigo": "EST07",
+      "nombre": "EST07-Cortar accesos de terceros",
+      "descripcion": "Revocar accesos remotos y usar cuentas nominales."
+    },
+    {
+      "id": "40208",
+      "codigo": "EST08",
+      "nombre": "EST08-Aislar y conservar evidencias",
+      "descripcion": "Contener sin borrar para la investigación."
+    },
+    {
+      "id": "40201",
+      "codigo": "EST01",
+      "nombre": "EST01-Operación local en planta",
+      "descripcion": "Sin accesos remotos: personal propio en desaladora y central."
+    }
+  ],
+  "E7": [
+    {
+      "id": "40203",
+      "codigo": "EST03",
+      "nombre": "EST03-Activar el plan de emergencia",
+      "descripcion": "Dirección, operación, seguridad y comunicación con mando único y libro de decisiones."
+    },
+    {
+      "id": "40206",
+      "codigo": "EST06",
+      "nombre": "EST06-Apoyo exterior",
+      "descripcion": "Buques cisterna, grupos electrógenos y combustible de reserva."
+    }
+  ]
+}

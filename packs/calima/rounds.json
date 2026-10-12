@@ -1,0 +1,289 @@
+{
+  "rounds": [
+    {
+      "id": "R01",
+      "number": 1,
+      "title": "Una mañana distinta",
+      "crisis_time": "T+0",
+      "copilot": {
+        "clock": "D0 07:30",
+        "scenarios": {}
+      },
+      "events": [
+        {
+          "id": "R01-E1",
+          "type": "ALERT",
+          "anchor": "FRONT",
+          "title": "06:10 h",
+          "text": "Desde la madrugada han llegado a la ciudad unas 25.000 personas en pocas horas, por tierra y por la costa. Calima tiene 80.000 habitantes. Hay personas en playas, parques y calles, muchas sin agua desde hace horas."
+        },
+        {
+          "id": "R01-E2",
+          "type": "MESSAGE",
+          "anchor": "DOOR",
+          "source": "Gobierno de la ciudad",
+          "title": "07:05 h",
+          "text": "«Necesitamos puntos de agua y aseos en cinco zonas antes del mediodía y luz garantizada en el pabellón habilitado como centro de atención.»"
+        },
+        {
+          "id": "R01-E3",
+          "type": "PHONE",
+          "anchor": "DOOR",
+          "source": "Jefe de planta de la desaladora",
+          "title": "07:20 h",
+          "text": "«Producimos 30.000 m³ al día y vamos al 92 %. Si el consumo sube un 25 %, no llegamos.»"
+        }
+      ],
+      "panel_actions": [
+        {
+          "id": "R01-A1",
+          "when": "after",
+          "tab": "⚡ Activación",
+          "text": "Declarad en el Panel de Crisis lo que está pasando y pulsad «Analizar impacto». Mirad en la maqueta qué depende de la desaladora y de la central."
+        }
+      ],
+      "decisions": [
+        {
+          "id": "D1",
+          "role": "R1",
+          "question": "Son las 07:30. ¿Qué priorizas?",
+          "answers": [
+            {
+              "id": "A",
+              "text": "Seguir como un día normal: la atención a las personas es cosa de otras administraciones."
+            },
+            {
+              "id": "B",
+              "text": "Activar el plan de emergencia: agua y luz garantizadas al hospital, al centro de atención y a los puntos humanitarios; desaladora a máxima capacidad con vigilancia; coordinación con el gobierno de la ciudad y libro de decisiones desde ya."
+            },
+            {
+              "id": "C",
+              "text": "Cortar el agua por zonas desde ya para ahorrar."
+            },
+            {
+              "id": "D",
+              "text": "Esperar instrucciones del Gobierno central."
+            }
+          ]
+        },
+        {
+          "id": "D2",
+          "role": "R2",
+          "question": "¿Qué declaras en el Panel de Crisis?",
+          "answers": [
+            {
+              "id": "A",
+              "text": "Nada: no ha fallado ninguna instalación."
+            },
+            {
+              "id": "B",
+              "text": "E5 (demanda por encima de la capacidad) en categoría 2 y E4 en categoría 1: el puerto funciona con restricciones."
+            },
+            {
+              "id": "C",
+              "text": "E6 en categoría 3: esto es un ataque."
+            },
+            {
+              "id": "D",
+              "text": "E1: hay que cerrar la desaladora para protegerla."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "R02",
+      "number": 2,
+      "title": "Ruido en la red",
+      "crisis_time": "T+6 h",
+      "copilot": {
+        "clock": "D0 13:30",
+        "declared": "D0 07:30",
+        "onset": "D0 06:10",
+        "scenarios": {
+          "E5": 2,
+          "E4": 1,
+          "E6": 2
+        }
+      },
+      "events": [
+        {
+          "id": "R02-E1",
+          "type": "ALERT",
+          "anchor": "FRONT",
+          "title": "SOC · 12:58",
+          "text": "Accesos remotos anómalos a la desaladora desde la cuenta de un proveedor de mantenimiento, fuera de su horario. A la vez, la web y la oficina virtual caen por un ataque de denegación de servicio que reivindica un grupo hacktivista."
+        },
+        {
+          "id": "R02-E2",
+          "type": "MESSAGE",
+          "anchor": "TABLE",
+          "source": "Proveedor de mantenimiento",
+          "title": "13:10 h",
+          "text": "«No hemos sido nosotros. Esa cuenta la compartimos varios técnicos.»"
+        },
+        {
+          "id": "R02-E3",
+          "type": "PHONE",
+          "anchor": "DOOR",
+          "source": "Gobierno de la ciudad",
+          "title": "13:25 h",
+          "text": "«¿Está garantizada el agua esta noche? La tensión en la calle va en aumento.»"
+        }
+      ],
+      "panel_actions": [
+        {
+          "id": "R02-A1",
+          "when": "before",
+          "tab": "📡 Comunicaciones",
+          "text": "Abrid Comunicaciones, contexto «NIS2 (CSIRT)»: mirad los plazos antes de decidir."
+        }
+      ],
+      "decisions": [
+        {
+          "id": "D3",
+          "role": "R2",
+          "question": "¿Qué haces con el acceso remoto del proveedor?",
+          "answers": [
+            {
+              "id": "A",
+              "text": "Dejarlo: lo necesitamos para mantener la planta en plena crisis."
+            },
+            {
+              "id": "B",
+              "text": "Cortar ya todos los accesos remotos de terceros, operar la desaladora en local con personal propio, cambiar credenciales, conservar evidencias y revisar la integridad del control antes de reabrir accesos con cuentas nominales."
+            },
+            {
+              "id": "C",
+              "text": "Apagar la desaladora por si acaso."
+            },
+            {
+              "id": "D",
+              "text": "Pedir al proveedor que lo investigue él."
+            }
+          ]
+        },
+        {
+          "id": "D4",
+          "role": "R3",
+          "question": "¿Y la notificación?",
+          "answers": [
+            {
+              "id": "A",
+              "text": "Nada: no han conseguido hacer daño."
+            },
+            {
+              "id": "B",
+              "text": "Alerta temprana al CSIRT de referencia antes de 24 horas, indicando que se sospecha un acto malicioso; notificación en 72 horas e informe final en un mes; y aviso a la autoridad competente del sector."
+            },
+            {
+              "id": "C",
+              "text": "Solo si sale en prensa."
+            },
+            {
+              "id": "D",
+              "text": "Que lo notifique el proveedor."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "R03",
+      "number": 3,
+      "title": "El bulo y el límite",
+      "crisis_time": "T+2 días",
+      "copilot": {
+        "clock": "D2 10:00",
+        "declared": "D0 07:30",
+        "onset": "D0 06:10",
+        "scenarios": {
+          "E5": 3,
+          "E6": 1,
+          "E7": 1
+        }
+      },
+      "events": [
+        {
+          "id": "R03-E1",
+          "type": "ALERT",
+          "anchor": "FRONT",
+          "title": "Redes · 08:40",
+          "text": "Se viraliza que «han envenenado el agua de la desaladora». Hay colas en los supermercados para comprar agua embotellada y una concentración frente a la planta."
+        },
+        {
+          "id": "R03-E2",
+          "type": "MESSAGE",
+          "anchor": "DOOR",
+          "source": "Desaladora",
+          "title": "09:15 h",
+          "text": "«Llevamos 48 horas al 100 %. El consumo está un 30 % por encima de lo normal y el depósito general baja un 4 % al día.»"
+        },
+        {
+          "id": "R03-E3",
+          "type": "PHONE",
+          "anchor": "DOOR",
+          "source": "Proveedor de combustible",
+          "title": "09:40 h",
+          "text": "«El barco de gasóleo para la central llega con dos días de retraso por las restricciones en el puerto.»"
+        }
+      ],
+      "panel_actions": [
+        {
+          "id": "R03-A1",
+          "when": "before",
+          "tab": "📡 Comunicaciones",
+          "text": "Abrid Comunicaciones, contexto «Población»: revisad qué hay que anunciar y con cuánta antelación."
+        }
+      ],
+      "decisions": [
+        {
+          "id": "D5",
+          "role": "R1",
+          "question": "¿Cómo gestionas el déficit de agua?",
+          "answers": [
+            {
+              "id": "A",
+              "text": "Nada: aguantará."
+            },
+            {
+              "id": "B",
+              "text": "Un plan de restricciones escalonado y anunciado con 24 horas de antelación (menos presión de noche por zonas, prioridad al hospital, los centros de atención y los servicios esenciales), refuerzo con agua embotellada y petición formal de buques cisterna, revisado cada 24 horas."
+            },
+            {
+              "id": "C",
+              "text": "Cortes sorpresa por barrios."
+            },
+            {
+              "id": "D",
+              "text": "Cortar el agua a los puntos humanitarios."
+            }
+          ]
+        },
+        {
+          "id": "D6",
+          "role": "R3",
+          "question": "¿Cómo respondes al bulo del envenenamiento?",
+          "answers": [
+            {
+              "id": "A",
+              "text": "Ignorarlo: se apagará solo."
+            },
+            {
+              "id": "B",
+              "text": "Publicar los análisis del laboratorio con hora y punto de muestreo, explicar qué pasó con los accesos (sin detalles útiles para un atacante) y por qué el agua es segura, con un portavoz único, actualizaciones diarias y en todos los idiomas presentes en la ciudad."
+            },
+            {
+              "id": "C",
+              "text": "Desmentirlo sin dar datos."
+            },
+            {
+              "id": "D",
+              "text": "Señalar a las personas recién llegadas como origen del problema."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

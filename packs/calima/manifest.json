@@ -1,0 +1,20 @@
+{
+  "schema": "crisis.exercise/1.0",
+  "exercise_id": "CALIMA",
+  "name": "Simulacro CALIMA · agua y energía en una ciudad aislada (NIS2)",
+  "version": "1.0",
+  "expected_players": 3,
+  "duration_minutes": 30,
+  "round_count": 3,
+  "decision_count": 6,
+  "language": "es-ES",
+  "files": {
+    "roles": "roles.json",
+    "rounds": "rounds.json",
+    "debrief": "debrief.json",
+    "site": "site.json",
+    "catalog": "catalogo/"
+  },
+  "intro": "Sois la dirección de crisis de Energía y Aguas de Calima, empresa ficticia de una ciudad portuaria de 80.000 habitantes con sistema eléctrico aislado y agua desalada; entidad esencial NIS2. Una madrugada llegan a la ciudad unas 25.000 personas. Tres rondas y tres roles: capacidad, ciberseguridad y confianza.",
+  "ending": "Fin del simulacro. En una crisis humanitaria, un servicio esencial sostiene a todo el mundo: a quien vive en la ciudad y a quien acaba de llegar. Salid de la realidad mixta para ver el resumen."
+}
