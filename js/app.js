@@ -3,10 +3,12 @@ import * as THREE from '../vendor/three.module.min.js';
 import { Panel, THEME, TEXTURE_OPTIONS } from './panel.js';
 import { CrisisPanel, tabFor } from './crisis-panel.js';
 import { voice } from './voice.js';
-import { loadPackIndex, loadPack, buildSteps } from './pack.js';
+import { loadPackIndex, loadPack, buildSteps, acceptRemoteAnswer } from './pack.js';
 import { Session, loadCheckpoint, checkpointKey, download, ENGINE_VERSION } from './session.js';
 import { loadCopilotData, roundState, computeSnapshot, widgetSpecs } from './copilot-view.js';
 import { SyncHub, syncLabel } from './sync.js';
+import { slotPose, slotFor } from './layout.js';
+import { CommandBar, timelineFor } from './command-bar.js';
 
 const $ = (id) => document.getElementById(id);
 const V3 = THREE.Vector3;
@@ -34,7 +36,10 @@ const S = {
   ui: {}, audio: null, ringTimer: null, lastHudSecond: -1,
   copilot: { data: null, round: null, st: null, startedReal: 0, visible: false, lastSecond: -1 },
   crisis: null, depth: false,
-  sync: null, remoteAnswers: {},
+  sync: null, remoteAnswers: {}, autoAdvance: null,
+  // 'center': centro de mando alrededor del participante (por defecto, sin calibrar; sirve en remoto).
+  // 'room': paneles anclados a la sala calibrada (pared del panel, puerta, mesa).
+  layout: 'center', rig: null,
 };
 
 /* ─────────────────────────── Pantallas DOM ─────────────────────────── */
@@ -44,10 +49,16 @@ function show(screenId) {
   document.body.classList.toggle('running', screenId === 'screen-xr');
 }
 
+// Fecha + tres caracteres al azar (sin letras confusibles): dos equipos que ensayen el mismo día no
+// coinciden en la misma sala de sincronización. Los otros visores copian el código del primero.
 function todaySessionId() {
   const d = new Date();
   const p = (n) => String(n).padStart(2, '0');
-  return `${d.getFullYear()}${p(d.getMonth() + 1)}${p(d.getDate())}-01`;
+  const ABC = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
+  const rnd = new Uint32Array(3);
+  (globalThis.crypto || { getRandomValues: (a) => a.map(() => Math.floor(Math.random() * 2 ** 32)) }).getRandomValues(rnd);
+  const suffix = [...rnd].map((n) => ABC[n % ABC.length]).join('');
+  return `${d.getFullYear()}${p(d.getMonth() + 1)}${p(d.getDate())}-${suffix}`;
 }
 
 async function initSetup() {
@@ -193,19 +204,43 @@ function onSyncMessage(msg) {
       }
     }
   } else if (type === 'answer') {
-    S.remoteAnswers[data.decision_id] = { answer: data.answer, from };
-    const step = S.ui && S.ui.step;
-    if (S.phase === 'run' && step && step.kind === 'decision' && step.decision.id === data.decision_id && step.decision.role !== S.role) {
-      const already = S.session.data.decisions[data.decision_id];
-      if (!already || already.answer !== data.answer) {
-        S.ui.selected = data.answer;
-        S.ui.fromSync = from;
-        renderDecision();
-        beep(1100, 0.1);
-        voice.say(`${from} ha respondido ${data.answer}.`);
-      }
-    }
+    // Solo cuenta la respuesta del visor cuyo rol decide, con una letra válida de una decisión del pack.
+    const ok = acceptRemoteAnswer(S.pack, { ...data, from });
+    if (!ok || ok.decision.role === S.role) return;
+    S.remoteAnswers[ok.decision.id] = { answer: ok.answer, from };
+    applyRemoteAnswer(ok);
   }
+}
+
+// La decisión del rol activo se registra sola en los demás visores (como observada, con sync_from).
+function applyRemoteAnswer({ round, decision, answer, from }) {
+  if (!S.session) return;
+  const prev = S.session.data.decisions[decision.id];
+  if (prev && prev.answer === answer) return;
+  // Si este visor la registró a mano (sin conexión), se conserva: el debrief mostrará la discrepancia.
+  if (prev && !prev.sync_from) return;
+  const step = S.ui && S.ui.step;
+  const here = S.phase === 'run' && step && step.kind === 'decision' && step.decision.id === decision.id;
+  if (here) { autoRegister(round, decision, answer, from); return; }
+  if (prev) { S.session.decisionAnswered(round, decision, answer, { sync_from: from }); updateHud(true); } // corrección del rol activo
+}
+
+function autoRegister(round, decision, answer, from) {
+  S.session.decisionAnswered(round, decision, answer, { sync_from: from });
+  S.ui.selected = answer;
+  stepPanel.set({
+    accent: THEME.blue, kicker: `${decision.id} · Decide ${decision.role}`, title: decision.question,
+    note: `${from} ha elegido ${answer} · registrada automáticamente`, noteColor: THEME.lime,
+    answers: decision.answers.map((a) => ({ id: a.id, text: a.text, state: a.id === answer ? 'selected' : '', disabled: a.id !== answer })),
+    buttons: [{ id: 'next', label: 'Continuar ▶', primary: true }],
+  });
+  place(stepPanel, 'FRONT');
+  beep(1100, 0.1);
+  voice.say(`${from} ha elegido ${answer}.`);
+  updateHud(true);
+  const at = S.session.stepIndex;
+  clearTimeout(S.autoAdvance);
+  S.autoAdvance = setTimeout(() => { if (S.phase === 'run' && S.session.stepIndex === at) runStep(at + 1); }, 3500);
 }
 
 function stepLabel(i) {
@@ -285,7 +320,7 @@ function wireButtons() {
 let renderer, scene, camera, world, raycaster;
 const controllers = [];
 const stepPanel = new Panel(1.1);
-const hudPanel = new Panel(0.62, 0.8);
+const hudPanel = new CommandBar(1.1); // barra de mando: reloj, conexión, botones y línea de tiempo
 const calibPanel = new Panel(0.8, 0.9);
 const copilotPanels = [new Panel(0.72, 0.85), new Panel(0.72, 0.85)];
 let reticle, desktopProps, listener, soundAnchor, soundSource, soundBus;
@@ -426,6 +461,73 @@ function ensureCrisis() {
   world.add(S.crisis.mesh);
 }
 
+/* ─────────────────────────── Centro de mando (arco alrededor del participante) ─────────────────────────── */
+
+const isCenter = () => S.layout === 'center';
+const DEG = Math.PI / 180;
+
+// Fija el frente del centro de mando donde mira ahora el participante.
+function captureRig() {
+  const { pos, fwd } = getHead();
+  S.rig = { pos: { x: pos.x, y: pos.y, z: pos.z }, fwd: { x: fwd.x, z: fwd.z } };
+}
+
+function slotOptions() {
+  // En pantalla hay menos campo de visión que en unas gafas: arco más cerrado y algo más lejos.
+  if (S.mode !== 'desktop') return { compress: 1, far: 1 };
+  return window.innerWidth < window.innerHeight ? { compress: 1, far: 0.8 } : { compress: 0.85, far: 1.3 }; // móvil en vertical: más cerca
+}
+
+// Coloca un objeto en un hueco del arco. topAligned: el borde superior queda fijo y el panel crece hacia
+// abajo, así la barra de mando no salta cuando cambia la altura del contenido.
+function placeSlot(mesh, slot, heightM = 0, topAligned = false) {
+  if (!S.rig) captureRig();
+  const pose = slotPose(S.rig, slot, slotOptions());
+  mesh.rotation.set(0, 0, 0);
+  mesh.position.set(pose.x, pose.y, pose.z);
+  if (topAligned) mesh.position.y = S.rig.pos.y + 0.12 - (heightM * pose.scale) / 2;
+  mesh.lookAt(pose.face.x, mesh.position.y, pose.face.z);
+  if (pose.tilt) mesh.rotateX(pose.tilt * DEG);
+  mesh.scale.setScalar(pose.scale);
+  return pose;
+}
+
+function recenter() {
+  captureRig();
+  if (S.crisis && S.crisis.mesh.visible) placeCrisis();
+  if (stepPanel.mesh.visible) place(stepPanel, stepPanel.mesh.userData.anchor || 'FRONT');
+  if (hudPanel.mesh.visible) placeHud();
+  if (copilotPanels.some((p) => p.mesh.visible)) placeCopilot();
+  beep(1320, 0.08);
+}
+
+// Vibración del mando (si el visor la ofrece).
+function haptic(c, intensity, ms) {
+  try {
+    const h = c && c.userData.source && c.userData.source.gamepad && c.userData.source.gamepad.hapticActuators;
+    if (h && h[0] && h[0].pulse) h[0].pulse(intensity, ms);
+  } catch { /* sin vibración */ }
+}
+
+// Entrada suave de un panel (fundido y ligero escalado) cuando cambia de paso o de hueco.
+function markAppear(mesh, key) {
+  if (mesh.userData.animKey === key && mesh.visible) return;
+  mesh.userData.animKey = key;
+  mesh.userData.appearAt = performance.now();
+}
+
+function animateAppear(mesh, material, now) {
+  const base = mesh.userData.baseScale || 1;
+  const t0 = mesh.userData.appearAt;
+  if (!t0) return false;
+  const t = Math.min(1, (now - t0) / 260);
+  const e = 1 - Math.pow(1 - t, 3);
+  material.opacity = e;
+  mesh.scale.setScalar(base * (0.95 + 0.05 * e));
+  if (t >= 1) { mesh.userData.appearAt = 0; material.opacity = 1; }
+  return true;
+}
+
 function crisisScale() {
   const tv = S.anchors.TV || defaultAnchor('TV');
   const d = tv.clone().sub(getHead().pos); d.y = 0;
@@ -437,6 +539,15 @@ function crisisHalfWidth() {
 
 function placeCrisis() {
   if (!S.crisis) return;
+  if (isCenter()) {
+    const m = S.crisis.mesh;
+    const wasVisible = m.visible;
+    placeSlot(m, 'crisis');
+    m.userData.baseScale = m.scale.x;
+    if (!wasVisible) markAppear(m, 'crisis');
+    m.visible = true;
+    return;
+  }
   const head = getHead().pos;
   const a = standOff((S.anchors.TV || defaultAnchor('TV')).clone(), head);
   const scale = crisisScale();
@@ -462,6 +573,17 @@ function facing(obj, target) {
 
 // Coloca un panel en su ancla con orientación y escala adecuadas para la lectura.
 function place(panel, anchorId) {
+  if (isCenter()) {
+    // En pantalla, la «mesa» inclinada se ve forzada: los documentos van al frente.
+    const slot = S.mode === 'desktop' && slotFor(anchorId) === 'desk' ? 'center' : slotFor(anchorId);
+    const m = panel.mesh;
+    placeSlot(m, slot, panel.heightM, slot !== 'desk');
+    m.userData.baseScale = m.scale.x;
+    m.userData.anchor = anchorId;
+    markAppear(m, `${S.session ? S.session.stepIndex : '-'}|${S.phase}|${anchorId}`);
+    m.visible = true;
+    return;
+  }
   const head = getHead().pos;
   const a = (S.anchors[anchorId] || defaultAnchor(anchorId)).clone();
   const m = panel.mesh;
@@ -492,6 +614,15 @@ function place(panel, anchorId) {
 }
 
 function placeHud() {
+  if (isCenter()) {
+    // Fija sobre el hueco central: el panel de lectura cuelga justo debajo.
+    const m = hudPanel.mesh;
+    const pose = placeSlot(m, 'center');
+    m.position.y = S.rig.pos.y + 0.12 + 0.03 + (hudPanel.heightM * pose.scale) / 2;
+    m.lookAt(pose.face.x, m.position.y, pose.face.z);
+    m.visible = true;
+    return;
+  }
   const front = S.anchors.FRONT || defaultAnchor('FRONT');
   const m = hudPanel.mesh;
   const onFront = stepPanel.mesh.visible && stepPanel.mesh.userData.anchor === 'FRONT';
@@ -532,9 +663,15 @@ function stopRing() { clearInterval(S.ringTimer); S.ringTimer = null; }
 
 /* ─────────────────────────── Entrada / salida ─────────────────────────── */
 
+function readLayoutOption() {
+  S.layout = $('opt-room') && $('opt-room').checked ? 'room' : 'center';
+  S.rig = null;
+}
+
 async function startXR() {
   voice.setEnabled($('opt-voice').checked);
-  voice.say('Realidad mixta activada. Calibra la sala.');
+  readLayoutOption();
+  voice.say(isCenter() ? 'Centro de mando activado. Mira al frente.' : 'Realidad mixta activada. Calibra la sala.');
   initAudio();
   initThree();
   S.mode = 'xr';
@@ -560,8 +697,10 @@ async function startXR() {
   session.addEventListener('end', onXREnd);
   await renderer.xr.setSession(session);
   show('screen-xr');
-  // Esperar un par de frames para tener la pose de la cabeza antes de calibrar.
-  setTimeout(() => beginCalibration(), 400);
+  // Esperar un par de frames para tener la pose de la cabeza antes de colocar o calibrar.
+  setTimeout(() => {
+    if (isCenter()) { captureRig(); enterReady(); } else beginCalibration();
+  }, 400);
 }
 
 function onXREnd() {
@@ -573,6 +712,7 @@ function onXREnd() {
 
 function startDesktop() {
   voice.setEnabled($('opt-voice').checked);
+  readLayoutOption();
   initAudio();
   initThree();
   S.mode = 'desktop';
@@ -592,6 +732,7 @@ function startDesktop() {
   buildDesktopProps();
   // En pantalla (sin realidad mixta) la interfaz se dibuja siempre por delante de la sala simulada.
   for (const p of [stepPanel, hudPanel, ...copilotPanels]) { p.material.depthTest = false; p.mesh.renderOrder = 30; }
+  if (isCenter()) captureRig();
   enterReady();
 }
 
@@ -614,6 +755,7 @@ function buildDesktopProps() {
   desktopProps = new THREE.Group();
   const grid = new THREE.GridHelper(12, 24, 0x334155, 0x1e293b);
   desktopProps.add(grid);
+  if (isCenter()) { scene.add(desktopProps); return; } // centro de mando: sin muebles simulados
   const box = (w, h, d, color, pos) => {
     const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), new THREE.MeshBasicMaterial({ color }));
     m.position.copy(pos); desktopProps.add(m); return m;
@@ -722,7 +864,10 @@ function enterReady() {
     body: resuming
       ? `Se reanudará en la ronda ${step.round ? step.round.number : '—'}. Espera la indicación del facilitador.`
       : 'Espera la orden del facilitador. Todos los visores pulsan COMENZAR a la vez.',
-    buttons: [{ id: 'start', label: resuming ? 'REANUDAR' : 'COMENZAR', primary: true }, { id: 'recalibrate', label: 'Recalibrar' }],
+    note: isCenter() ? 'Los paneles se colocan a tu alrededor. Si quedan torcidos, mira al frente y pulsa Recentrar.' : null,
+    noteColor: THEME.muted,
+    buttons: [{ id: 'start', label: resuming ? 'REANUDAR' : 'COMENZAR', primary: true },
+      isCenter() ? { id: 'recenter', label: 'Recentrar' } : { id: 'recalibrate', label: 'Recalibrar' }],
   });
   place(stepPanel, 'FRONT');
   hudPanel.mesh.visible = false;
@@ -755,6 +900,7 @@ function goTo(index, reason) {
 
 function runStep(index) {
   stopRing();
+  clearTimeout(S.autoAdvance);
   index = THREE.MathUtils.clamp(index, 0, S.steps.length - 1);
   S.session.setStep(index);
   const step = S.steps[index];
@@ -793,7 +939,7 @@ function runStep(index) {
     stepPanel.set({
       accent: THEME.blue, icon: '📺', kicker: `Panel de Crisis${a.tab ? ' · ' + a.tab : ''}`,
       title: 'Actuación en el panel', body: a.text,
-      note: 'Opera el Panel de Crisis (a tu izquierda) y confirma al terminar.', noteColor: THEME.muted,
+      note: `Opera el Panel de Crisis (${isCenter() ? 'gira a tu izquierda' : 'a tu izquierda'}) y confirma al terminar.`, noteColor: THEME.muted,
       buttons: [{ id: 'panel:done', label: 'Hecho', primary: true }],
     });
     if (S.crisis) S.crisis.setTab(tabFor(a.tab || ''));
@@ -803,13 +949,17 @@ function runStep(index) {
     voice.say('Actuación en el Panel de Crisis. ' + a.text);
   } else if (step.kind === 'decision') {
     sess.decisionShown(step.round, step.decision);
-    voice.say((step.decision.role === S.role ? 'Te toca decidir. ' : `Decide ${step.decision.role}. `) + step.decision.question);
     const prev = sess.data.decisions[step.decision.id];
     S.ui.selected = prev ? prev.answer : null;
     const remote = S.remoteAnswers[step.decision.id];
-    if (!prev && remote && step.decision.role !== S.role) { S.ui.selected = remote.answer; S.ui.fromSync = remote.from; }
-    renderDecision();
-    beep(520, 0.12); beep(780, 0.12, 0.12);
+    if (!prev && remote && step.decision.role !== S.role) {
+      // El rol activo ya decidió antes de que este visor llegara aquí: se ve su elección y se avanza solo.
+      autoRegister(step.round, step.decision, remote.answer, remote.from);
+    } else {
+      voice.say((step.decision.role === S.role ? 'Te toca decidir. ' : `Decide ${step.decision.role}. `) + step.decision.question);
+      renderDecision();
+      beep(520, 0.12); beep(780, 0.12, 0.12);
+    }
   } else if (step.kind === 'round_end') {
     const r = step.round;
     sess.log('round_completed', { round_id: r.id });
@@ -861,22 +1011,21 @@ function renderDecision() {
   const d = S.ui.step.decision;
   const mine = d.role === S.role;
   const sel = S.ui.selected;
-  const remote = S.remoteAnswers[d.id];
-  const synced = !mine && !!sel && !!S.ui.fromSync && remote && remote.answer === sel;
+  const live = S.sync && ['host', 'client', 'local'].includes(S.sync.status) && S.sync.roles().includes(d.role);
   stepPanel.set({
     accent: mine ? THEME.lime : THEME.blue,
     kicker: `${d.id} · Decide ${d.role}${mine ? ' · TU TURNO' : ''}`,
     title: d.question,
     note: mine
-      ? 'Te toca: elige, anuncia la letra en voz alta y confirma.'
-      : synced
-        ? `Recibido de ${S.ui.fromSync}: ${sel}. Confirma para registrarla (o elige otra si lo anunciado fue distinto).`
-        : `Decide ${roleName(d.role)}. Espera su anuncio y registra la letra.`,
-    noteColor: mine || synced ? THEME.lime : THEME.amber,
+      ? (S.sync && S.sync.connected ? 'Te toca: elige y confirma. Los demás verán tu elección al instante.' : 'Te toca: elige, anuncia la letra y confirma.')
+      : live
+        ? `Decide ${roleName(d.role)}. Su elección aparecerá aquí y se registrará sola.`
+        : `Decide ${roleName(d.role)}. Sin conexión con su visor: registra la letra que anuncie.`,
+    noteColor: mine || live ? THEME.lime : THEME.amber,
     answers: d.answers.map((a) => ({ id: a.id, text: a.text, state: sel === a.id ? 'selected' : '' })),
     buttons: [sel
       ? { id: 'decision:confirm', label: mine ? `Confirmar ${sel}` : `Registrar ${sel} (observada)`, primary: true }
-      : { id: 'noop', label: mine ? 'Elige una respuesta' : 'Registra la respuesta anunciada', disabled: true }],
+      : { id: 'noop', label: mine ? 'Elige una respuesta' : live ? `Esperando a ${d.role}…` : 'Registra la respuesta anunciada', disabled: true }],
   });
   place(stepPanel, 'FRONT');
 }
@@ -890,6 +1039,7 @@ function showDecisionResult(rec) {
   });
   place(stepPanel, 'FRONT');
   beep(1320, 0.12);
+  updateHud(true);
   const at = S.session.stepIndex;
   setTimeout(() => { if (S.phase === 'run' && S.session.stepIndex === at) runStep(at + 1); }, 1300);
 }
@@ -897,10 +1047,10 @@ function showDecisionResult(rec) {
 /* ─────────────────────────── HUD y menú ─────────────────────────── */
 
 function hudSync() {
-  if (!S.sync || S.sync.status === 'off') return '';
-  if (S.sync.status === 'error') return ' · 🔗 sin conexión';
+  if (!S.sync || S.sync.status === 'off') return { text: '', ok: false };
+  if (S.sync.status === 'error') return { text: '🔗 sin conexión', ok: false };
   const roles = S.sync.roles();
-  return roles.length ? ` · 🔗 ${roles.join(' ')}` : ' · 🔗 esperando';
+  return roles.length ? { text: `🔗 ${roles.join(' · ')}`, ok: true } : { text: '🔗 esperando al resto', ok: false };
 }
 
 function updateHud(force = false) {
@@ -911,11 +1061,19 @@ function updateHud(force = false) {
   const step = S.steps[S.session.stepIndex];
   const r = step.round;
   const clock = new Date(sec * 1000).toISOString().substring(11, 19);
+  const sync = hudSync();
+  const tl = timelineFor(S.steps, S.session.stepIndex, S.session.data.decisions, S.pack.rounds);
   hudPanel.set({
     accent: THEME.border,
-    kicker: `${S.role} · ${r ? `Ronda ${r.number}/${S.pack.rounds.length} · ${r.crisis_time}` : 'Fin'}${hudSync()}`,
-    title: `⏱ ${clock}`,
-    buttons: [{ id: 'menu', label: 'Menú' }, { id: 'copilot', label: S.copilot.visible ? 'Resumen ◉' : 'Resumen ○' }, { id: 'voice', label: voice.enabled ? 'Voz ◉' : 'Voz ○' }],
+    kicker: `${S.role} · ${r ? `Ronda ${r.number} de ${S.pack.rounds.length} · ${r.crisis_time}` : 'Fin del ejercicio'}`,
+    clock, sync: sync.text, syncOk: sync.ok,
+    buttons: [
+      { id: 'menu', label: 'Menú' },
+      { id: 'copilot', label: 'Resumen', active: S.copilot.visible },
+      { id: 'voice', label: 'Voz', active: voice.enabled },
+      ...(isCenter() ? [{ id: 'recenter', label: 'Recentrar' }] : []),
+    ],
+    rounds: tl.rounds, items: tl.items,
   });
   const onFront = stepPanel.mesh.visible && stepPanel.mesh.userData.anchor === 'FRONT';
   if (!onFront || force) placeHud();
@@ -949,6 +1107,23 @@ function updateCopilot(force = false) {
 
 // Columna a la izquierda de la TV (las actuaciones del panel van a la derecha).
 function placeCopilot() {
+  if (isCenter()) {
+    // Columna de tarjetas a la derecha del arco.
+    if (!S.rig) captureRig();
+    const visible = copilotPanels.filter((p) => p.mesh.visible);
+    const pose = slotPose(S.rig, 'cards', slotOptions());
+    const gap = 0.04;
+    const total = visible.reduce((h, p) => h + p.heightM * pose.scale, 0) + gap * (visible.length - 1);
+    let top = pose.y + total / 2;
+    for (const p of visible) {
+      const m = p.mesh;
+      placeSlot(m, 'cards');
+      const h = p.heightM * pose.scale;
+      m.position.y = top - h / 2;
+      top -= h + gap;
+    }
+    return;
+  }
   const head = getHead().pos;
   const tv = (S.anchors.TV || defaultAnchor('TV')).clone();
   const to = tv.clone().sub(head); to.y = 0;
@@ -1000,7 +1175,7 @@ function openMenu() {
       { id: 'menu:prevRound', label: '◀◀ Inicio de ronda anterior' },
       { id: 'menu:nextRound', label: 'Inicio de ronda siguiente ▶▶' },
       ...syncGotoButtons(i),
-      { id: 'menu:recalibrate', label: 'Recalibrar sala' },
+      isCenter() ? { id: 'menu:recenter', label: 'Recentrar el centro de mando' } : { id: 'menu:recalibrate', label: 'Recalibrar sala' },
       { id: 'menu:exit', label: 'Salir (la sesión queda guardada)' },
     ],
   });
@@ -1034,6 +1209,7 @@ function handleAction(id) {
   if (id === 'calib:back') { S.calibIndex = Math.max(0, S.calibIndex - 1); showCalibrationStep(); return; }
   if (id === 'start') { countdown(); return; }
   if (id === 'recalibrate') { beginCalibration(); return; }
+  if (id === 'recenter') { recenter(); return; }
   if (id === 'menu') { openMenu(); return; }
   if (id === 'voice') { voice.setEnabled(!voice.enabled); updateHud(true); return; }
   if (id === 'copilot') {
@@ -1053,6 +1229,7 @@ function handleAction(id) {
       case 'menu:prevRound': goTo(roundStartIndex(i, -1), 'manual_navigation'); return;
       case 'menu:nextRound': goTo(roundStartIndex(i, 1), 'manual_navigation'); return;
       case 'menu:recalibrate': S.phase = 'calibrate'; beginCalibration(() => { S.phase = 'run'; runStepResume(); }); return;
+      case 'menu:recenter': captureRig(); placeCrisis(); updateCopilot(true); runStepResume(); return;
       case 'menu:exit': exitRun(); return;
     }
   }
@@ -1117,7 +1294,11 @@ function onSelect(c) {
   if (!c.userData.source) return;
   const { origin, dir } = controllerRay(c);
   const { id, panel } = pick(origin, dir);
-  if (panel) { if (panel === S.crisis) crisisAction(id); else handleAction(id); return; }
+  if (panel) {
+    if (id && id !== 'noop') haptic(c, 0.55, 35);
+    if (panel === S.crisis) crisisAction(id); else handleAction(id);
+    return;
+  }
   if (S.phase === 'calibrate') {
     const p = S.lastCalibPoint;
     if (p) setAnchor(CALIBRATION[S.calibIndex].id, p);
@@ -1165,6 +1346,10 @@ function loop(time, frame) {
       const { panel, id, distance } = pick(origin, dir);
       c.userData.line.scale.z = distance ?? 2;
       if (panel && id) hovers.set(panel, id);
+      // Toque suave al pasar a un botón nuevo: se «nota» dónde está el rayo sin mirar el puntero.
+      const hk = panel && id ? id : null;
+      if (hk && hk !== c.userData.hover) haptic(c, 0.15, 12);
+      c.userData.hover = hk;
     }
     if (S.phase === 'calibrate') {
       const p = calibrationPoint(frame);
@@ -1184,9 +1369,12 @@ function loop(time, frame) {
   for (const p of [stepPanel, hudPanel, calibPanel, S.crisis]) if (p && p.mesh.visible) p.setHover(hovers.get(p) || null);
   if (S.crisis && S.crisis.mesh.visible) S.crisis.tick();
 
+  const now = performance.now();
   const m = stepPanel.mesh;
-  if (m.visible && m.userData.pulse) m.scale.setScalar(m.userData.baseScale * (1 + 0.04 * Math.sin(time * 0.012)));
+  if (m.visible && animateAppear(m, stepPanel.material, now)) { /* entrando */ }
+  else if (m.visible && m.userData.pulse) m.scale.setScalar(m.userData.baseScale * (1 + 0.04 * Math.sin(time * 0.012)));
   else if (m.visible && m.userData.baseScale) m.scale.setScalar(m.userData.baseScale);
+  if (S.crisis && S.crisis.mesh.visible) animateAppear(S.crisis.mesh, S.crisis.mesh.material, now);
 
   updateHud();
   updateCopilot();
