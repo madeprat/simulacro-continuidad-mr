@@ -11,7 +11,8 @@
   "files": {
     "roles": "roles.json",
     "rounds": "rounds.json",
-    "debrief": "debrief.json"
+    "debrief": "debrief.json",
+    "site": "site.json"
   },
   "intro": "Ejercicio de crisis en realidad mixta, en la misma sala o cada uno desde su sitio. El Panel de Crisis es una pantalla virtual de tu centro de mando: cualquiera puede operarlo con el mando o la mano. En cada decisión solo responde el rol activo; con los visores conectados, su elección aparece y se registra sola en los demás (sin conexión, la anuncia y los demás la registran).",
   "ending": "Fin del ejercicio. Salid de la realidad mixta para revisar el resumen y exportar el registro de sesión."

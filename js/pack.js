@@ -1,6 +1,8 @@
 // Carga y validación de packs de ejercicio (EXERCISE_PACK v1).
 // El pack solo aporta datos: el motor rechaza tipos desconocidos y nunca evalúa código del pack.
 
+import { validateSite } from './site-model.js';
+
 export const SUPPORTED_SCHEMA = 'crisis.exercise/1.0';
 export const EVENT_TYPES = ['PHONE', 'DOCUMENT', 'ALERT', 'MESSAGE', 'MEDIA', 'INFO_CARD'];
 export const ANCHORS = ['TV', 'DOOR', 'TABLE', 'FRONT'];
@@ -34,12 +36,14 @@ export async function loadPack(basePath) {
   const base = basePath.replace(/\/?$/, '/');
   const manifest = await getJSON(base + 'manifest.json');
   const files = manifest.files || {};
-  const [roles, rounds, debrief] = await Promise.all([
+  const [roles, rounds, debrief, site] = await Promise.all([
     getJSON(base + (files.roles || 'roles.json')),
     getJSON(base + (files.rounds || 'rounds.json')),
     files.debrief ? getJSON(base + files.debrief).catch(() => ({})) : Promise.resolve({}),
+    // Maqueta de la organización (opcional): si el pack la declara y no se puede leer, es un error del pack.
+    files.site ? getJSON(base + files.site).catch((e) => ({ __error: e.message })) : Promise.resolve(null),
   ]);
-  const pack = { base, manifest, roles: roles.roles || [], rounds: rounds.rounds || [], debrief };
+  const pack = { base, manifest, roles: roles.roles || [], rounds: rounds.rounds || [], debrief, site };
   pack.errors = validatePack(pack);
   pack.decisionCount = pack.rounds.reduce((n, r) => n + (r.decisions || []).length, 0);
   return pack;
@@ -112,6 +116,10 @@ export function validatePack(pack) {
     if (a.severity_if_missed && !SEVERITIES.includes(a.severity_if_missed)) errors.push(`debrief.json/${id}: gravedad «${a.severity_if_missed}» no válida (high, medium o low).`);
     const caps = pack.debrief && pack.debrief.capabilities;
     if (a.capability && caps && !caps[a.capability]) errors.push(`debrief.json/${id}: la capacidad «${a.capability}» no tiene etiqueta en «capabilities».`);
+  }
+  if (pack.site) {
+    if (pack.site.__error) errors.push(`site.json: ${pack.site.__error}`);
+    else for (const e of validateSite(pack.site)) errors.push(`site.json: ${e}`);
   }
   if (m.decision_count && m.decision_count !== pack.rounds.reduce((n, r) => n + (r.decisions || []).length, 0)) {
     errors.push(`manifest.decision_count (${m.decision_count}) no coincide con las decisiones del pack.`);

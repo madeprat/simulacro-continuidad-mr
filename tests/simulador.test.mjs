@@ -73,3 +73,56 @@ test('línea de tiempo de la ronda en curso', () => {
   assert.equal(cur.icon, 'B');
   assert.ok(tl.items.some((it) => it.state === 'todo'));
 });
+
+test('maqueta: cada pack con site.json es válido y usa servicios del catálogo', async () => {
+  const { validateSite } = await import('../js/site-model.js');
+  const catalog = new Set(JSON.parse(fs.readFileSync(new URL('../copiloto/data/servicios.json', import.meta.url))).map((s) => s.codigo));
+  const index = JSON.parse(fs.readFileSync(new URL('../packs/index.json', import.meta.url)));
+  let withSite = 0;
+  for (const p of index.packs) {
+    const manifest = JSON.parse(fs.readFileSync(new URL(`../${p.path}manifest.json`, import.meta.url)));
+    if (!manifest.files.site) continue;
+    withSite++;
+    const site = JSON.parse(fs.readFileSync(new URL(`../${p.path}${manifest.files.site}`, import.meta.url)));
+    assert.deepEqual(validateSite(site), [], p.path);
+    for (const n of site.nodes) for (const sv of n.services || []) assert.ok(catalog.has(sv), `${p.path} ${n.id}: ${sv} no está en el catálogo`);
+  }
+  assert.ok(withSite >= 2, 'al menos dos packs traen maqueta');
+});
+
+test('maqueta: estado de los nodos según los escenarios declarados y los servicios afectados', async () => {
+  const { siteStatus, validateSite } = await import('../js/site-model.js');
+  const site = {
+    schema: 'crisis.site/1.0', name: 'Prueba',
+    nodes: [
+      { id: 'SEDE', type: 'building', label: 'Sede', x: 0, z: 0, scenarios: ['E1'], services: ['SV-A', 'SV-B'] },
+      { id: 'CPD', type: 'datacenter', label: 'CPD', x: 1, z: 0, scenarios: ['E3'], services: ['SV-C', 'SV-D'] },
+      { id: 'ALT', type: 'building', label: 'Alternativa', role: 'backup', x: -1, z: 0, scenarios: ['E2'] },
+    ],
+    links: [{ from: 'SEDE', to: 'CPD' }, { from: 'ALT', to: 'CPD' }],
+  };
+  assert.deepEqual(validateSite(site), []);
+  const st = siteStatus(site, { selected: { E1: 2 }, affected: [{ codigo: 'SV-C' }] });
+  const by = Object.fromEntries(st.nodes.map((n) => [n.id, n]));
+  assert.equal(by.SEDE.status, 'hit');
+  assert.match(by.SEDE.line, /E1 C2/);
+  assert.equal(by.CPD.status, 'impacted');
+  assert.equal(by.CPD.line, '1 de 2 servicios afectados');
+  assert.equal(by.ALT.status, 'standby');
+  assert.equal(st.links[0].status, 'hit');
+  assert.equal(st.links[1].status, 'impacted');
+  assert.deepEqual(st.summary, { hit: 1, impacted: 1 });
+  const nada = siteStatus(site, {});
+  assert.ok(nada.nodes.every((n) => n.status === 'ok' || n.status === 'standby'));
+
+  const mal = validateSite({ ...site, nodes: [...site.nodes, { id: 'SEDE', type: 'castillo', label: '', x: 9, z: 0, services: ['SV-A'] }], links: [{ from: 'SEDE', to: 'NADA' }] });
+  for (const frag of ['id duplicado', 'tipo «castillo»', 'falta «label»', '«x» debe ser', 'ya depende de', 'NADA']) {
+    assert.ok(mal.some((e) => e.includes(frag)), `falta el error: ${frag}`);
+  }
+});
+
+test('maqueta: no tapa el panel de lectura', () => {
+  const center = [-angularWidth('center', 1.1) / 2, angularWidth('center', 1.1) / 2];
+  const model = [SLOTS.model.angle - angularWidth('model', 0.64) / 2, SLOTS.model.angle + angularWidth('model', 0.64) / 2];
+  assert.ok(model[1] <= center[0], `maqueta ${model} / lectura ${center}`);
+});

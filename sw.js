@@ -1,7 +1,7 @@
 // Service worker: precarga el motor y los packs para ejecutar el simulacro sin conexión.
 // Estrategia: red primero (para recibir cambios del pack) y caché como respaldo offline. Si la red tarda más de
 // 3 s (wifi de sala con portal cautivo o sin salida), se sirve la caché y la respuesta de red la actualiza al llegar.
-const CACHE = 'simulacro-mr-v7';
+const CACHE = 'simulacro-mr-v8';
 const NET_TIMEOUT_MS = 3000;
 const ASSETS = [
   './',
@@ -20,6 +20,8 @@ const ASSETS = [
   'js/shared-state.js',
   'js/integrity.js',
   'js/csv.js',
+  'js/site-model.js',
+  'js/site-view.js',
   'vendor/peerjs.min.js',
   'copiloto/',
   'copiloto/index.html',
@@ -53,6 +55,12 @@ const ASSETS = [
   'packs/tramontana/roles.json',
   'packs/tramontana/rounds.json',
   'packs/tramontana/debrief.json',
+  'packs/tramontana/site.json',
+  'packs/gregal/manifest.json',
+  'packs/gregal/roles.json',
+  'packs/gregal/rounds.json',
+  'packs/gregal/debrief.json',
+  'packs/gregal/site.json',
 ];
 
 self.addEventListener('install', (e) => {

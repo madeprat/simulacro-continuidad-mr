@@ -212,6 +212,7 @@ function describe(e) {
     case 'decision_answered': return `${e.decision_id}: ${e.answer} en ${e.response_seconds} s`;
     case 'session_corrected': return e.decision_id ? `Corrección ${e.decision_id}: ${e.previous_answer} → ${e.new_answer}` : `Navegación manual ${e.from_step} → ${e.to_step}`;
     case 'copilot_toggled': return `Resumen del copiloto ${e.visible ? 'visible' : 'oculto'}`;
+    case 'site_toggled': return `Maqueta ${e.visible ? 'visible' : 'oculta'}`;
     case 'panel_analyzed': return `Panel: ${e.recalculated ? 'recalcula' : 'analiza'} impacto con ${Object.entries(e.scenarios || {}).map(([k, v]) => k + ' C' + v).join(' + ')}`;
     case 'panel_onset_set': return `Panel: inicio real ${e.onset_minutes_before_analysis} min antes del análisis`;
     case 'panel_status': return `Panel: seguimiento ${({ contained: 'pausado', active: 'reanudado', closed: 'cerrado' })[e.status] || e.status}`;

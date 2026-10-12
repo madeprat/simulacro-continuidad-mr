@@ -1,5 +1,12 @@
 {
   "packs": [
-    { "path": "packs/tramontana/", "label": "TRAMONTANA · 9 rondas · 29 decisiones" }
+    {
+      "path": "packs/tramontana/",
+      "label": "TRAMONTANA · 9 rondas · 29 decisiones"
+    },
+    {
+      "path": "packs/gregal/",
+      "label": "GREGAL · 3 rondas · 6 decisiones · multisede"
+    }
   ]
 }

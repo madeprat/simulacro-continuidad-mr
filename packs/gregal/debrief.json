@@ -1,0 +1,53 @@
+{
+  "status": "propuesta",
+  "note": "Hoja de respuestas PROPUESTA a partir del texto de las preguntas; debe validarla quien diseñó el ejercicio. No se muestra a los participantes durante el ejercicio.",
+  "capabilities": {
+    "deteccion_escalado": "Detección y escalado",
+    "autoridad": "Roles y autoridad",
+    "recuperacion": "Continuidad y recuperación",
+    "comunicacion": "Comunicaciones",
+    "cumplimiento": "Obligaciones legales y contractuales",
+    "informacion": "Disponibilidad de información",
+    "decision": "Toma de decisiones con incertidumbre",
+    "terceros": "Coordinación con terceros",
+    "retorno": "Retorno a la normalidad"
+  },
+  "assessments": {
+    "D1": {
+      "preferred_response": "B",
+      "capability": "deteccion_escalado",
+      "severity_if_missed": "high",
+      "rationale": "Hay indicios objetivos (aviso rojo, agua en el sótano, accesos cortados) que justifican activar de forma preventiva y proporcionada. Esperar al relevo consume el margen; apagar el CPD no procede porque está en housing, fuera de la sede."
+    },
+    "D2": {
+      "preferred_response": "B",
+      "capability": "decision",
+      "severity_if_missed": "medium",
+      "rationale": "Lo que hay es un problema de acceso y desplazamiento, no de sistemas: el CPD está fuera de la sede. Declarar E3 distorsiona el nivel; no declarar nada impide activar las estrategias de personas y de sede alternativa."
+    },
+    "D3": {
+      "preferred_response": "B",
+      "capability": "recuperacion",
+      "severity_if_missed": "high",
+      "rationale": "Cuarenta y cinco minutos de activación frente a treinta y cinco de SAI: hay que activar ya y cubrir el hueco con una solución puente controlada. Dispersar al personal sin coordinación deja huecos de vigilancia; el proveedor del housing no presta el servicio de SOC."
+    },
+    "D4": {
+      "preferred_response": "B",
+      "capability": "comunicacion",
+      "severity_if_missed": "medium",
+      "rationale": "Transparencia proporcionada con quien puede verse afectado y compromiso de actualización a hora fija. No hace falta exponer públicamente daños materiales ni esperar al cierre."
+    },
+    "D5": {
+      "preferred_response": "B",
+      "capability": "autoridad",
+      "severity_if_missed": "high",
+      "rationale": "La combinación de escenarios eleva el nivel: corresponde al comité tomar el control, consolidar la estrategia en curso y gestionar al proveedor crítico con compromisos verificables. Cambiar de operador en plena crisis añade riesgo."
+    },
+    "D6": {
+      "preferred_response": "B",
+      "capability": "cumplimiento",
+      "severity_if_missed": "medium",
+      "rationale": "Información veraz, por el canal formal y con próxima actualización. Por nuestra parte no hay incidente de seguridad que notificar; la valoración de sus obligaciones corresponde al cliente, con nuestra información."
+    }
+  }
+}

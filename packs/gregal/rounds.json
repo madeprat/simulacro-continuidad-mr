@@ -1,0 +1,273 @@
+{
+  "rounds": [
+    {
+      "id": "R01",
+      "number": 1,
+      "title": "Aviso rojo y primeros daños",
+      "crisis_time": "T+0",
+      "copilot": {
+        "clock": "D0 05:55",
+        "scenarios": {}
+      },
+      "events": [
+        {
+          "id": "R01-E1",
+          "type": "ALERT",
+          "anchor": "FRONT",
+          "title": "Aviso rojo · 05:30 h",
+          "text": "La agencia meteorológica eleva a rojo el aviso por lluvias torrenciales en el área de la Sede Levante para las próximas 12 horas."
+        },
+        {
+          "id": "R01-E2",
+          "type": "MESSAGE",
+          "anchor": "DOOR",
+          "source": "Vigilancia de la sede",
+          "title": "Agua en el aparcamiento",
+          "text": "El vigilante informa de 20 cm de agua en el aparcamiento subterráneo. La planta baja sigue seca, pero el cuadro eléctrico general está en el sótano."
+        },
+        {
+          "id": "R01-E3",
+          "type": "PHONE",
+          "anchor": "DOOR",
+          "source": "Jefe de turno del SOC",
+          "title": "05:55 h",
+          "text": "El relevo de las 07:00 avisa de que dos accesos por carretera a la Sede Levante están cortados. El turno de noche lleva nueve horas."
+        }
+      ],
+      "panel_actions": [
+        {
+          "id": "R01-A1",
+          "when": "after",
+          "tab": "⚡ Activación",
+          "text": "Aplicad en el panel lo decidido: escenarios y categoría, hora real de inicio y «Analizar impacto». Mirad cómo cambia la maqueta."
+        }
+      ],
+      "decisions": [
+        {
+          "id": "D1",
+          "role": "R1",
+          "question": "Son las 05:55. ¿Qué haces?",
+          "answers": [
+            {
+              "id": "A",
+              "text": "Esperar a las 07:00 para comprobar si llega el relevo antes de convocar a nadie."
+            },
+            {
+              "id": "B",
+              "text": "Activar el equipo de crisis en modo preventivo, ordenar que nadie acuda a la Sede Levante y preparar el traslado del SOC al centro alternativo."
+            },
+            {
+              "id": "C",
+              "text": "Evacuar la sede y ordenar el apagado de los sistemas del CPD por precaución."
+            },
+            {
+              "id": "D",
+              "text": "Pedir al turno de noche que continúe hasta que mejore la situación, sin activar nada."
+            }
+          ]
+        },
+        {
+          "id": "D2",
+          "role": "R2",
+          "question": "¿Qué declaras en el Panel de Crisis?",
+          "answers": [
+            {
+              "id": "A",
+              "text": "Nada hasta que haya daños en los sistemas."
+            },
+            {
+              "id": "B",
+              "text": "E4 (desplazamiento) y E1 (acceso físico) en categoría 1, anunciando que se recalculará con la evolución."
+            },
+            {
+              "id": "C",
+              "text": "E3 en categoría 3: si cae la sede, caen los sistemas."
+            },
+            {
+              "id": "D",
+              "text": "E7 por si el operador de telecomunicaciones se ve afectado."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "R02",
+      "number": 2,
+      "title": "Corte eléctrico en la sede",
+      "crisis_time": "T+2 h",
+      "copilot": {
+        "clock": "D0 07:50",
+        "declared": "D0 05:55",
+        "onset": "D0 05:30",
+        "scenarios": {
+          "E1": 2,
+          "E4": 2
+        }
+      },
+      "events": [
+        {
+          "id": "R02-E1",
+          "type": "ALERT",
+          "anchor": "FRONT",
+          "title": "Corte eléctrico · 07:42 h",
+          "text": "El agua alcanza el cuadro general del sótano y la Sede Levante se queda sin suministro. El SAI del SOC informa de 35 minutos de autonomía; el grupo electrógeno no arranca."
+        },
+        {
+          "id": "R02-E2",
+          "type": "DOCUMENT",
+          "anchor": "TABLE",
+          "source": "Plan de continuidad · SOC",
+          "title": "Estrategia de centro alternativo",
+          "text": "El SOC puede operar desde la Oficina Centro (6 puestos preparados) o en teletrabajo con equipos bastionados. Tiempo estimado de activación del centro alternativo: 45 minutos."
+        }
+      ],
+      "panel_actions": [
+        {
+          "id": "R02-A1",
+          "when": "before",
+          "tab": "🎯 Nivel",
+          "text": "Revisad en el panel el nivel con el estado de referencia de la ronda (E1 y E4 en categoría 2) y comprobad qué nodos de la maqueta cambian."
+        }
+      ],
+      "decisions": [
+        {
+          "id": "D3",
+          "role": "R2",
+          "question": "Con 35 minutos de SAI, ¿cómo mantienes el SOC?",
+          "answers": [
+            {
+              "id": "A",
+              "text": "Esperar a que vuelva la luz: el SAI da margen suficiente."
+            },
+            {
+              "id": "B",
+              "text": "Activar ya el SOC alternativo de la Oficina Centro y, mientras tanto, que el turno saliente opere en remoto con equipos bastionados, con traspaso ordenado de consolas y casos abiertos."
+            },
+            {
+              "id": "C",
+              "text": "Enviar a todo el personal del SOC a casa y que cada uno se conecte cuando pueda."
+            },
+            {
+              "id": "D",
+              "text": "Pedir al proveedor del CPD en housing que se haga cargo de la monitorización de clientes."
+            }
+          ]
+        },
+        {
+          "id": "D4",
+          "role": "R3",
+          "question": "¿Qué comunicas a los clientes del SOC gestionado?",
+          "answers": [
+            {
+              "id": "A",
+              "text": "Nada: el servicio no se ha interrumpido."
+            },
+            {
+              "id": "B",
+              "text": "Un aviso a los clientes con servicio crítico: incidencia en una sede, servicio mantenido desde el centro alternativo, posible degradación puntual y próxima actualización a hora fija."
+            },
+            {
+              "id": "C",
+              "text": "Un comunicado público en la web detallando los daños de la sede."
+            },
+            {
+              "id": "D",
+              "text": "Esperar a que el comité cierre el incidente para informar con todos los datos."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "R03",
+      "number": 3,
+      "title": "El proveedor de conectividad cae",
+      "crisis_time": "T+5 h",
+      "copilot": {
+        "clock": "D0 10:40",
+        "declared": "D0 05:55",
+        "onset": "D0 05:30",
+        "scenarios": {
+          "E1": 2,
+          "E4": 2,
+          "E7": 2
+        }
+      },
+      "events": [
+        {
+          "id": "R03-E1",
+          "type": "MESSAGE",
+          "anchor": "DOOR",
+          "source": "Operador WAN",
+          "title": "Avería en nodo regional",
+          "text": "El nodo regional del operador está inundado y no hay estimación de reparación. Las conexiones de la Oficina Centro siguen activas a través de otro nodo."
+        },
+        {
+          "id": "R03-E2",
+          "type": "PHONE",
+          "anchor": "DOOR",
+          "source": "Cliente público (sector salud)",
+          "title": "10:35 h",
+          "text": "Pregunta si el incidente afecta a la monitorización de su red y si debe notificar algo por su parte."
+        }
+      ],
+      "panel_actions": [
+        {
+          "id": "R03-A1",
+          "when": "before",
+          "tab": "📡 Comunicaciones",
+          "text": "Con E7 añadido por la referencia de la ronda, recalculad y revisad la pestaña Comunicaciones antes de decidir."
+        }
+      ],
+      "decisions": [
+        {
+          "id": "D5",
+          "role": "R1",
+          "question": "El nivel sube por la combinación E1 + E4 + E7. ¿Qué decides?",
+          "answers": [
+            {
+              "id": "A",
+              "text": "Mantener la gestión en el equipo técnico: es un problema del operador."
+            },
+            {
+              "id": "B",
+              "text": "Convocar el comité de continuidad, consolidar la sede alternativa como operación principal mientras dure el aviso y exigir al operador un plan de contingencia por escrito con hitos."
+            },
+            {
+              "id": "C",
+              "text": "Cambiar hoy mismo de operador de telecomunicaciones."
+            },
+            {
+              "id": "D",
+              "text": "Declarar la vuelta a la normalidad en cuanto vuelva la luz a la sede."
+            }
+          ]
+        },
+        {
+          "id": "D6",
+          "role": "R3",
+          "question": "¿Qué respondes al cliente público?",
+          "answers": [
+            {
+              "id": "A",
+              "text": "Que no hay ningún problema."
+            },
+            {
+              "id": "B",
+              "text": "Confirmar por el canal formal el estado real (monitorización mantenida desde el centro alternativo, sin indicios de incidente de seguridad), qué se está haciendo y cuándo será la próxima actualización, ofreciéndole la información que necesite para valorar sus propias obligaciones."
+            },
+            {
+              "id": "C",
+              "text": "Recomendarle que notifique al CCN-CERT por si acaso."
+            },
+            {
+              "id": "D",
+              "text": "Derivarle al operador de telecomunicaciones."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
