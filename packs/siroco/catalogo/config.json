@@ -1,0 +1,126 @@
+{
+  "lead_name": "Dirección general",
+  "lead_role": "Presidencia del comité de crisis",
+  "lead_email": "direccion@banco.example",
+  "operator_label": "Riesgo TIC y continuidad",
+  "umbral_perdida_eur": 300000,
+  "umbral_criticos_mtpd": 1,
+  "umbral_prob_pct": 75,
+  "history_limit": 20,
+  "links": {},
+  "sheets": {},
+  "documents": [
+    "Plan de respuesta y recuperación de incidentes TIC",
+    "Registro de proveedores TIC y planes de salida",
+    "Procedimiento de clasificación y notificación (DORA)"
+  ],
+  "scenarios": {
+    "E1": {
+      "title": "Una sede u oficina no se puede usar",
+      "short": "Una sede u oficina no se puede usar",
+      "icon": "🏦",
+      "pattern": "Cerrada toda la jornada",
+      "strategies": [
+        "EST02",
+        "EST03"
+      ]
+    },
+    "E2": {
+      "title": "Falta personal clave",
+      "short": "Falta personal clave",
+      "icon": "👥",
+      "pattern": "Equipos críticos sin cubrir durante la jornada",
+      "strategies": [
+        "EST02",
+        "EST03"
+      ]
+    },
+    "E3": {
+      "title": "Servicios digitales o de pago caídos",
+      "short": "Servicios digitales o de pago caídos",
+      "icon": "💳",
+      "pattern": "Servicio caído durante horas",
+      "strategies": [
+        "EST01",
+        "EST03",
+        "EST05"
+      ]
+    },
+    "E4": {
+      "title": "No se puede llegar a sedes u oficinas",
+      "short": "No se puede llegar a sedes u oficinas",
+      "icon": "🛣️",
+      "pattern": "Accesos cortados durante la jornada",
+      "strategies": [
+        "EST01",
+        "EST02"
+      ]
+    },
+    "E5": {
+      "title": "Error en los sistemas del banco",
+      "short": "Error en los sistemas del banco",
+      "icon": "⚙️",
+      "pattern": "Error que impide operar horas",
+      "strategies": [
+        "EST04",
+        "EST05"
+      ]
+    },
+    "E6": {
+      "title": "Ciberataque o fraude masivo",
+      "short": "Ciberataque o fraude masivo",
+      "icon": "🛡️",
+      "pattern": "Ataque o campaña de fraude en curso",
+      "strategies": [
+        "EST03",
+        "EST07",
+        "EST08"
+      ]
+    },
+    "E7": {
+      "title": "Falla un proveedor TIC crítico",
+      "short": "Falla un proveedor TIC crítico",
+      "icon": "🔗",
+      "pattern": "Servicio caído durante la jornada",
+      "strategies": [
+        "EST01",
+        "EST03",
+        "EST06"
+      ]
+    }
+  },
+  "strategies": {
+    "EST01": {
+      "title": "Canal de pago alternativo",
+      "detail": "Cajeros propios, pagos móviles y transferencias inmediatas con límites ampliados."
+    },
+    "EST02": {
+      "title": "Refuerzo de oficinas y efectivo",
+      "detail": "Más efectivo, horario ampliado y personal de servicios centrales en red."
+    },
+    "EST03": {
+      "title": "Activar el comité de crisis",
+      "detail": "Dirección, riesgo TIC, CISO, cumplimiento y comunicación con mando único."
+    },
+    "EST04": {
+      "title": "Esperar y vigilar",
+      "detail": "Seguimiento con hora fija de revisión."
+    },
+    "EST05": {
+      "title": "Recuperar en el CPD de respaldo",
+      "detail": "Conmutar los servicios al centro de respaldo."
+    },
+    "EST06": {
+      "title": "Proveedor alternativo o plan de salida",
+      "detail": "Activar el procesador de respaldo previsto en el contrato."
+    },
+    "EST07": {
+      "title": "Medidas preventivas sobre clientes",
+      "detail": "Bloqueo y reemisión de tarjetas en riesgo, límites y alertas."
+    },
+    "EST08": {
+      "title": "Aislar y conservar evidencias",
+      "detail": "Contener sin borrar para la investigación."
+    }
+  }
+}

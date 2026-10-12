@@ -15,6 +15,14 @@
     {
       "path": "packs/valdecierzo/",
       "label": "VALDECIERZO · ayuntamiento · 3 rondas · 6 decisiones"
+    },
+    {
+      "path": "packs/sierraclara/",
+      "label": "SIERRA CLARA · hospital (ENS) · 3 rondas · 6 decisiones"
+    },
+    {
+      "path": "packs/siroco/",
+      "label": "SIROCO · banco (DORA) · 3 rondas · 6 decisiones"
     }
   ]
 }

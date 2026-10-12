@@ -1,0 +1,118 @@
+{
+  "E1": [
+    {
+      "id": "20202",
+      "codigo": "EST02",
+      "nombre": "EST02-Refuerzo de oficinas y efectivo",
+      "descripcion": "Más efectivo, horario ampliado y personal de servicios centrales en red."
+    },
+    {
+      "id": "20203",
+      "codigo": "EST03",
+      "nombre": "EST03-Activar el comité de crisis",
+      "descripcion": "Dirección, riesgo TIC, CISO, cumplimiento y comunicación con mando único."
+    }
+  ],
+  "E2": [
+    {
+      "id": "20202",
+      "codigo": "EST02",
+      "nombre": "EST02-Refuerzo de oficinas y efectivo",
+      "descripcion": "Más efectivo, horario ampliado y personal de servicios centrales en red."
+    },
+    {
+      "id": "20203",
+      "codigo": "EST03",
+      "nombre": "EST03-Activar el comité de crisis",
+      "descripcion": "Dirección, riesgo TIC, CISO, cumplimiento y comunicación con mando único."
+    }
+  ],
+  "E3": [
+    {
+      "id": "20201",
+      "codigo": "EST01",
+      "nombre": "EST01-Canal de pago alternativo",
+      "descripcion": "Cajeros propios, pagos móviles y transferencias inmediatas con límites ampliados."
+    },
+    {
+      "id": "20203",
+      "codigo": "EST03",
+      "nombre": "EST03-Activar el comité de crisis",
+      "descripcion": "Dirección, riesgo TIC, CISO, cumplimiento y comunicación con mando único."
+    },
+    {
+      "id": "20205",
+      "codigo": "EST05",
+      "nombre": "EST05-Recuperar en el CPD de respaldo",
+      "descripcion": "Conmutar los servicios al centro de respaldo."
+    }
+  ],
+  "E4": [
+    {
+      "id": "20201",
+      "codigo": "EST01",
+      "nombre": "EST01-Canal de pago alternativo",
+      "descripcion": "Cajeros propios, pagos móviles y transferencias inmediatas con límites ampliados."
+    },
+    {
+      "id": "20202",
+      "codigo": "EST02",
+      "nombre": "EST02-Refuerzo de oficinas y efectivo",
+      "descripcion": "Más efectivo, horario ampliado y personal de servicios centrales en red."
+    }
+  ],
+  "E5": [
+    {
+      "id": "20204",
+      "codigo": "EST04",
+      "nombre": "EST04-Esperar y vigilar",
+      "descripcion": "Seguimiento con hora fija de revisión."
+    },
+    {
+      "id": "20205",
+      "codigo": "EST05",
+      "nombre": "EST05-Recuperar en el CPD de respaldo",
+      "descripcion": "Conmutar los servicios al centro de respaldo."
+    }
+  ],
+  "E6": [
+    {
+      "id": "20203",
+      "codigo": "EST03",
+      "nombre": "EST03-Activar el comité de crisis",
+      "descripcion": "Dirección, riesgo TIC, CISO, cumplimiento y comunicación con mando único."
+    },
+    {
+      "id": "20207",
+      "codigo": "EST07",
+      "nombre": "EST07-Medidas preventivas sobre clientes",
+      "descripcion": "Bloqueo y reemisión de tarjetas en riesgo, límites y alertas."
+    },
+    {
+      "id": "20208",
+      "codigo": "EST08",
+      "nombre": "EST08-Aislar y conservar evidencias",
+      "descripcion": "Contener sin borrar para la investigación."
+    }
+  ],
+  "E7": [
+    {
+      "id": "20201",
+      "codigo": "EST01",
+      "nombre": "EST01-Canal de pago alternativo",
+      "descripcion": "Cajeros propios, pagos móviles y transferencias inmediatas con límites ampliados."
+    },
+    {
+      "id": "20203",
+      "codigo": "EST03",
+      "nombre": "EST03-Activar el comité de crisis",
+      "descripcion": "Dirección, riesgo TIC, CISO, cumplimiento y comunicación con mando único."
+    },
+    {
+      "id": "20206",
+      "codigo": "EST06",
+      "nombre": "EST06-Proveedor alternativo o plan de salida",
+      "descripcion": "Activar el procesador de respaldo previsto en el contrato."
+    }
+  ]
+}

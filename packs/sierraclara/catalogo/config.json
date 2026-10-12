@@ -1,0 +1,126 @@
+{
+  "lead_name": "Gerencia del hospital",
+  "lead_role": "Dirección del plan de contingencia",
+  "lead_email": "gerencia@hospital.example",
+  "operator_label": "Coordinación de continuidad",
+  "umbral_perdida_eur": 20000,
+  "umbral_criticos_mtpd": 1,
+  "umbral_prob_pct": 75,
+  "history_limit": 20,
+  "links": {},
+  "sheets": {},
+  "documents": [
+    "Plan de contingencia de sistemas clínicos",
+    "Procedimientos en papel por servicio",
+    "Directorio de guardias y proveedores"
+  ],
+  "scenarios": {
+    "E1": {
+      "title": "Un área del hospital no se puede usar",
+      "short": "Un área del hospital no se puede usar",
+      "icon": "🏥",
+      "pattern": "Área inutilizable durante la jornada",
+      "strategies": [
+        "EST01",
+        "EST03",
+        "EST05"
+      ]
+    },
+    "E2": {
+      "title": "Falta personal sanitario clave",
+      "short": "Falta personal sanitario clave",
+      "icon": "👥",
+      "pattern": "Turnos sin cubrir en servicios críticos",
+      "strategies": [
+        "EST02",
+        "EST03"
+      ]
+    },
+    "E3": {
+      "title": "Sin sistemas clínicos (historia, laboratorio, imagen)",
+      "short": "Sin sistemas clínicos (historia, laboratorio, imagen)",
+      "icon": "💻",
+      "pattern": "Sin sistemas clínicos durante horas",
+      "strategies": [
+        "EST01",
+        "EST03",
+        "EST05",
+        "EST07"
+      ]
+    },
+    "E4": {
+      "title": "No se puede llegar al hospital",
+      "short": "No se puede llegar al hospital",
+      "icon": "🚑",
+      "pattern": "Accesos cortados durante horas",
+      "strategies": [
+        "EST06",
+        "EST07"
+      ]
+    },
+    "E5": {
+      "title": "Error en los sistemas clínicos",
+      "short": "Error en los sistemas clínicos",
+      "icon": "⚙️",
+      "pattern": "Error que obliga a trabajar en papel",
+      "strategies": [
+        "EST01",
+        "EST05"
+      ]
+    },
+    "E6": {
+      "title": "Ciberataque o acción hostil",
+      "short": "Ciberataque o acción hostil",
+      "icon": "🛡️",
+      "pattern": "Ataque confirmado contenido",
+      "strategies": [
+        "EST03",
+        "EST08"
+      ]
+    },
+    "E7": {
+      "title": "Falla un proveedor crítico",
+      "short": "Falla un proveedor crítico",
+      "icon": "🔗",
+      "pattern": "Servicio caído durante la jornada",
+      "strategies": [
+        "EST03",
+        "EST06"
+      ]
+    }
+  },
+  "strategies": {
+    "EST01": {
+      "title": "Procedimientos en papel",
+      "detail": "Peticiones, prescripciones y resultados en papel con circuitos definidos."
+    },
+    "EST02": {
+      "title": "Reorganizar la actividad",
+      "detail": "Aplazar cirugía y consultas no urgentes; reforzar Urgencias y plantas."
+    },
+    "EST03": {
+      "title": "Activar el comité de crisis",
+      "detail": "Gerencia, dirección médica y de enfermería, sistemas y comunicación con mando único."
+    },
+    "EST04": {
+      "title": "Esperar y vigilar",
+      "detail": "Seguimiento con hora fija de revisión."
+    },
+    "EST05": {
+      "title": "Arrancar en el CPD de respaldo",
+      "detail": "Restaurar en la infraestructura de respaldo de la consejería."
+    },
+    "EST06": {
+      "title": "Proveedor alternativo",
+      "detail": "Laboratorio de referencia, ambulancias o mantenimiento de respaldo."
+    },
+    "EST07": {
+      "title": "Desvío de pacientes",
+      "detail": "Coordinar con emergencias el desvío de ambulancias no críticas."
+    },
+    "EST08": {
+      "title": "Aislar y conservar evidencias",
+      "detail": "Contener sin borrar para la investigación."
+    }
+  }
+}

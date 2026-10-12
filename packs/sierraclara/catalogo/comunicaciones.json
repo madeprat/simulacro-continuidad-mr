@@ -1,0 +1,199 @@
+{
+  "contexts": [
+    {
+      "id": "ens",
+      "label": "Servicio público (ENS)"
+    },
+    {
+      "id": "pacientes",
+      "label": "Pacientes y ciudadanía"
+    },
+    {
+      "id": "datos",
+      "label": "Datos de salud"
+    }
+  ],
+  "items": [
+    {
+      "id": "ens-1",
+      "ctx": [
+        "ens"
+      ],
+      "order": 10,
+      "when": "Ahora",
+      "bucket": "now",
+      "mandatory": true,
+      "title": "Activar el plan de contingencia y el comité de crisis",
+      "quien": "Gerencia",
+      "canal": "Busca, teléfono de guardias y megafonía interna",
+      "plazo": "Sin demora",
+      "base": "Plan de contingencia del hospital",
+      "evidencia": "Hora de activación y miembros convocados",
+      "accion": "info",
+      "color": "critical",
+      "mail_asunto": "Activar el plan de contingencia y el comité de crisis",
+      "mail_cuerpo": "Activar el plan de contingencia y el comité de crisis."
+    },
+    {
+      "id": "ens-2",
+      "ctx": [
+        "ens"
+      ],
+      "order": 20,
+      "when": "Ahora",
+      "bucket": "now",
+      "mandatory": true,
+      "title": "Informar a la consejería de sanidad y a la coordinación de emergencias",
+      "quien": "Gerencia",
+      "canal": "Teléfono de guardia y correo oficial",
+      "plazo": "En la primera hora",
+      "base": "Protocolo autonómico de incidencias",
+      "evidencia": "Hora, interlocutor y capacidad comunicada",
+      "accion": "info",
+      "color": "critical",
+      "mail_asunto": "Informar a la consejería de sanidad y a la coordinación de emergencias",
+      "mail_cuerpo": "Informar a la consejería de sanidad y a la coordinación de emergencias."
+    },
+    {
+      "id": "ens-3",
+      "ctx": [
+        "ens"
+      ],
+      "order": 30,
+      "when": "Según impacto",
+      "bucket": "now",
+      "mandatory": true,
+      "title": "Notificar el incidente al CCN-CERT por LUCÍA",
+      "quien": "Jefatura de Sistemas con el responsable de seguridad",
+      "canal": "LUCÍA",
+      "plazo": "Sin dilación si el impacto es alto",
+      "base": "Esquema Nacional de Seguridad y guía CCN-STIC 817",
+      "evidencia": "Número de caso y actualizaciones",
+      "accion": "info",
+      "color": "danger",
+      "mail_asunto": "Notificar el incidente al CCN-CERT por LUCÍA",
+      "mail_cuerpo": "Notificar el incidente al CCN-CERT por LUCÍA."
+    },
+    {
+      "id": "pac-1",
+      "ctx": [
+        "pacientes"
+      ],
+      "order": 40,
+      "when": "Hoy",
+      "bucket": "next",
+      "mandatory": true,
+      "title": "Aviso a pacientes con cita: qué se mantiene y qué se reprograma",
+      "quien": "Admisión y Atención al paciente",
+      "canal": "SMS oficial, web y centralita",
+      "plazo": "Antes del siguiente turno de citas",
+      "base": "Protocolo de información al paciente",
+      "evidencia": "Texto, hora y pacientes avisados",
+      "accion": "info",
+      "color": "warn",
+      "mail_asunto": "Aviso a pacientes con cita: qué se mantiene y qué se reprograma",
+      "mail_cuerpo": "Aviso a pacientes con cita: qué se mantiene y qué se reprograma."
+    },
+    {
+      "id": "pac-2",
+      "ctx": [
+        "pacientes"
+      ],
+      "order": 50,
+      "when": "Si hay suplantación",
+      "bucket": "next",
+      "mandatory": true,
+      "title": "Aviso público: el hospital nunca pide datos por SMS",
+      "quien": "Comunicación",
+      "canal": "Web, redes, pantallas y centros de salud",
+      "plazo": "En cuanto se detecte",
+      "base": "Protocolo de comunicación",
+      "evidencia": "Capturas con hora de publicación",
+      "accion": "info",
+      "color": "danger",
+      "mail_asunto": "Aviso público: el hospital nunca pide datos por SMS",
+      "mail_cuerpo": "Aviso público: el hospital nunca pide datos por SMS."
+    },
+    {
+      "id": "pac-3",
+      "ctx": [
+        "pacientes"
+      ],
+      "order": 60,
+      "when": "Durante el incidente",
+      "bucket": "now",
+      "mandatory": false,
+      "title": "Información a familiares de pacientes ingresados",
+      "quien": "Supervisión de cada planta",
+      "canal": "En persona y por teléfono",
+      "plazo": "En cada turno",
+      "base": "Protocolo de información al paciente",
+      "evidencia": "Registro en la hoja de enfermería",
+      "accion": "info",
+      "color": "warn",
+      "mail_asunto": "Información a familiares de pacientes ingresados",
+      "mail_cuerpo": "Información a familiares de pacientes ingresados."
+    },
+    {
+      "id": "dat-1",
+      "ctx": [
+        "datos"
+      ],
+      "order": 70,
+      "when": "Ahora",
+      "bucket": "now",
+      "mandatory": true,
+      "title": "Evaluar con el DPD la brecha de disponibilidad de datos de salud",
+      "quien": "Delegado de protección de datos",
+      "canal": "Reunión y registro de brechas",
+      "plazo": "Sin dilación",
+      "base": "RGPD art. 33",
+      "evidencia": "Evaluación inicial con hora de conocimiento",
+      "accion": "info",
+      "color": "critical",
+      "mail_asunto": "Evaluar con el DPD la brecha de disponibilidad de datos de salud",
+      "mail_cuerpo": "Evaluar con el DPD la brecha de disponibilidad de datos de salud."
+    },
+    {
+      "id": "dat-2",
+      "ctx": [
+        "datos"
+      ],
+      "order": 80,
+      "when": "Antes de 72 h",
+      "bucket": "deadline",
+      "mandatory": true,
+      "title": "Notificar la brecha a la AEPD",
+      "quien": "Hospital como responsable del tratamiento",
+      "canal": "Sede electrónica de la AEPD",
+      "plazo": "Máximo 72 h desde el conocimiento",
+      "base": "RGPD art. 33.1",
+      "evidencia": "Justificante de notificación",
+      "accion": "info",
+      "color": "danger",
+      "mail_asunto": "Notificar la brecha a la AEPD",
+      "mail_cuerpo": "Notificar la brecha a la AEPD.",
+      "plazo_horas": 72
+    },
+    {
+      "id": "dat-3",
+      "ctx": [
+        "datos"
+      ],
+      "order": 90,
+      "when": "Hoy",
+      "bucket": "next",
+      "mandatory": true,
+      "title": "Documentar los efectos (p. ej. resultados críticos retrasados)",
+      "quien": "DPD con la Dirección Médica",
+      "canal": "Registro de brechas",
+      "plazo": "Durante la gestión",
+      "base": "RGPD art. 33.5",
+      "evidencia": "Hechos, efectos y medidas adoptadas",
+      "accion": "info",
+      "color": "warn",
+      "mail_asunto": "Documentar los efectos (p. ej. resultados críticos retrasados)",
+      "mail_cuerpo": "Documentar los efectos (p. ej. resultados críticos retrasados)."
+    }
+  ]
+}

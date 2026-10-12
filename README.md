@@ -280,6 +280,8 @@ packs/tramontana/               Pack de ejemplo (9 rondas): ciberataque, sede ce
 packs/gregal/                   Pack corto (3 rondas): temporal e inundación, organización multisede con nube
 packs/altamar/                  Simulacro escolar (3 rondas): incendio en un colegio, con catálogo propio
 packs/valdecierzo/              Simulacro municipal (3 rondas): ciberataque en un pueblo en fiestas, con catálogo propio
+packs/sierraclara/              Simulacro hospitalario (3 rondas, ENS): caída del CPD por calor, con catálogo propio
+packs/siroco/                   Simulacro bancario (3 rondas, DORA): proveedor TIC crítico caído, con catálogo propio
 tools/generar_catalogo.py       Genera el catálogo ficticio
 tools/comprobar-anonimato.mjs   Control de anonimato (también en CI)
 tests/                          Pruebas del motor, del consolidador, de los packs y del simulador (npm test)

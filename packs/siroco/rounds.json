@@ -1,0 +1,288 @@
+{
+  "rounds": [
+    {
+      "id": "R01",
+      "number": 1,
+      "title": "Viernes de nómina",
+      "crisis_time": "T+0",
+      "copilot": {
+        "clock": "D0 09:25",
+        "scenarios": {}
+      },
+      "events": [
+        {
+          "id": "R01-E1",
+          "type": "ALERT",
+          "anchor": "FRONT",
+          "title": "Pagos con tarjeta · 09:05",
+          "text": "El 38 % de los pagos con tarjeta de los clientes de Banco Siroco se rechazan en comercios y cajeros. Es viernes de nómina."
+        },
+        {
+          "id": "R01-E2",
+          "type": "MESSAGE",
+          "anchor": "DOOR",
+          "source": "Procesador de tarjetas (proveedor TIC)",
+          "title": "09:15 h",
+          "text": "«Tenemos un incidente en nuestra plataforma. Lo estamos investigando. No hay estimación de solución.»"
+        },
+        {
+          "id": "R01-E3",
+          "type": "PHONE",
+          "anchor": "DOOR",
+          "source": "Atención al cliente",
+          "title": "09:22 h",
+          "text": "«1.200 llamadas en media hora, colas en las oficinas y las redes echando humo.»"
+        }
+      ],
+      "panel_actions": [
+        {
+          "id": "R01-A1",
+          "when": "after",
+          "tab": "⚡ Activación",
+          "text": "Declarad en el Panel de Crisis lo que está pasando y pulsad «Analizar impacto». Mirad en la maqueta de quién dependen los pagos."
+        }
+      ],
+      "decisions": [
+        {
+          "id": "D1",
+          "role": "R1",
+          "question": "Son las 09:25. ¿Qué haces?",
+          "answers": [
+            {
+              "id": "A",
+              "text": "Esperar a que el proveedor lo resuelva: el incidente es suyo."
+            },
+            {
+              "id": "B",
+              "text": "Activar el plan de respuesta a incidentes TIC y el comité de crisis, empezar a clasificar el incidente con los criterios de DORA y exigir al proveedor información a hora fija."
+            },
+            {
+              "id": "C",
+              "text": "Cambiar de procesador de tarjetas esta misma mañana."
+            },
+            {
+              "id": "D",
+              "text": "Apagar todos los canales digitales por precaución."
+            }
+          ]
+        },
+        {
+          "id": "D2",
+          "role": "R2",
+          "question": "¿Qué declaras en el Panel de Crisis?",
+          "answers": [
+            {
+              "id": "A",
+              "text": "Nada: es un incidente del proveedor."
+            },
+            {
+              "id": "B",
+              "text": "E7 (proveedor TIC crítico) en categoría 2 y E3 en categoría 1: pagos con tarjeta degradados."
+            },
+            {
+              "id": "C",
+              "text": "E6 en categoría 3: seguro que es un ataque."
+            },
+            {
+              "id": "D",
+              "text": "E1: hay que cerrar las oficinas."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "R02",
+      "number": 2,
+      "title": "¿Incidente grave?",
+      "crisis_time": "T+1 h 30",
+      "copilot": {
+        "clock": "D0 10:50",
+        "declared": "D0 09:25",
+        "onset": "D0 09:05",
+        "scenarios": {
+          "E7": 2,
+          "E3": 2
+        }
+      },
+      "events": [
+        {
+          "id": "R02-E1",
+          "type": "ALERT",
+          "anchor": "FRONT",
+          "title": "Proveedor · 10:30",
+          "text": "El procesador confirma un ransomware en su plataforma. Ha aislado los sistemas: los pagos con tarjeta están caídos al 100 %."
+        },
+        {
+          "id": "R02-E2",
+          "type": "MESSAGE",
+          "anchor": "TABLE",
+          "source": "Riesgo TIC y Cumplimiento",
+          "title": "Clasificación",
+          "text": "310.000 clientes afectados, un servicio crítico caído más de una hora e impacto en medios y redes. Con los criterios de DORA, el incidente es grave desde las 10:45."
+        },
+        {
+          "id": "R02-E3",
+          "type": "PHONE",
+          "anchor": "DOOR",
+          "source": "Red de oficinas",
+          "title": "10:48 h",
+          "text": "«Colas para sacar efectivo y dos cajeros vacíos. Hay una televisión grabando en la puerta de la oficina principal.»"
+        }
+      ],
+      "panel_actions": [
+        {
+          "id": "R02-A1",
+          "when": "before",
+          "tab": "📡 Comunicaciones",
+          "text": "Abrid Comunicaciones, contexto «Supervisor (DORA)»: mirad los plazos de notificación antes de decidir."
+        }
+      ],
+      "decisions": [
+        {
+          "id": "D3",
+          "role": "R3",
+          "question": "El incidente es grave desde las 10:45. ¿Cuándo notificas al supervisor?",
+          "answers": [
+            {
+              "id": "A",
+              "text": "Cuando esté resuelto y se tengan todos los datos."
+            },
+            {
+              "id": "B",
+              "text": "Notificación inicial al Banco de España en un máximo de 4 horas desde la clasificación (y nunca más de 24 horas desde que se conoció), aunque falten datos; informe intermedio en 72 horas y final en un mes."
+            },
+            {
+              "id": "C",
+              "text": "Solo si sale en las noticias."
+            },
+            {
+              "id": "D",
+              "text": "Lo notifica el proveedor: el incidente es suyo."
+            }
+          ]
+        },
+        {
+          "id": "D4",
+          "role": "R2",
+          "question": "¿Cómo pueden pagar y cobrar hoy los clientes?",
+          "answers": [
+            {
+              "id": "A",
+              "text": "Nada hasta que vuelva el proveedor."
+            },
+            {
+              "id": "B",
+              "text": "Activar la alternativa prevista: ampliar límites en cajeros propios, pagos móviles y transferencias inmediatas, reforzar el efectivo en oficinas y activar el procesador de respaldo del contrato de contingencia."
+            },
+            {
+              "id": "C",
+              "text": "Reconectar ya con el proveedor aunque no esté limpio."
+            },
+            {
+              "id": "D",
+              "text": "Recomendar a los clientes que usen tarjetas de otros bancos."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "R03",
+      "number": 3,
+      "title": "Los estafadores llegan antes",
+      "crisis_time": "T+8 h",
+      "copilot": {
+        "clock": "D0 17:20",
+        "declared": "D0 09:25",
+        "onset": "D0 09:05",
+        "scenarios": {
+          "E7": 2,
+          "E3": 1,
+          "E6": 2
+        }
+      },
+      "events": [
+        {
+          "id": "R03-E1",
+          "type": "ALERT",
+          "anchor": "FRONT",
+          "title": "Fraude · 16:50",
+          "text": "Miles de clientes reciben un SMS: «Banco Siroco: su tarjeta ha sido bloqueada. Reactívela aquí». Ya hay cargos fraudulentos."
+        },
+        {
+          "id": "R03-E2",
+          "type": "MESSAGE",
+          "anchor": "DOOR",
+          "source": "Procesador de tarjetas",
+          "title": "17:05 h",
+          "text": "«Servicio restablecido desde las 16:30. No podemos descartar que se hayan extraído datos de tarjetas de unos 40.000 clientes.»"
+        },
+        {
+          "id": "R03-E3",
+          "type": "PHONE",
+          "anchor": "DOOR",
+          "source": "Banco de España",
+          "title": "17:15 h",
+          "text": "«Hemos recibido la notificación inicial. ¿Qué vais a comunicar a los clientes y cuándo llega el informe intermedio?»"
+        }
+      ],
+      "panel_actions": [
+        {
+          "id": "R03-A1",
+          "when": "before",
+          "tab": "📡 Comunicaciones",
+          "text": "Abrid Comunicaciones, contexto «Fraude y datos»: mirad la cuenta atrás de 72 h para la AEPD. Después decidid."
+        }
+      ],
+      "decisions": [
+        {
+          "id": "D5",
+          "role": "R1",
+          "question": "¿Qué haces con las 40.000 tarjetas posiblemente expuestas?",
+          "answers": [
+            {
+              "id": "A",
+              "text": "Nada hasta confirmar que se extrajeron."
+            },
+            {
+              "id": "B",
+              "text": "Vigilancia reforzada del fraude, bloqueo preventivo y reemisión prioritaria de esas tarjetas, aviso personal a sus titulares y devolución de los cargos fraudulentos."
+            },
+            {
+              "id": "C",
+              "text": "Bloquear las 900.000 tarjetas del banco."
+            },
+            {
+              "id": "D",
+              "text": "Que se encargue el proveedor."
+            }
+          ]
+        },
+        {
+          "id": "D6",
+          "role": "R3",
+          "question": "¿Qué comunicas a los clientes?",
+          "answers": [
+            {
+              "id": "A",
+              "text": "Nada, para no alarmar."
+            },
+            {
+              "id": "B",
+              "text": "Un mensaje por canales oficiales (app, web y oficinas): qué ha pasado, que el banco nunca pide datos por SMS, cómo saber si su tarjeta está afectada y qué hará el banco con los cargos. Y valorar con el DPD la notificación a la AEPD de la posible brecha de datos de tarjetas."
+            },
+            {
+              "id": "C",
+              "text": "Responder solo en redes sociales."
+            },
+            {
+              "id": "D",
+              "text": "Un comunicado culpando al proveedor."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 // Service worker: precarga el motor y los packs para ejecutar el simulacro sin conexión.
 // Estrategia: red primero (para recibir cambios del pack) y caché como respaldo offline. Si la red tarda más de
 // 3 s (wifi de sala con portal cautivo o sin salida), se sirve la caché y la respuesta de red la actualiza al llegar.
-const CACHE = 'simulacro-mr-v10';
+const CACHE = 'simulacro-mr-v11';
 const NET_TIMEOUT_MS = 3000;
 const ASSETS = [
   './',
@@ -81,6 +81,26 @@ const ASSETS = [
   'packs/valdecierzo/catalogo/escenarios.json',
   'packs/valdecierzo/catalogo/estrategias.json',
   'packs/valdecierzo/catalogo/comunicaciones.json',
+  'packs/sierraclara/manifest.json',
+  'packs/sierraclara/roles.json',
+  'packs/sierraclara/rounds.json',
+  'packs/sierraclara/debrief.json',
+  'packs/sierraclara/site.json',
+  'packs/sierraclara/catalogo/config.json',
+  'packs/sierraclara/catalogo/servicios.json',
+  'packs/sierraclara/catalogo/escenarios.json',
+  'packs/sierraclara/catalogo/estrategias.json',
+  'packs/sierraclara/catalogo/comunicaciones.json',
+  'packs/siroco/manifest.json',
+  'packs/siroco/roles.json',
+  'packs/siroco/rounds.json',
+  'packs/siroco/debrief.json',
+  'packs/siroco/site.json',
+  'packs/siroco/catalogo/config.json',
+  'packs/siroco/catalogo/servicios.json',
+  'packs/siroco/catalogo/escenarios.json',
+  'packs/siroco/catalogo/estrategias.json',
+  'packs/siroco/catalogo/comunicaciones.json',
 ];
 
 self.addEventListener('install', (e) => {
