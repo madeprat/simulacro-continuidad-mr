@@ -1,0 +1,42 @@
+Simulacro de Continuidad MR
+Copyright (c) 2026 madeprat (https://github.com/madeprat). Todos los derechos reservados.
+
+Este repositorio es visible públicamente solo para su consulta. Su visibilidad no concede
+ninguna licencia ni derecho de uso.
+
+Sin autorización previa y por escrito de la titular, queda prohibido:
+
+  - copiar, reproducir, modificar, traducir o adaptar total o parcialmente el software, su
+    documentación, el modelo de cálculo, los catálogos y los paquetes de ejercicios (carpeta packs/),
+    incluidas sus hojas de respuestas y criterios de evaluación;
+  - distribuir, publicar, sublicenciar, vender o poner a disposición de terceros cualquiera de esos
+    elementos o una obra derivada de ellos;
+  - utilizarlos para impartir ejercicios, formación o servicios a terceros, con o sin ánimo de lucro;
+  - utilizarlos para desarrollar un producto o servicio que los reproduzca o se derive de ellos.
+
+Las solicitudes de licencia o de colaboración se dirigen a la titular a través de
+https://github.com/madeprat.
+
+Los componentes de terceros incluidos en la carpeta vendor/ (three.js y PeerJS) se rigen por sus
+propias licencias (MIT), indicadas en cada fichero.
+
+EL SOFTWARE SE PROPORCIONA «TAL CUAL», SIN GARANTÍA DE NINGÚN TIPO.
+
+---
+
+Simulacro de Continuidad MR
+Copyright (c) 2026 madeprat (https://github.com/madeprat). All rights reserved.
+
+This repository is publicly visible for reference only. Its visibility grants no licence or
+right of use.
+
+Without the owner's prior written permission, you may not copy, reproduce, modify, translate,
+adapt, distribute, publish, sublicense, sell or make available the software, its documentation,
+calculation model, catalogues or exercise packs (packs/), including their answer keys and
+assessment criteria, in whole or in part; use them to deliver exercises, training or services to
+third parties; or use them to build a product or service that reproduces or derives from them.
+
+Third-party components in vendor/ (three.js and PeerJS) are governed by their own MIT licences,
+stated in each file.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND.

@@ -323,3 +323,9 @@ La integración continua (`.github/workflows/comprobaciones.yml`) ejecuta ambas 
 - Sincronización opcional TV ↔ gafas por red local.
 - Consola del facilitador para lanzar rondas e injects a todos a la vez (ejercicios en remoto).
 - Texto vectorial (MSDF) en los paneles para ganar nitidez y no redibujar texturas completas.
+
+## Licencia
+
+© 2026 madeprat. Todos los derechos reservados. El repositorio es visible solo para consulta: no se concede
+ninguna licencia de uso, copia, modificación ni distribución sin autorización previa y por escrito. Las condiciones
+completas están en [`LICENSE`](LICENSE). Los componentes de `vendor/` (three.js y PeerJS) mantienen sus licencias MIT.
