@@ -4,10 +4,11 @@ import { Panel, THEME, TEXTURE_OPTIONS } from './panel.js';
 import { CrisisPanel, tabFor } from './crisis-panel.js';
 import { voice } from './voice.js';
 import { loadPackIndex, loadPack, buildSteps, acceptRemoteAnswer } from './pack.js';
-import { Session, loadCheckpoint, checkpointKey, download, ENGINE_VERSION } from './session.js';
+import { Session, loadCheckpoint, checkpointKey, download, newSessionId, ENGINE_VERSION } from './session.js';
 import { shortPrint } from './integrity.js';
 import { loadCopilotData, roundState, computeSnapshot, widgetSpecs } from './copilot-view.js';
 import { SyncHub, syncLabel } from './sync.js';
+import { acceptControl, resolveTarget, peerName } from './facilitator.js';
 import { slotPose, slotFor } from './layout.js';
 import { CommandBar, timelineFor } from './command-bar.js';
 import { SiteView } from './site-view.js';
@@ -40,6 +41,8 @@ const S = {
   copilot: { data: null, round: null, st: null, startedReal: 0, visible: false, lastSecond: -1 },
   crisis: null, depth: false,
   sync: null, remoteAnswers: {}, autoAdvance: null,
+  // Consola del facilitador: paso pendiente (orden recibida antes de COMENZAR) y fase a la que vuelve un aviso.
+  pendingStep: null, noticeReturn: null,
   // 'center': centro de mando alrededor del participante (por defecto, sin calibrar; sirve en remoto).
   // 'room': paneles anclados a la sala calibrada (pared del panel, puerta, mesa).
   layout: 'center', rig: null,
@@ -53,20 +56,8 @@ function show(screenId) {
   document.body.classList.toggle('running', screenId === 'screen-xr');
 }
 
-// Fecha + tres caracteres al azar (sin letras confusibles): dos equipos que ensayen el mismo día no
-// coinciden en la misma sala de sincronización. Los otros visores copian el código del primero.
-function todaySessionId() {
-  const d = new Date();
-  const p = (n) => String(n).padStart(2, '0');
-  const ABC = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
-  const rnd = new Uint32Array(3);
-  (globalThis.crypto || { getRandomValues: (a) => a.map(() => Math.floor(Math.random() * 2 ** 32)) }).getRandomValues(rnd);
-  const suffix = [...rnd].map((n) => ABC[n % ABC.length]).join('');
-  return `${d.getFullYear()}${p(d.getMonth() + 1)}${p(d.getDate())}-${suffix}`;
-}
-
 async function initSetup() {
-  $('session-id').value = todaySessionId();
+  $('session-id').value = newSessionId();
   const sel = $('pack-select');
   try {
     const idx = await loadPackIndex();
@@ -89,7 +80,7 @@ async function initSetup() {
     if (!role) { $('setup-error').textContent = 'Elige el rol de este visor.'; return; }
     S.role = role;
     S.roleInfo = S.pack.roles.find((r) => r.id === role);
-    S.sessionId = $('session-id').value.trim() || todaySessionId();
+    S.sessionId = $('session-id').value.trim() || newSessionId();
     S.participant = $('participant').value.trim() || null;
     renderBrief();
   });
@@ -171,6 +162,7 @@ function startSync() {
   const transport = new URLSearchParams(location.search).get('sync') === 'local' ? 'local' : 'peer';
   S.syncRoom = room;
   S.remoteAnswers = {};
+  S.pendingStep = null;
   S.sync = new SyncHub({ room, role: S.role, transport });
   const refresh = () => {
     $('sync-status').textContent = syncLabel(S.sync);
@@ -180,6 +172,7 @@ function startSync() {
   S.sync.addEventListener('peers', refresh);
   S.sync.addEventListener('join', (e) => {
     if (S.session && S.phase !== 'idle') S.session.log('sync_joined', { role: e.detail.role });
+    // La consola del facilitador también recibe el paso en el que está este visor (presencia) y sus decisiones.
     // Quien llega recibe el estado actual del Panel de Crisis.
     if (S.crisis && S.crisis.changed) S.sync.send('panel', { state: S.crisis.getShared(), action: 'estado' });
     if (S.session) for (const rec of Object.values(S.session.data.decisions)) {
@@ -206,13 +199,16 @@ function onSyncMessage(msg) {
   const { type, from, data } = msg;
   if (type === 'panel' && S.crisis) {
     if (S.crisis.applyShared(data.state, from, data.action)) {
-      if (S.session && (S.phase === 'run' || S.phase === 'menu')) S.session.log('panel_sync', { from, action: data.action });
+      if (S.session && inRun()) S.session.log('panel_sync', { from, action: data.action });
       updateCopilot(true);
       updateSite(true);
       if (S.phase === 'run' && ['analyze', 'close', 'convene'].includes(data.action)) {
         voice.say(`${from} ${({ analyze: 'ha analizado el impacto', close: 'ha cerrado el incidente', convene: 'ha convocado al comité' })[data.action]}.`);
       }
     }
+  } else if (type === 'control') {
+    const cmd = acceptControl(S.pack, msg, S.role);
+    if (cmd && $('opt-follow').checked) onControl(cmd);
   } else if (type === 'answer') {
     // Solo cuenta la respuesta del visor cuyo rol decide, con una letra válida de una decisión del pack.
     const ok = acceptRemoteAnswer(S.pack, { ...data, from });
@@ -251,6 +247,99 @@ function autoRegister(round, decision, answer, from) {
   const at = S.session.stepIndex;
   clearTimeout(S.autoAdvance);
   S.autoAdvance = setTimeout(() => { if (S.phase === 'run' && S.session.stepIndex === at) runStep(at + 1); }, 3500);
+}
+
+/* ─────────────────────────── Órdenes del facilitador ─────────────────────────── */
+
+// Fases en las que el ejercicio está en marcha (aunque el visor tenga abierto el menú, una pausa o un aviso).
+function inRun() {
+  if (S.phase === 'notice') return S.noticeReturn !== 'ready';
+  return ['run', 'menu', 'paused'].includes(S.phase);
+}
+
+// Visor en «Preparado» (o leyendo un aviso que llegó estando en «Preparado»).
+function waitingStart() {
+  return S.phase === 'ready' || (S.phase === 'notice' && S.noticeReturn === 'ready');
+}
+
+function logControl(cmd, extra = {}) {
+  if (S.session && S.session.data.started_at) {
+    S.session.log('facilitator_command', { action: cmd.action, ...(cmd.target ? { target: cmd.target } : {}), ...(cmd.text ? { text: cmd.text } : {}), ...extra });
+  }
+}
+
+function onControl(cmd) {
+  if (cmd.action === 'start') {
+    if (waitingStart()) countdown();
+    return;
+  }
+  if (cmd.action === 'goto') {
+    const steps = S.steps.length ? S.steps : buildSteps(S.pack);
+    const index = resolveTarget(steps, cmd.target);
+    if (index < 0) return;
+    if (inRun()) {
+      logControl(cmd, { from_step: S.session.stepIndex, to_step: index });
+      S.phase = 'run';
+      runStep(index);
+    } else {
+      // Aún no ha empezado (o está en la cuenta atrás): empezará directamente en ese punto.
+      S.pendingStep = index;
+      if (waitingStart()) countdown();
+    }
+    return;
+  }
+  if (cmd.action === 'pause') {
+    if (S.phase === 'run' || S.phase === 'menu') { logControl(cmd, { step: S.session.stepIndex }); showPause(); }
+    else if (S.phase === 'notice') { logControl(cmd, { step: S.session.stepIndex }); S.noticeReturn = 'paused'; }
+    return;
+  }
+  if (cmd.action === 'resume') {
+    if (S.phase === 'paused') { logControl(cmd, { step: S.session.stepIndex }); S.phase = 'run'; voice.say('Se reanuda el ejercicio.'); runStepResume(); }
+    else if (S.phase === 'notice' && S.noticeReturn === 'paused') { logControl(cmd); S.noticeReturn = 'run'; }
+    return;
+  }
+  if (cmd.action === 'message') {
+    if (S.phase === 'ready' || inRun()) { logControl(cmd, { to: cmd.to }); showNotice(cmd.text); }
+  }
+}
+
+function freeze() {
+  stopRing();
+  clearTimeout(S.autoAdvance);
+  voice.stop();
+}
+
+function showPause() {
+  freeze();
+  S.phase = 'paused';
+  stepPanel.set({
+    accent: THEME.amber, icon: '⏸', kicker: 'Facilitador', title: 'Ejercicio en pausa',
+    body: 'El facilitador ha detenido el ejercicio. Espera a que lo reanude.', buttons: [],
+  });
+  place(stepPanel, 'FRONT');
+  beep(440, 0.25);
+  voice.say('El facilitador ha pausado el ejercicio.');
+}
+
+function showNotice(text) {
+  if (S.phase !== 'notice') S.noticeReturn = S.phase === 'menu' ? 'run' : S.phase;
+  freeze();
+  S.phase = 'notice';
+  stepPanel.set({
+    accent: THEME.amber, icon: '📣', kicker: 'Mensaje del facilitador', title: 'Aviso del facilitador', body: text,
+    buttons: [{ id: 'notice:ack', label: 'Entendido', primary: true }],
+  });
+  place(stepPanel, 'FRONT');
+  beep(880, 0.1); beep(1180, 0.12, 0.12);
+  voice.say('Mensaje del facilitador. ' + text);
+}
+
+function closeNotice() {
+  const back = S.noticeReturn;
+  S.noticeReturn = null;
+  if (back === 'ready') enterReady();
+  else if (back === 'paused') showPause();
+  else { S.phase = 'run'; runStepResume(); }
 }
 
 function stepLabel(i) {
@@ -949,7 +1038,7 @@ function enterReady() {
     source: S.roleInfo.name + (S.copilot.data ? ` · catálogo ${shortPrint(S.copilot.data.fingerprint)}` : ''),
     body: resuming
       ? `Se reanudará en la ronda ${step.round ? step.round.number : '—'}. Espera la indicación del facilitador.`
-      : 'Espera la orden del facilitador. Todos los visores pulsan COMENZAR a la vez.',
+      : 'Espera la orden del facilitador: con su consola el ejercicio empieza solo; si no, pulsad COMENZAR a la vez.',
     note: isCenter() ? 'Los paneles se colocan a tu alrededor. Si quedan torcidos, mira al frente y pulsa Recentrar.' : null,
     noteColor: THEME.muted,
     buttons: [{ id: 'start', label: resuming ? 'REANUDAR' : 'COMENZAR', primary: true },
@@ -960,10 +1049,21 @@ function enterReady() {
 }
 
 function countdown() {
+  if (S.phase === 'countdown') return;
+  S.noticeReturn = null;
   S.phase = 'countdown';
   let n = 3;
   const tick = () => {
-    if (n === 0) { beep(1320, 0.25); S.session.start(); S.phase = 'run'; runStep(S.session.stepIndex); return; }
+    if (n === 0) {
+      beep(1320, 0.25); S.session.start(); S.phase = 'run';
+      const pending = S.pendingStep;
+      S.pendingStep = null;
+      if (pending != null && pending !== S.session.stepIndex) {
+        S.session.log('facilitator_command', { action: 'goto', from_step: S.session.stepIndex, to_step: pending });
+        runStep(pending);
+      } else runStep(S.session.stepIndex);
+      return;
+    }
     stepPanel.set({ accent: THEME.lime, kicker: 'Comienza en', title: String(n), buttons: [] });
     place(stepPanel, 'FRONT');
     beep(880, 0.12);
@@ -1137,7 +1237,7 @@ function hudSync() {
   if (!S.sync || S.sync.status === 'off') return { text: '', ok: false };
   if (S.sync.status === 'error') return { text: '🔗 sin conexión', ok: false };
   const roles = S.sync.roles();
-  return roles.length ? { text: `🔗 ${roles.join(' · ')}`, ok: true } : { text: '🔗 esperando al resto', ok: false };
+  return roles.length ? { text: `🔗 ${roles.map(peerName).join(' · ')}`, ok: true } : { text: '🔗 esperando al resto', ok: false };
 }
 
 function updateHud(force = false) {
@@ -1182,7 +1282,7 @@ function syncCopilotRound(round) {
 
 function updateCopilot(force = false) {
   const c = S.copilot;
-  const show = c.data && c.round && c.visible && (S.phase === 'run' || S.phase === 'menu');
+  const show = c.data && c.round && c.visible && inRun();
   if (!show) { for (const p of copilotPanels) p.mesh.visible = false; return; }
   const elapsedReal = Date.now() - c.startedReal;
   const second = Math.floor(elapsedReal / 1000);
@@ -1292,8 +1392,12 @@ function roundStartIndex(from, dir) {
 
 function handleAction(id) {
   if (!id || id === 'noop') return;
+  // Durante una pausa o un aviso del facilitador solo responden la voz y «Entendido».
+  if (S.phase === 'paused' && id !== 'voice') return;
+  if (S.phase === 'notice' && id !== 'voice' && id !== 'notice:ack') return;
   beep(1500, 0.04, 0, 0.08);
   const sess = S.session;
+  if (id === 'notice:ack') { closeNotice(); return; }
   if (id === 'calib:default') { setAnchor(CALIBRATION[S.calibIndex].id, defaultAnchor(CALIBRATION[S.calibIndex].id)); return; }
   if (id === 'calib:back') { S.calibIndex = Math.max(0, S.calibIndex - 1); showCalibrationStep(); return; }
   if (id === 'start') { countdown(); return; }
@@ -1362,7 +1466,14 @@ function handleAction(id) {
 // Vuelve a mostrar el paso actual sin volver a registrarlo como nuevo evento.
 function runStepResume() {
   const step = S.steps[S.session.stepIndex];
-  if (step.kind === 'decision') { S.ui = { step, open: false, selected: S.session.data.decisions[step.decision.id]?.answer || null }; renderDecision(); placeHud(); updateHud(true); }
+  if (step.kind === 'decision') {
+    const prev = S.session.data.decisions[step.decision.id];
+    const remote = S.remoteAnswers[step.decision.id];
+    S.ui = { step, open: false, selected: prev?.answer || null };
+    // El rol activo decidió mientras este visor tenía abierto el menú, una pausa o un aviso.
+    if (!prev && remote && step.decision.role !== S.role) { autoRegister(step.round, step.decision, remote.answer, remote.from); placeHud(); return; }
+    renderDecision(); placeHud(); updateHud(true);
+  }
   else runStep(S.session.stepIndex);
 }
 
@@ -1391,7 +1502,7 @@ function onSelect(c) {
   const { id, panel } = pick(origin, dir);
   if (panel) {
     if (id && id !== 'noop') haptic(c, 0.55, 35);
-    if (panel === S.crisis) crisisAction(id); else handleAction(id);
+    if (panel === S.crisis) { if (S.phase !== 'paused' && S.phase !== 'notice') crisisAction(id); } else handleAction(id);
     return;
   }
   if (S.phase === 'calibrate') {
@@ -1422,7 +1533,7 @@ function initMouse() {
     if (S.mode === 'desktop' && down && !down.moved) {
       raycaster.setFromCamera(ndc(e), camera);
       const { id, panel } = pick(raycaster.ray.origin.clone(), raycaster.ray.direction.clone());
-      if (panel && panel === S.crisis) crisisAction(id); else handleAction(id);
+      if (panel && panel === S.crisis) { if (S.phase !== 'paused' && S.phase !== 'notice') crisisAction(id); } else handleAction(id);
     }
     down = null;
   });

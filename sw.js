@@ -1,7 +1,7 @@
 // Service worker: precarga el motor y los packs para ejecutar el simulacro sin conexión.
 // Estrategia: red primero (para recibir cambios del pack) y caché como respaldo offline. Si la red tarda más de
 // 3 s (wifi de sala con portal cautivo o sin salida), se sirve la caché y la respuesta de red la actualiza al llegar.
-const CACHE = 'simulacro-mr-v13';
+const CACHE = 'simulacro-mr-v14';
 const NET_TIMEOUT_MS = 3000;
 const ASSETS = [
   './',
@@ -22,6 +22,7 @@ const ASSETS = [
   'js/csv.js',
   'js/site-model.js',
   'js/site-view.js',
+  'js/facilitator.js',
   'vendor/peerjs.min.js',
   'copiloto/',
   'copiloto/index.html',
@@ -43,6 +44,10 @@ const ASSETS = [
   'copiloto/docs/plan-gestion-incidentes.html',
   'copiloto/docs/estrategia-recuperacion.html',
   'copiloto/docs/directorio-equipo.html',
+  'facilitador/',
+  'facilitador/index.html',
+  'facilitador/facilitador.js',
+  'facilitador/facilitador.css',
   'debrief/',
   'debrief/index.html',
   'debrief/main.js',

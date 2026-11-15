@@ -8,6 +8,8 @@
 //
 // Sin conexión no pasa nada: cada visor sigue funcionando por su cuenta como antes.
 
+import { peerName } from './facilitator.js';
+
 const HELLO_EVERY = 4000;
 const PEER_TIMEOUT = 13000;
 
@@ -210,5 +212,5 @@ export function syncLabel(hub) {
   if (hub.status === 'error') return hub.detail || 'Error de sincronización';
   if (hub.status === 'connecting') return hub.detail || 'Conectando…';
   const roles = hub.roles();
-  return roles.length ? `Conectado con ${roles.join(', ')}` : 'En la sala, esperando a los demás visores';
+  return roles.length ? `Conectado con ${roles.map(peerName).join(', ')}` : 'En la sala, esperando a los demás visores';
 }

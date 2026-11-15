@@ -1,13 +1,14 @@
 # Simulacro de Continuidad MR · Meta Quest + Copiloto de Continuidad
 
 Kit para ejercicios de continuidad de negocio (ISO 22301), en la misma sala o cada participante desde su sitio,
-con tres piezas que funcionan
+con cuatro piezas que funcionan
 **sin servidor, sin base de datos y sin conexión** una vez cargadas:
 
 | Pieza | Dónde | Qué hace |
 |---|---|---|
 | **Simulador MR** (`/`) | Navegador de Meta Quest (WebXR, passthrough) | **Centro de mando** alrededor de cada participante: rondas, injects, decisiones A–D por rol, **Panel de Crisis virtual** (el copiloto dentro de las gafas), barra de mando con línea de tiempo, voz narradora, audio 3D, registro de evidencias JSON/CSV |
 | **Copiloto de Continuidad web** (`/copiloto/`) | Opcional: portátil o TV | La misma lógica en versión web completa (con historial, ficha imprimible y catálogo desde Google Sheets). Modo ejercicio con reloj simulado |
+| **Consola del facilitador** (`/facilitador/`) | Portátil o tableta del facilitador | Entra en la sala de los visores y dirige el ejercicio: ve quién está conectado y por dónde va, comienza a la vez en todos, lanza rondas e injects, pausa y reanuda, envía avisos a todos o a un rol y sigue las decisiones en directo (con la clave de respuestas opcional) |
 | **Debrief** (`/debrief/`) | PC del facilitador | Consolida los registros de R1/R2/R3: informe con cronología de hechos y decisiones (con la clave de respuestas), gráfico por competencias y recomendaciones; envío por correo, PDF e histórico local de simulacros; exporta JSON/CSV |
 
 Todo el contenido es **ficticio y anónimo** (organización «la Compañía», buzones de rol en `compania.example`).
@@ -20,7 +21,7 @@ Después:
 - Gafas: `https://<usuario>.github.io/<repo>/`
 - TV: `https://<usuario>.github.io/<repo>/copiloto/` (añade `?ejercicio` para abrir la barra de ejercicio;
   `?vista=lectura` muestra solo la pestaña Impacto, sin controles).
-- Facilitador: `https://<usuario>.github.io/<repo>/debrief/`
+- Facilitador: `https://<usuario>.github.io/<repo>/facilitador/` (consola) y `https://<usuario>.github.io/<repo>/debrief/`
 
 Tras la primera visita todo queda en caché (service worker) y funciona sin red; si la red de la sala tarda más de
 3 s en responder, se sirve lo guardado y se actualiza en segundo plano. En local basta con
@@ -113,8 +114,10 @@ código de sesión** forman una sala:
   activo corrige su decisión, la corrección llega también. Sin conexión con ese visor, se registra a mano la letra
   que anuncie (en remoto, por teléfono); si después llega una letra distinta, se conserva la registrada a mano y el
   debrief marca la discrepancia.
-- **Presencia:** la barra de mando muestra quién está conectado (🔗 R1 · R3) y el menú ofrece *Ir a donde está R2* si alguien
+- **Presencia:** la barra de mando muestra quién está conectado (🔗 R1 · R3 · Facilitador) y el menú ofrece *Ir a donde está R2* si alguien
   va por otro paso.
+- **Órdenes del facilitador:** si la consola está en la sala, los visores obedecen sus órdenes (ver
+  [Consola del facilitador](#consola-del-facilitador)). Cada visor puede desactivarlo en el briefing.
 - **Sin red no pasa nada:** cada visor sigue funcionando solo y reintenta la conexión cada pocos segundos.
 
 Cómo funciona: WebRTC con [PeerJS](https://peerjs.com) (incluido en `vendor/`). El primer visor ocupa el identificador
@@ -127,14 +130,42 @@ videollamada.
 
 Para probar sin gafas: abre tres pestañas con `?sync=local` (sincroniza pestañas del mismo navegador).
 
+## Consola del facilitador
+
+`/facilitador/` es la pieza para dirigir el ejercicio, imprescindible en remoto. El facilitador elige el pack, abre la
+sala con un código de sesión (lo dicta a los participantes, o escribe el que ya hayan generado los visores) y entra en
+ella con el rol especial `FAC`, por el mismo canal que los visores.
+
+- **Visores:** cada rol del pack con su estado de conexión y el paso en el que está («ronda 2 · D3»).
+- **Mando:** *Comenzar* arranca la cuenta atrás a la vez en todos los visores que esperan en «Preparado»;
+  *Pausar* congela el ejercicio en todos (solo responde la voz) y *Reanudar* lo devuelve al paso de cada uno;
+  *Finalizar* (pide una segunda pulsación) lleva a todos al final.
+- **Guion:** todas las rondas con sus injects y decisiones. *Lanzar ronda* o *Lanzar* (un inject) lleva a todos los
+  visores a ese punto; si un visor aún no había empezado, arranca directamente ahí. Las decisiones muestran la letra
+  del rol activo en cuanto la confirma y, si se activa, la respuesta de referencia del `debrief.json` (en verde si
+  coincide, en ámbar si no). La clave solo se ve en la consola, nunca en las gafas.
+- **Avisos:** texto libre (hasta 400 caracteres) para todos o para un rol. Aparece en las gafas con *Entendido* y lo lee
+  la voz narradora; sirve para injects improvisados, aclaraciones o límites de tiempo.
+- **Actividad:** quién entra, qué decide cada rol, las actuaciones relevantes en el Panel de Crisis y las órdenes
+  enviadas.
+
+La consola no guarda evidencias propias: cada visor anota en su registro las órdenes que recibe
+(`facilitator_command`, con origen y destino del salto) y el debrief las muestra en la cronología. Las órdenes solo se
+aceptan del rol `FAC`, para el mismo ejercicio y con destinos que existen en el pack (`js/facilitator.js`). Como el
+resto de la sincronización, la sala se protege con el código de sesión: quien lo conozca puede entrar. Para probarla
+sin gafas: `/?sync=local` en una pestaña (modo escritorio) y `/facilitador/?sync=local` en otra.
+
 ## Cómo encaja en un simulacro
 
-1. **Visores (Quest):** mismo código de sesión, un rol por visor, mirar al frente y COMENZAR. En la misma sala o cada
-   uno desde su sitio (con teléfono o videollamada para hablar). El Panel de Crisis virtual sustituye a la TV.
-2. **Opcional (facilitador):** el copiloto web (`/copiloto/?ejercicio`, *Aplicar ronda*) en un portátil o TV sirve
+1. **Facilitador:** abre `/facilitador/`, elige el pack y dicta el código de sesión.
+2. **Visores (Quest):** ese código de sesión, un rol por visor, mirar al frente y esperar en «Preparado». En la misma
+   sala o cada uno desde su sitio (con teléfono o videollamada para hablar). El Panel de Crisis virtual sustituye a
+   la TV. El facilitador pulsa *Comenzar* y dirige rondas, pausas y avisos desde la consola. Sin consola, todos pulsan
+   COMENZAR a la vez y avanzan por su cuenta, como antes.
+3. **Opcional:** el copiloto web (`/copiloto/?ejercicio`, *Aplicar ronda*) en un portátil o TV sirve
    para seguir el ejercicio desde fuera o proyectarlo; usa el mismo motor y el mismo estado de ronda, pero no se
    sincroniza en directo con las gafas.
-3. **Cierre:** cada visor exporta su JSON; el facilitador los arrastra a `/debrief/`.
+4. **Cierre:** cada visor exporta su JSON; el facilitador los arrastra a `/debrief/`.
 
 ## Copiloto de Continuidad
 
@@ -204,8 +235,8 @@ tras el primer análisis sin recargar; el impacto «Crítico» se reconoce con o
 
 La hoja de respuestas vive en `packs/<pack>/debrief.json` (`preferred_response`, `capability`,
 `severity_if_missed`, `rationale` y `why_not`, que explica por qué no es adecuada cada opción distinta de la de
-referencia). Las de TRAMONTANA y GREGAL son **propuestas** (`"status": "propuesta"`) pendientes de
-validar; el debrief lo advierte. Nunca se muestra a los participantes durante el ejercicio.
+referencia). Las de todos los packs son **propuestas** (`"status": "propuesta"`) pendientes de validar;
+el debrief y la consola del facilitador lo advierten. Nunca se muestra a los participantes durante el ejercicio.
 
 ## Formato de pack (`crisis.exercise/1.0`)
 
@@ -280,6 +311,7 @@ js/command-bar.js               Barra de mando y línea de tiempo de la ronda
 js/copilot-view.js              Tarjetas de resumen por rol
 js/voice.js                     Voz narradora (SpeechSynthesis)
 js/sync.js                      Sincronización entre visores (PeerJS/WebRTC o pestañas locales)
+js/facilitator.js               Protocolo de órdenes de la consola del facilitador (consola, visores y pruebas)
 js/shared-state.js              Versión y fusión del estado compartido del Panel de Crisis
 js/integrity.js                 SHA-256 y cadena de integridad del registro (visor y debrief)
 js/csv.js                       Celdas CSV seguras (visor y debrief)
@@ -292,6 +324,7 @@ copiloto/                       Copiloto de Continuidad para la TV
   js/data.js, ejercicio.js      Catálogo (JSON/Sheets) y barra de ejercicio
   data/, data/plantilla/        Catálogo ficticio y plantillas CSV
   docs/                         Documentos de ejemplo (plan, estrategias, directorio)
+facilitador/                    Consola del facilitador
 debrief/                        Consolidador, informe (informe.js) e histórico local (historico.js)
 packs/tramontana/               Pack de ejemplo (9 rondas): ciberataque, sede central con CPD propio
 packs/gregal/                   Pack corto (3 rondas): temporal e inundación, organización multisede con nube
@@ -309,7 +342,7 @@ tests/                          Pruebas del motor, del consolidador, de los pack
 ## Comprobaciones
 
 ```
-npm test                              # motor, consolidador, packs, centro de mando y sincronización
+npm test                              # motor, consolidador, packs, centro de mando, sincronización y consola
 node tools/comprobar-anonimato.mjs    # sin referencias a la organización real ni correos reales
 ```
 
@@ -319,9 +352,10 @@ La integración continua (`.github/workflows/comprobaciones.yml`) ejecuta ambas 
 
 - Lecturas del Panel (R2) con teclado en MR y consultas documentales cronometradas.
 - Multimedia en injects (audio de llamadas, recortes de prensa ficticios) y consecuencias condicionales.
-- Validar con el equipo la hoja de respuestas de TRAMONTANA (`debrief.json`, hoy en estado «propuesta»).
+- Validar las hojas de respuestas de todos los packs (`debrief.json`, hoy en estado «propuesta»).
+- Repartir las letras de referencia en los packs cortos: hoy la respuesta esperada es siempre la B.
 - Sincronización opcional TV ↔ gafas por red local.
-- Consola del facilitador para lanzar rondas e injects a todos a la vez (ejercicios en remoto).
+- Consola del facilitador: guardar su propio registro de órdenes y ver el estado del Panel de Crisis de la sala.
 - Texto vectorial (MSDF) en los paneles para ganar nitidez y no redibujar texturas completas.
 
 ## Licencia
