@@ -50,11 +50,11 @@
           "answers": [
             {
               "id": "A",
-              "text": "Esperar a que el proveedor lo resuelva: el incidente es suyo."
+              "text": "Activar el plan de respuesta a incidentes TIC y el comité de crisis, empezar a clasificar el incidente con los criterios de DORA y exigir al proveedor información a hora fija."
             },
             {
               "id": "B",
-              "text": "Activar el plan de respuesta a incidentes TIC y el comité de crisis, empezar a clasificar el incidente con los criterios de DORA y exigir al proveedor información a hora fija."
+              "text": "Esperar a que el proveedor lo resuelva: el incidente es suyo."
             },
             {
               "id": "C",
@@ -73,19 +73,19 @@
           "answers": [
             {
               "id": "A",
-              "text": "Nada: es un incidente del proveedor."
-            },
-            {
-              "id": "B",
-              "text": "E7 (proveedor TIC crítico) en categoría 2 y E3 en categoría 1: pagos con tarjeta degradados."
-            },
-            {
-              "id": "C",
               "text": "E6 en categoría 3: seguro que es un ataque."
             },
             {
-              "id": "D",
+              "id": "B",
               "text": "E1: hay que cerrar las oficinas."
+            },
+            {
+              "id": "C",
+              "text": "Nada: es un incidente del proveedor."
+            },
+            {
+              "id": "D",
+              "text": "E7 (proveedor TIC crítico) en categoría 2 y E3 en categoría 1: pagos con tarjeta degradados."
             }
           ]
         }
@@ -146,11 +146,11 @@
           "answers": [
             {
               "id": "A",
-              "text": "Cuando esté resuelto y se tengan todos los datos."
+              "text": "Notificación inicial al Banco de España en un máximo de 4 horas desde la clasificación (y nunca más de 24 horas desde que se conoció), aunque falten datos; informe intermedio en 72 horas y final en un mes."
             },
             {
               "id": "B",
-              "text": "Notificación inicial al Banco de España en un máximo de 4 horas desde la clasificación (y nunca más de 24 horas desde que se conoció), aunque falten datos; informe intermedio en 72 horas y final en un mes."
+              "text": "Lo notifica el proveedor: el incidente es suyo."
             },
             {
               "id": "C",
@@ -158,7 +158,7 @@
             },
             {
               "id": "D",
-              "text": "Lo notifica el proveedor: el incidente es suyo."
+              "text": "Cuando esté resuelto y se tengan todos los datos."
             }
           ]
         },
@@ -247,11 +247,11 @@
             },
             {
               "id": "B",
-              "text": "Vigilancia reforzada del fraude, bloqueo preventivo y reemisión prioritaria de esas tarjetas, aviso personal a sus titulares y devolución de los cargos fraudulentos."
+              "text": "Bloquear las 900.000 tarjetas del banco."
             },
             {
               "id": "C",
-              "text": "Bloquear las 900.000 tarjetas del banco."
+              "text": "Vigilancia reforzada del fraude, bloqueo preventivo y reemisión prioritaria de esas tarjetas, aviso personal a sus titulares y devolución de los cargos fraudulentos."
             },
             {
               "id": "D",
@@ -266,7 +266,7 @@
           "answers": [
             {
               "id": "A",
-              "text": "Nada, para no alarmar."
+              "text": "Un comunicado culpando al proveedor."
             },
             {
               "id": "B",
@@ -278,7 +278,7 @@
             },
             {
               "id": "D",
-              "text": "Un comunicado culpando al proveedor."
+              "text": "Nada, para no alarmar."
             }
           ]
         }

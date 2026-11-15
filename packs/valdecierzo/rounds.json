@@ -50,19 +50,19 @@
           "answers": [
             {
               "id": "A",
-              "text": "Apagarlo todo y llamar a un técnico la semana que viene, cuando acaben las fiestas."
-            },
-            {
-              "id": "B",
               "text": "Desconectar ya los equipos de la red sin borrar nada, activar el plan con el servicio provincial y conservar las evidencias."
             },
             {
-              "id": "C",
+              "id": "B",
               "text": "Pagar el rescate para tenerlo todo listo antes de la verbena."
             },
             {
-              "id": "D",
+              "id": "C",
               "text": "Seguir trabajando con los equipos que todavía funcionan."
+            },
+            {
+              "id": "D",
+              "text": "Apagarlo todo y llamar a un técnico la semana que viene, cuando acaben las fiestas."
             }
           ]
         },
@@ -73,15 +73,15 @@
           "answers": [
             {
               "id": "A",
-              "text": "Nada: es un problema informático, no una emergencia."
+              "text": "Solo E3 en categoría 1: se ha estropeado el ordenador."
             },
             {
               "id": "B",
-              "text": "E6 (ciberataque) y E3 (sin sistemas), los dos en categoría 2: ataque confirmado y sin servidor durante la jornada."
+              "text": "Nada: es un problema informático, no una emergencia."
             },
             {
               "id": "C",
-              "text": "Solo E3 en categoría 1: se ha estropeado el ordenador."
+              "text": "E6 (ciberataque) y E3 (sin sistemas), los dos en categoría 2: ataque confirmado y sin servidor durante la jornada."
             },
             {
               "id": "D",
@@ -146,11 +146,11 @@
           "answers": [
             {
               "id": "A",
-              "text": "Volver a conectar el telecontrol a la red para recuperarlo cuanto antes."
+              "text": "Confiar en que el depósito aguante hasta el lunes."
             },
             {
               "id": "B",
-              "text": "Operación manual con turnos de vigilancia (fontanero y Protección Civil), telecontrol aislado hasta revisarlo y la empresa del agua de la diputación avisada como respaldo."
+              "text": "Volver a conectar el telecontrol a la red para recuperarlo cuanto antes."
             },
             {
               "id": "C",
@@ -158,7 +158,7 @@
             },
             {
               "id": "D",
-              "text": "Confiar en que el depósito aguante hasta el lunes."
+              "text": "Operación manual con turnos de vigilancia (fontanero y Protección Civil), telecontrol aislado hasta revisarlo y la empresa del agua de la diputación avisada como respaldo."
             }
           ]
         },
@@ -169,19 +169,19 @@
           "answers": [
             {
               "id": "A",
-              "text": "Esperar a recuperar el servidor para tener la lista."
-            },
-            {
-              "id": "B",
               "text": "Rehacer la lista con lo que hay en papel, el consultorio y lo que sabe la trabajadora social, y que Protección Civil y voluntarios llamen o visiten hoy a cada persona."
             },
             {
-              "id": "C",
+              "id": "B",
               "text": "Pedir en redes sociales que cada vecino se ocupe de sus vecinos."
             },
             {
-              "id": "D",
+              "id": "C",
               "text": "Pedir la lista a la empresa de teleasistencia y esperar su respuesta."
+            },
+            {
+              "id": "D",
+              "text": "Esperar a recuperar el servidor para tener la lista."
             }
           ]
         }
@@ -243,7 +243,7 @@
           "answers": [
             {
               "id": "A",
-              "text": "Suspender las fiestas."
+              "text": "Celebrarla sin bando ni cortes de calle: no da tiempo."
             },
             {
               "id": "B",
@@ -251,7 +251,7 @@
             },
             {
               "id": "C",
-              "text": "Celebrarla sin bando ni cortes de calle: no da tiempo."
+              "text": "Suspender las fiestas."
             },
             {
               "id": "D",
@@ -270,11 +270,11 @@
             },
             {
               "id": "B",
-              "text": "Reconocer el ciberataque, explicar qué datos pueden estar afectados y qué deben vigilar (llamadas o mensajes que se hagan pasar por el ayuntamiento), que se ha avisado a las autoridades y cuándo habrá más información."
+              "text": "Echar la culpa a la empresa informática."
             },
             {
               "id": "C",
-              "text": "Echar la culpa a la empresa informática."
+              "text": "Reconocer el ciberataque, explicar qué datos pueden estar afectados y qué deben vigilar (llamadas o mensajes que se hagan pasar por el ayuntamiento), que se ha avisado a las autoridades y cuándo habrá más información."
             },
             {
               "id": "D",

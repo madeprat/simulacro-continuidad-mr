@@ -73,19 +73,19 @@
           "answers": [
             {
               "id": "A",
-              "text": "Nada: es una avería de mantenimiento."
-            },
-            {
-              "id": "B",
-              "text": "E3 (sin sistemas clínicos) en categoría 2 y E1 en categoría 1: el CPD no se puede usar mientras dure la avería."
-            },
-            {
-              "id": "C",
               "text": "E6 en categoría 3: podría ser un ataque."
             },
             {
-              "id": "D",
+              "id": "B",
               "text": "Solo E7: es culpa del proveedor de climatización."
+            },
+            {
+              "id": "C",
+              "text": "E3 (sin sistemas clínicos) en categoría 2 y E1 en categoría 1: el CPD no se puede usar mientras dure la avería."
+            },
+            {
+              "id": "D",
+              "text": "Nada: es una avería de mantenimiento."
             }
           ]
         }
@@ -154,11 +154,11 @@
             },
             {
               "id": "C",
-              "text": "Encender ya los servidores principales con ventiladores, aunque siga el calor."
+              "text": "Pedir al proveedor que restaure sin validaciones para ir más rápido."
             },
             {
               "id": "D",
-              "text": "Pedir al proveedor que restaure sin validaciones para ir más rápido."
+              "text": "Encender ya los servidores principales con ventiladores, aunque siga el calor."
             }
           ]
         },
@@ -173,11 +173,11 @@
             },
             {
               "id": "B",
-              "text": "Un circuito específico: el laboratorio llama a la planta por cada resultado crítico y se registra quién lo recibe, hasta que vuelva el sistema."
+              "text": "Que el personal de planta vaya a buscarlos cuando pueda."
             },
             {
               "id": "C",
-              "text": "Que el personal de planta vaya a buscarlos cuando pueda."
+              "text": "Un circuito específico: el laboratorio llama a la planta por cada resultado crítico y se registra quién lo recibe, hasta que vuelva el sistema."
             },
             {
               "id": "D",
@@ -242,19 +242,19 @@
           "answers": [
             {
               "id": "A",
-              "text": "Nada: ha sido una avería, no un ciberataque."
-            },
-            {
-              "id": "B",
               "text": "Notificar el incidente al CCN-CERT por LUCÍA, porque afectó gravemente a la disponibilidad de un servicio público, y con el DPD notificar a la AEPD dentro de las 72 h la brecha de disponibilidad de datos de salud, documentando el resultado crítico retrasado."
             },
             {
+              "id": "B",
+              "text": "Nada: ha sido una avería, no un ciberataque."
+            },
+            {
               "id": "C",
-              "text": "Solo a la AEPD."
+              "text": "Esperar al informe del fabricante de la climatización."
             },
             {
               "id": "D",
-              "text": "Esperar al informe del fabricante de la climatización."
+              "text": "Solo a la AEPD."
             }
           ]
         },
@@ -269,15 +269,15 @@
             },
             {
               "id": "B",
-              "text": "Aviso inmediato en web, redes, pantallas y centros de salud: el hospital nunca pide datos por SMS y no se ha perdido ningún historial. Además, se denuncia como intento de fraude."
-            },
-            {
-              "id": "C",
               "text": "Enviar otro SMS masivo pidiendo a los pacientes que verifiquen sus datos."
             },
             {
-              "id": "D",
+              "id": "C",
               "text": "Desmentirlo solo si pregunta algún medio."
+            },
+            {
+              "id": "D",
+              "text": "Aviso inmediato en web, redes, pantallas y centros de salud: el hospital nunca pide datos por SMS y no se ha perdido ningún historial. Además, se denuncia como intento de fraude."
             }
           ]
         }

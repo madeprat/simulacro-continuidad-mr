@@ -176,3 +176,16 @@ test('hoja de respuestas: cada opción incorrecta explica por qué no', () => {
     }
   }
 });
+
+test('la respuesta de referencia no cae siempre en la misma letra', () => {
+  const index = JSON.parse(fs.readFileSync(new URL('../packs/index.json', import.meta.url)));
+  for (const p of index.packs) {
+    const name = p.path.replace(/^packs\//, '').replace(/\/$/, '');
+    const pack = readPack(name);
+    const letters = Object.values(pack.debrief.assessments || {}).map((a) => a.preferred_response).filter(Boolean);
+    if (letters.length < 4) continue;
+    const counts = Object.values(letters.reduce((c, l) => ({ ...c, [l]: (c[l] || 0) + 1 }), {}));
+    assert.ok(counts.length >= 3, `${name}: solo usa ${counts.length} letra(s) de referencia`);
+    assert.ok(Math.max(...counts) / letters.length <= 0.5, `${name}: una letra concentra más de la mitad de las respuestas`);
+  }
+});

@@ -210,8 +210,13 @@ async function processLogs(entries, saved = null) {
   for (const e of errors) msgs.append(el('p', e, 'error'));
   for (const w of warnings) msgs.append(el('p', w, 'warn'));
   if (errors.length) { $('result').hidden = true; return; }
-  const pack = await loadPack(logs[0].data.exercise?.id);
+  let pack = await loadPack(logs[0].data.exercise?.id);
   if (!pack) msgs.append(el('p', 'No se encontró el pack del ejercicio: se consolida sin textos ni hoja de respuestas.', 'warn'));
+  else if (pack.manifest.version !== logs[0].data.exercise?.version) {
+    // Otra versión del pack puede tener las respuestas en otro orden: evaluar con ella daría un resultado falso.
+    msgs.append(el('p', `Los registros son de la versión ${logs[0].data.exercise?.version} del ejercicio y el pack disponible es la ${pack.manifest.version}: se consolida sin textos ni hoja de respuestas para no evaluar con una clave distinta.`, 'warn'));
+    pack = null;
+  }
   const result = consolidate(logs, pack);
   result.sources = logs.map((l) => ({ file: l.name, role: l.data.local_role, sha256: l.hash, chain: l.chain.status, chain_head: l.chain.head, chain_detail: l.chain.detail }));
   result.generated_at = new Date().toISOString();

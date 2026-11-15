@@ -50,19 +50,19 @@
           "answers": [
             {
               "id": "A",
-              "text": "Esperar a que el centro de emergencias diga algo: los avisos a la población no son competencia nuestra."
-            },
-            {
-              "id": "B",
-              "text": "Activar el plan de emergencia de la empresa, informar por escrito al centro de coordinación de emergencias con los datos de caudal y el riesgo para la potabilizadora, proponer avisos a la población y anotarlo todo con hora en el libro de decisiones."
-            },
-            {
-              "id": "C",
               "text": "Llamar informalmente a algún conocido de emergencias y esperar."
             },
             {
-              "id": "D",
+              "id": "B",
+              "text": "Esperar a que el centro de emergencias diga algo: los avisos a la población no son competencia nuestra."
+            },
+            {
+              "id": "C",
               "text": "Parar la potabilizadora por precaución sin avisar a nadie."
+            },
+            {
+              "id": "D",
+              "text": "Activar el plan de emergencia de la empresa, informar por escrito al centro de coordinación de emergencias con los datos de caudal y el riesgo para la potabilizadora, proponer avisos a la población y anotarlo todo con hora en el libro de decisiones."
             }
           ]
         },
@@ -73,7 +73,7 @@
           "answers": [
             {
               "id": "A",
-              "text": "Nada: aquí no llueve."
+              "text": "E5 en categoría 3: el agua ya está contaminada."
             },
             {
               "id": "B",
@@ -81,7 +81,7 @@
             },
             {
               "id": "C",
-              "text": "E5 en categoría 3: el agua ya está contaminada."
+              "text": "Nada: aquí no llueve."
             },
             {
               "id": "D",
@@ -147,19 +147,19 @@
           "answers": [
             {
               "id": "A",
-              "text": "Nada sobre el agua: la prioridad es la inundación."
-            },
-            {
-              "id": "B",
-              "text": "Un mensaje corto y concreto: no consumir agua del grifo en los 9 municipios (nombrados) hasta nuevo aviso, junto a las instrucciones de protección (subir a pisos altos, no usar el coche) y el canal donde informarse."
-            },
-            {
-              "id": "C",
               "text": "«Precaución con el agua», sin más detalle, para no alarmar."
             },
             {
-              "id": "D",
+              "id": "B",
+              "text": "Nada sobre el agua: la prioridad es la inundación."
+            },
+            {
+              "id": "C",
               "text": "Esperar a los análisis de mañana para estar seguros."
+            },
+            {
+              "id": "D",
+              "text": "Un mensaje corto y concreto: no consumir agua del grifo en los 9 municipios (nombrados) hasta nuevo aviso, junto a las instrucciones de protección (subir a pisos altos, no usar el coche) y el canal donde informarse."
             }
           ]
         },
@@ -170,11 +170,11 @@
           "answers": [
             {
               "id": "A",
-              "text": "Esperar a que vuelva a funcionar la potabilizadora."
+              "text": "Cisternas y agua embotellada a hospitales, residencias y centros de diálisis con una lista priorizada, y sectorizar la red para aislar la zona contaminada."
             },
             {
               "id": "B",
-              "text": "Cisternas y agua embotellada a hospitales, residencias y centros de diálisis con una lista priorizada, y sectorizar la red para aislar la zona contaminada."
+              "text": "Bombear agua sin tratar para mantener la presión."
             },
             {
               "id": "C",
@@ -182,7 +182,7 @@
             },
             {
               "id": "D",
-              "text": "Bombear agua sin tratar para mantener la presión."
+              "text": "Esperar a que vuelva a funcionar la potabilizadora."
             }
           ]
         }
@@ -245,15 +245,15 @@
           "answers": [
             {
               "id": "A",
-              "text": "Un resumen que redactamos ahora con lo que recordamos."
+              "text": "Nada hasta que lo revise un abogado durante meses."
             },
             {
               "id": "B",
-              "text": "El libro de decisiones tal como se llevó durante la emergencia (horas, decisiones, información disponible, avisos y acuses), sin retocar, junto con la telemetría y las comunicaciones."
+              "text": "Un resumen que redactamos ahora con lo que recordamos."
             },
             {
               "id": "C",
-              "text": "Nada hasta que lo revise un abogado durante meses."
+              "text": "El libro de decisiones tal como se llevó durante la emergencia (horas, decisiones, información disponible, avisos y acuses), sin retocar, junto con la telemetría y las comunicaciones."
             },
             {
               "id": "D",
@@ -268,19 +268,19 @@
           "answers": [
             {
               "id": "A",
-              "text": "Que no se preocupen: la responsabilidad es de las administraciones."
-            },
-            {
-              "id": "B",
               "text": "Que NIS2 hace responsables a los órganos de dirección de aprobar y supervisar las medidas de gestión de riesgos y de formarse en ellas; que se revise si el plan estaba aprobado y ejercitado, y que el informe final al CSIRT y las lecciones aprendidas pasen por el consejo."
             },
             {
+              "id": "B",
+              "text": "Que no se preocupen: la responsabilidad es de las administraciones."
+            },
+            {
               "id": "C",
-              "text": "Que lo pregunten a la aseguradora."
+              "text": "Que dimitan para evitar problemas."
             },
             {
               "id": "D",
-              "text": "Que dimitan para evitar problemas."
+              "text": "Que lo pregunten a la aseguradora."
             }
           ]
         }
