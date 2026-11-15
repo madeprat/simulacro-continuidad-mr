@@ -54,7 +54,7 @@
             },
             {
               "id": "B",
-              "text": "Evacuación general ya, según el plan de autoprotección: llamar al 112 y activar el equipo de emergencia."
+              "text": "Llamar a las familias para que vengan a recoger a sus hijos."
             },
             {
               "id": "C",
@@ -62,7 +62,7 @@
             },
             {
               "id": "D",
-              "text": "Llamar a las familias para que vengan a recoger a sus hijos."
+              "text": "Evacuación general ya, según el plan de autoprotección: llamar al 112 y activar el equipo de emergencia."
             }
           ]
         },
@@ -73,7 +73,7 @@
           "answers": [
             {
               "id": "A",
-              "text": "Entrar tú a buscarlos al pabellón."
+              "text": "Pedir a los alumnos mayores que los busquen por el patio y los edificios."
             },
             {
               "id": "B",
@@ -81,11 +81,11 @@
             },
             {
               "id": "C",
-              "text": "Esperar: seguro que están con otro grupo."
+              "text": "Entrar tú a buscarlos al pabellón."
             },
             {
               "id": "D",
-              "text": "Pedir a los alumnos mayores que los busquen por el patio y los edificios."
+              "text": "Esperar: seguro que están con otro grupo."
             }
           ]
         }
@@ -146,19 +146,19 @@
           "answers": [
             {
               "id": "A",
-              "text": "Nada hasta tener todos los datos: mejor no equivocarse."
-            },
-            {
-              "id": "B",
               "text": "Ya mismo, por la app y por SMS, a todas las familias: todo el alumnado está bien y localizado, cómo y dónde recogerlos de forma ordenada y a qué hora llega la siguiente actualización. El mismo texto en la web y en redes."
             },
             {
+              "id": "B",
+              "text": "Nada hasta tener todos los datos: mejor no equivocarse."
+            },
+            {
               "id": "C",
-              "text": "Contestar uno a uno en redes a quien comparte el vídeo."
+              "text": "Pedir a los alumnos que avisen ellos a sus familias con el móvil."
             },
             {
               "id": "D",
-              "text": "Pedir a los alumnos que avisen ellos a sus familias con el móvil."
+              "text": "Contestar uno a uno en redes a quien comparte el vídeo."
             }
           ]
         },
@@ -169,11 +169,11 @@
           "answers": [
             {
               "id": "A",
-              "text": "Nada: eso es cosa de la policía."
+              "text": "Entregar a cada alumno a quien lo pida en la puerta, sin listas, para despejar rápido."
             },
             {
               "id": "B",
-              "text": "Pedir a la Policía Local que corte la calle y organizar la recogida por la puerta del polideportivo, con profesorado entregando a cada alumno según las listas."
+              "text": "Nada: eso es cosa de la policía."
             },
             {
               "id": "C",
@@ -181,7 +181,7 @@
             },
             {
               "id": "D",
-              "text": "Entregar a cada alumno a quien lo pida en la puerta, sin listas, para despejar rápido."
+              "text": "Pedir a la Policía Local que corte la calle y organizar la recogida por la puerta del polideportivo, con profesorado entregando a cada alumno según las listas."
             }
           ]
         }
@@ -244,19 +244,19 @@
           "answers": [
             {
               "id": "A",
-              "text": "Cerrar el colegio hasta que el pabellón esté reparado."
+              "text": "Pasar a todo el colegio a clases en línea durante un mes."
             },
             {
               "id": "B",
-              "text": "Reabrir mañana por fases: Primaria en su edificio; ESO y Bachillerato en el polideportivo y en aulas libres, con horario reducido; 2.º de Bachillerato con prioridad; clases en línea solo donde no haya espacio. Revisar el plan en tres días."
+              "text": "Cerrar el colegio hasta que el pabellón esté reparado."
             },
             {
               "id": "C",
-              "text": "Volver mañana al pabellón principal: el humo no es peligroso."
+              "text": "Reabrir mañana por fases: Primaria en su edificio; ESO y Bachillerato en el polideportivo y en aulas libres, con horario reducido; 2.º de Bachillerato con prioridad; clases en línea solo donde no haya espacio. Revisar el plan en tres días."
             },
             {
               "id": "D",
-              "text": "Pasar a todo el colegio a clases en línea durante un mes."
+              "text": "Volver mañana al pabellón principal: el humo no es peligroso."
             }
           ]
         },
@@ -267,7 +267,7 @@
           "answers": [
             {
               "id": "A",
-              "text": "Un comunicado general: «Estamos trabajando en ello»."
+              "text": "Nada hasta que llegue el informe definitivo de la aseguradora."
             },
             {
               "id": "B",
@@ -275,11 +275,11 @@
             },
             {
               "id": "C",
-              "text": "Nada hasta que llegue el informe definitivo de la aseguradora."
+              "text": "Solo una publicación en redes sociales."
             },
             {
               "id": "D",
-              "text": "Solo una publicación en redes sociales."
+              "text": "Un comunicado general: «Estamos trabajando en ello»."
             }
           ]
         }

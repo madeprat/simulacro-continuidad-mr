@@ -353,7 +353,6 @@ La integración continua (`.github/workflows/comprobaciones.yml`) ejecuta ambas 
 - Lecturas del Panel (R2) con teclado en MR y consultas documentales cronometradas.
 - Multimedia en injects (audio de llamadas, recortes de prensa ficticios) y consecuencias condicionales.
 - Validar las hojas de respuestas de todos los packs (`debrief.json`, hoy en estado «propuesta»).
-- Repartir las letras de referencia en los packs cortos: hoy la respuesta esperada es siempre la B.
 - Sincronización opcional TV ↔ gafas por red local.
 - Consola del facilitador: guardar su propio registro de órdenes y ver el estado del Panel de Crisis de la sala.
 - Texto vectorial (MSDF) en los paneles para ganar nitidez y no redibujar texturas completas.

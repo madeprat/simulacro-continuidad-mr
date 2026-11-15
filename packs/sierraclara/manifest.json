@@ -2,7 +2,7 @@
   "schema": "crisis.exercise/1.0",
   "exercise_id": "SIERRACLARA",
   "name": "Simulacro hospitalario SIERRA CLARA",
-  "version": "1.0",
+  "version": "1.1",
   "expected_players": 3,
   "duration_minutes": 30,
   "round_count": 3,
