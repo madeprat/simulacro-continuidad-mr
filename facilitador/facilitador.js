@@ -291,6 +291,80 @@ function renderScript() {
   $('c-script').replaceChildren(...blocks, end);
 }
 
+/* ─────────────── Guion imprimible ─────────────── */
+
+// Hoja del ejercicio para el facilitador, generada desde el pack: así nunca se desactualiza.
+// Incluye la clave de respuestas solo si está marcada «Mostrar la clave de respuestas».
+export function buildPrintSheet() {
+  const pack = F.pack;
+  const m = pack.manifest;
+  const withKey = $('opt-key').checked;
+  const proposed = pack.debrief && pack.debrief.status === 'propuesta';
+  const perRound = m.duration_minutes && pack.rounds.length ? Math.round(m.duration_minutes / pack.rounds.length) : null;
+  const sheet = $('print-sheet');
+  const add = (parent, tag, text, cls) => { const n = el(tag, text, cls); parent.appendChild(n); return n; };
+  const tableOf = (parent, head, rows) => {
+    const t = add(parent, 'table');
+    const tr = add(add(t, 'thead'), 'tr');
+    for (const h of head) add(tr, 'th', h);
+    const tb = add(t, 'tbody');
+    for (const r of rows) { const row = add(tb, 'tr'); for (const c of r) add(row, 'td', c); }
+    return t;
+  };
+  sheet.replaceChildren();
+
+  add(sheet, 'p', 'SIMULACRO DE CONTINUIDAD MR · GUION DEL FACILITADOR', 'kicker');
+  add(sheet, 'h1', m.name);
+  const grid = add(sheet, 'div', null, 'meta-grid');
+  const meta = [['Versión', m.version], ['Rondas / decisiones', `${pack.rounds.length} / ${pack.decisionCount}`],
+    ['Duración del juego', m.duration_minutes ? `${m.duration_minutes} min${perRound ? ` (≈ ${perRound} min por ronda)` : ''}` : '—'],
+    ['Código de sesión', F.sessionId || '________________']];
+  for (const [k, v] of meta) { const c = add(grid, 'div'); add(c, 'b', k); add(c, 'span', v, k === 'Código de sesión' ? 'code' : null); }
+  if (m.intro) add(sheet, 'p', m.intro, 'muted');
+  if (withKey) {
+    add(sheet, 'p', 'Contiene la clave de respuestas: no la dejes a la vista de los participantes.' +
+      (proposed ? ' La clave es una PROPUESTA pendiente de validar.' : ''), 'warn');
+  }
+
+  add(sheet, 'h2', 'Roles');
+  tableOf(sheet, ['Rol', 'Funciones'], pack.roles.map((r) => [r.name, (r.functions || []).join(' ')]));
+
+  pack.rounds.forEach((round, i) => {
+    const box = add(sheet, 'section', null, 'round' + (i === 0 ? ' first' : ''));
+    add(box, 'h2', `Ronda ${round.number} de ${pack.rounds.length} · ${round.title}`);
+    add(box, 'p', `Tiempo de crisis ${round.crisis_time}${perRound ? ` · ≈ ${perRound} min de juego` : ''}`, 'muted');
+    add(box, 'p', 'Hora de inicio: ________     Observaciones: ____________________________________________', 'notes');
+    if ((round.events || []).length) {
+      add(box, 'h3', 'Injects');
+      tableOf(box, ['Id', 'Tipo', 'Qué llega', 'Para'], round.events.map((e) => [
+        e.id, TYPE_LABEL[e.type] || e.type, [e.title || e.source, e.text].filter(Boolean).join(' — '), e.target && e.target !== 'ALL' ? e.target : 'Todos']));
+    }
+    if ((round.panel_actions || []).length) {
+      add(box, 'h3', 'Actuaciones en el Panel de Crisis');
+      tableOf(box, ['Id', 'Pestaña', 'Qué se pide', 'Cuándo'], round.panel_actions.map((a) => [
+        a.id, a.tab || '—', a.text, a.when === 'after' ? 'Tras las decisiones' : 'Antes de decidir']));
+    }
+    for (const dcs of round.decisions || []) {
+      add(box, 'h3', `${dcs.id} · decide ${dcs.role}`);
+      const card = add(box, 'div', null, 'decision');
+      add(card, 'p', dcs.question).style.fontWeight = 'bold';
+      const ref = assessmentFor(pack, dcs);
+      const preferred = withKey && ref ? ref.preferred_response : null;
+      const ul = add(card, 'ul', null, 'options');
+      for (const a of dcs.answers) add(ul, 'li', `${a.id}) ${a.text}${a.id === preferred ? '   ← referencia' : ''}`, a.id === preferred ? 'ref' : null);
+      if (preferred && ref.rationale) add(card, 'p', `Por qué: ${ref.rationale}`, 'why');
+    }
+  });
+
+  if (m.ending) { add(sheet, 'h2', 'Final'); add(sheet, 'p', m.ending, 'muted'); }
+  return sheet;
+}
+
+function printSheet() {
+  buildPrintSheet();
+  window.print();
+}
+
 /* ─────────────── Arranque ─────────────── */
 
 function wire() {
@@ -302,6 +376,7 @@ function wire() {
   });
   $('msg-form').addEventListener('submit', cmdMessage);
   $('opt-key').addEventListener('change', renderScript);
+  $('btn-print').addEventListener('click', printSheet);
   $('btn-leave').addEventListener('click', closeConsole);
   setInterval(tickClock, 500);
   window.addEventListener('beforeunload', () => { if (F.hub) F.hub.stop(); });
