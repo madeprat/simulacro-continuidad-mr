@@ -69,3 +69,31 @@ test('el facilitador aparece con nombre legible en la sala', () => {
   assert.equal(peerName(FACILITATOR_ROLE), 'Facilitador');
   assert.equal(peerName('R2'), 'R2');
 });
+
+test('registro de un visor: la consola acepta el suyo y rechaza los ajenos', async () => {
+  const { Session } = await import('../js/session.js');
+  const { acceptLog, logMessage } = await import('../js/facilitator.js');
+  globalThis.localStorage ??= { getItem: () => null, setItem: () => {}, removeItem: () => {} };
+  const pack = readPack('altamar');
+  const s = new Session(pack, { sessionId: '20261115-ABC', role: 'R2' });
+  s.start();
+  s.complete();
+  const data = logMessage(s);
+  const ok = acceptLog(pack, { type: 'log', from: 'R2', data }, '20261115-abc');
+  assert.ok(ok, 'el código de sesión no distingue mayúsculas');
+  assert.equal(ok.role, 'R2');
+  assert.equal(ok.completed, true);
+  assert.equal(ok.head, s.head);
+  assert.equal(ok.text, data.text, 'el texto llega intacto para que el debrief verifique la cadena');
+  assert.equal(acceptLog(pack, { type: 'log', from: 'R1', data }, '20261115-ABC'), null, 'otro rol no puede enviar el registro de R2');
+  assert.equal(acceptLog(pack, { type: 'log', from: 'R2', data }, 'OTRA-SESION'), null);
+  assert.equal(acceptLog(readPack('siroco'), { type: 'log', from: 'R2', data }, '20261115-ABC'), null, 'otro ejercicio');
+  assert.equal(acceptLog(pack, { type: 'log', from: 'R2', data: { ...data, text: '{roto' } }, '20261115-ABC'), null);
+  // Un nombre de fichero con rutas se sustituye por uno seguro.
+  assert.equal(acceptLog(pack, { type: 'log', from: 'R2', data: { ...data, file: '../../malo.json' } }, '20261115-ABC').file, 'ALTAMAR_20261115-ABC_R2.json');
+});
+
+test('la orden de recoger registros es válida', () => {
+  const pack = readPack('altamar');
+  assert.deepEqual(acceptControl(pack, fromFac(pack, 'collect'), 'R1'), { action: 'collect' });
+});

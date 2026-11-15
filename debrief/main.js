@@ -1,6 +1,7 @@
 // Interfaz del debrief: consolida los registros, prepara el informe (vista previa, PDF, descarga y envío por
 // correo sin servidor) y guarda cada simulacro en el histórico local del facilitador.
 import { consolidate, validateLogs, toCSV, findingsCSV, sha256 } from './consolidar.js';
+import { HANDOFF_KEY } from '../js/facilitator.js';
 import { verifyLog, shortPrint } from '../js/integrity.js';
 import { buildReport, reportSummary } from './informe.js';
 import { recordKey, saveRecord, getRecord, deleteRecord, listRecords, exportArchive, importArchive } from './historico.js';
@@ -317,3 +318,12 @@ if (new URLSearchParams(location.search).has('debug')) window.__debrief = { get 
 if ('serviceWorker' in navigator && location.protocol === 'https:') {
   navigator.serviceWorker.register('../sw.js', { scope: '../' }).catch(() => {});
 }
+
+// Registros que deja la consola del facilitador («Abrir en el debrief»): se cargan como si se hubieran arrastrado.
+(async () => {
+  if (!new URLSearchParams(location.search).has('desde')) return;
+  let entries = null;
+  try { entries = JSON.parse(localStorage.getItem(HANDOFF_KEY)); localStorage.removeItem(HANDOFF_KEY); } catch { entries = null; }
+  if (Array.isArray(entries) && entries.length) await processLogs(entries.filter((e) => e && typeof e.text === 'string'));
+  history.replaceState(null, '', location.pathname);
+})();

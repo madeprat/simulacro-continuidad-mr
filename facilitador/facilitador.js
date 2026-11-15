@@ -4,7 +4,8 @@
 import { loadPack, assessmentFor } from '../js/pack.js';
 import { SyncHub, syncLabel } from '../js/sync.js';
 import { newSessionId } from '../js/session.js';
-import { FACILITATOR_ROLE, controlMessage, peerName } from '../js/facilitator.js';
+import { FACILITATOR_ROLE, controlMessage, peerName, acceptLog, HANDOFF_KEY } from '../js/facilitator.js';
+import { shortPrint } from '../js/integrity.js';
 
 const $ = (id) => document.getElementById(id);
 const STORE = 'simulacro:facilitador';
@@ -20,6 +21,7 @@ const PANEL_ACTION = {
 const F = {
   pack: null, packPath: null, sessionId: null, hub: null,
   answers: {}, // decision_id → { answer, from, at }
+  logs: {}, // rol → { role, file, text, completed, events, head, at }
   startedAt: null, pausedAt: null, pausedMs: 0, currentRound: null,
 };
 
@@ -100,6 +102,7 @@ function openConsole() {
   const m = F.pack.manifest;
   F.answers = {};
   F.startedAt = null; F.pausedAt = null; F.pausedMs = 0; F.currentRound = null;
+  F.logs = loadLogs();
   $('c-pack').textContent = `${m.name} · v${m.version}`;
   $('c-session').textContent = F.sessionId;
   $('c-feed').replaceChildren();
@@ -110,6 +113,7 @@ function openConsole() {
   renderScript();
   renderPeers();
   renderState();
+  renderLogs();
   show('screen-console');
 
   const transport = new URLSearchParams(location.search).get('sync') === 'local' ? 'local' : 'peer';
@@ -138,6 +142,16 @@ function onMessage(msg) {
     F.answers[data.decision_id] = { answer: data.answer, from, at: msg.at };
     feed(prev ? `${from} corrige ${data.decision_id}: ${prev.answer} → ${data.answer}` : `${from} decide ${data.decision_id}: ${data.answer}`);
     renderScript();
+  } else if (type === 'log') {
+    const log = acceptLog(F.pack, msg, F.sessionId);
+    if (!log) { feed(`⚠ ${from} envía un registro que no es de este ejercicio o sesión: se descarta.`); return; }
+    const prev = F.logs[log.role];
+    // Se conserva el más completo: un registro parcial no sustituye a uno terminado.
+    if (prev && (prev.completed && !log.completed || prev.events > log.events)) return;
+    F.logs[log.role] = { ...log, at: Date.now() };
+    saveLogs();
+    feed(`📥 Registro de ${log.role} recibido (${log.completed ? 'completo' : 'parcial'}, ${log.events} eventos, huella ${shortPrint(log.head)})`);
+    renderLogs();
   } else if (type === 'panel' && PANEL_ACTION[data.action]) {
     feed(`${from} ${PANEL_ACTION[data.action]}`);
   } else if (type === 'control' && from === FACILITATOR_ROLE) {
@@ -197,6 +211,58 @@ function cmdMessage(e) {
   if (!text || !send('message', { text, to })) return;
   feed(`📣 Aviso${to === 'ALL' ? '' : ' a ' + to}: «${text}»`);
   $('msg-text').value = '';
+}
+
+/* ─────────────── Registros de los visores ─────────────── */
+
+const logsKey = () => `simulacro:consola-registros:${F.pack.manifest.exercise_id}:${F.sessionId.toLowerCase()}`;
+
+function loadLogs() {
+  try { return JSON.parse(localStorage.getItem(logsKey())) || {}; } catch { return {}; }
+}
+
+function saveLogs() {
+  try { localStorage.setItem(logsKey(), JSON.stringify(F.logs)); } catch { feed('⚠ No se pudo guardar el registro en este navegador: descárgalo antes de cerrar la consola.'); }
+}
+
+function cmdCollect() {
+  if (!send('collect')) return;
+  feed('📨 Pide los registros a los visores');
+}
+
+// Traspaso al debrief (mismo origen): deja los registros en el navegador y abre el debrief, que los carga solo.
+function openInDebrief() {
+  const entries = Object.values(F.logs).map((l) => ({ name: l.file, text: l.text }));
+  if (!entries.length) return;
+  try { localStorage.setItem(HANDOFF_KEY, JSON.stringify(entries)); } catch { feed('⚠ El navegador no permite el traspaso: descarga los JSON y arrástralos al debrief.'); return; }
+  window.open('../debrief/?desde=consola', '_blank');
+  feed(`↗ Abre el debrief con ${entries.length} registro(s)`);
+}
+
+function downloadLogs() {
+  for (const l of Object.values(F.logs)) {
+    const url = URL.createObjectURL(new Blob([l.text], { type: 'application/json' }));
+    const a = Object.assign(document.createElement('a'), { href: url, download: l.file });
+    document.body.append(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 2000);
+  }
+}
+
+function renderLogs() {
+  const rows = F.pack.roles.map((r) => {
+    const l = F.logs[r.id];
+    const tr = el('tr');
+    tr.append(el('td', r.name),
+      el('td', l ? `${l.completed ? '✓ completo' : '◐ parcial'} · ${l.events} eventos` : 'pendiente', l ? (l.completed ? 'on' : '') : 'off'),
+      el('td', l ? shortPrint(l.head) : '—', l ? 'code' : null),
+      el('td', l ? hhmmss(new Date(l.at)) : '—'));
+    return tr;
+  });
+  $('c-logs').replaceChildren(...rows);
+  const n = Object.keys(F.logs).length;
+  $('btn-logs-debrief').disabled = !n;
+  $('btn-logs-download').disabled = !n;
+  $('btn-logs-debrief').textContent = n ? `Abrir en el debrief (${n} de ${F.pack.roles.length})` : 'Abrir en el debrief';
 }
 
 /* ─────────────── Pintado ─────────────── */
@@ -377,6 +443,9 @@ function wire() {
   $('msg-form').addEventListener('submit', cmdMessage);
   $('opt-key').addEventListener('change', renderScript);
   $('btn-print').addEventListener('click', printSheet);
+  $('btn-collect').addEventListener('click', cmdCollect);
+  $('btn-logs-debrief').addEventListener('click', openInDebrief);
+  $('btn-logs-download').addEventListener('click', downloadLogs);
   $('btn-leave').addEventListener('click', closeConsole);
   setInterval(tickClock, 500);
   window.addEventListener('beforeunload', () => { if (F.hub) F.hub.stop(); });
