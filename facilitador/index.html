@@ -102,6 +102,23 @@
     </section>
 
     <section class="card">
+      <h2>Registros de los visores</h2>
+      <p class="hint">Cada visor envía su registro al terminar el ejercicio. Si alguno falta (por ejemplo, porque se
+        desconectó al final), pídeselo; si no llega, cópialo de las gafas por cable USB.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Rol</th><th>Registro</th><th>Huella</th><th>Recibido</th></tr></thead>
+          <tbody id="c-logs"></tbody>
+        </table>
+      </div>
+      <div class="actions">
+        <button id="btn-collect" type="button">Pedir los registros a los visores</button>
+        <button id="btn-logs-debrief" type="button" class="primary" disabled>Abrir en el debrief</button>
+        <button id="btn-logs-download" type="button" disabled>Descargar los JSON</button>
+      </div>
+    </section>
+
+    <section class="card">
       <h2>Actividad</h2>
       <ol id="c-feed" class="feed"></ol>
     </section>

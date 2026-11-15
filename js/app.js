@@ -8,7 +8,7 @@ import { Session, loadCheckpoint, checkpointKey, download, newSessionId, ENGINE_
 import { shortPrint } from './integrity.js';
 import { loadCopilotData, roundState, computeSnapshot, widgetSpecs } from './copilot-view.js';
 import { SyncHub, syncLabel } from './sync.js';
-import { acceptControl, resolveTarget, peerName } from './facilitator.js';
+import { acceptControl, resolveTarget, peerName, logMessage, FACILITATOR_ROLE } from './facilitator.js';
 import { slotPose, slotFor } from './layout.js';
 import { CommandBar, timelineFor } from './command-bar.js';
 import { SiteView } from './site-view.js';
@@ -172,7 +172,9 @@ function startSync() {
   S.sync.addEventListener('peers', refresh);
   S.sync.addEventListener('join', (e) => {
     if (S.session && S.phase !== 'idle') S.session.log('sync_joined', { role: e.detail.role });
-    // La consola del facilitador también recibe el paso en el que está este visor (presencia) y sus decisiones.
+    // La consola del facilitador también recibe el paso en el que está este visor (presencia) y sus decisiones;
+    // si llega cuando este visor ya ha terminado, recibe además su registro.
+    if (e.detail.role === FACILITATOR_ROLE && S.session && S.session.data.completed_at) sendLog();
     // Quien llega recibe el estado actual del Panel de Crisis.
     if (S.crisis && S.crisis.changed) S.sync.send('panel', { state: S.crisis.getShared(), action: 'estado' });
     if (S.session) for (const rec of Object.values(S.session.data.decisions)) {
@@ -268,7 +270,16 @@ function logControl(cmd, extra = {}) {
   }
 }
 
+// Envía el registro de evidencias a la consola del facilitador (el mismo JSON que se descarga).
+function sendLog() {
+  if (!S.session || !S.session.data.started_at || !$('opt-follow').checked) return false;
+  if (!S.sync || !S.sync.roles().includes(FACILITATOR_ROLE)) return false;
+  syncSend('log', logMessage(S.session));
+  return true;
+}
+
 function onControl(cmd) {
+  if (cmd.action === 'collect') { sendLog(); return; }
   if (cmd.action === 'start') {
     if (waitingStart()) countdown();
     return;
@@ -1158,11 +1169,13 @@ function runStep(index) {
     place(stepPanel, 'FRONT');
   } else if (step.kind === 'end') {
     sess.complete();
+    const sent = sendLog();
     const sum = sess.summary();
     stepPanel.set({
       accent: THEME.lime, icon: '🏁', kicker: 'Fin del ejercicio', title: S.pack.manifest.name,
       body: `${sum.decisions_recorded} de ${sum.decisions_total} decisiones registradas (${sum.decisions_own} propias, ${sum.decisions_observed} observadas).\n\n${S.pack.manifest.ending || ''}`,
-      note: `Huella del registro: ${shortPrint(sess.head)} (anótala o fotografíala: el debrief la comprueba)`, noteColor: THEME.muted,
+      note: `Huella del registro: ${shortPrint(sess.head)} (anótala o fotografíala: el debrief la comprueba)` +
+        (sent ? '\nRegistro enviado a la consola del facilitador.' : ''), noteColor: THEME.muted,
       buttons: [{ id: 'exit', label: 'Salir y exportar', primary: true }],
     });
     place(stepPanel, 'FRONT');

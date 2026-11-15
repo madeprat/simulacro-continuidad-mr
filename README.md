@@ -148,6 +148,10 @@ ella con el rol especial `FAC`, por el mismo canal que los visores.
   la voz narradora; sirve para injects improvisados, aclaraciones o límites de tiempo.
 - **Actividad:** quién entra, qué decide cada rol, las actuaciones relevantes en el Panel de Crisis y las órdenes
   enviadas.
+- **Registros:** al llegar al final, cada visor envía a la consola su registro de evidencias (el mismo JSON que se
+  descarga, con su cadena de integridad). La consola marca cada rol como completo o parcial con su huella, puede
+  pedírselo a los visores conectados y lo pasa al debrief con *Abrir en el debrief*, sin copiar ficheros. Si un
+  registro no llega, se exporta en las gafas como siempre.
 - **Imprimir guion:** hoja A4 del ejercicio generada desde el pack (roles, una página por ronda con injects,
   actuaciones en el panel y decisiones, y una línea para anotar la hora y las observaciones). Lleva la clave de
   respuestas solo si está marcada *Mostrar la clave de respuestas*.
@@ -171,7 +175,8 @@ sin gafas: `/?sync=local` en una pestaña (modo escritorio) y `/facilitador/?syn
 3. **Opcional:** el copiloto web (`/copiloto/?ejercicio`, *Aplicar ronda*) en un portátil o TV sirve
    para seguir el ejercicio desde fuera o proyectarlo; usa el mismo motor y el mismo estado de ronda, pero no se
    sincroniza en directo con las gafas.
-4. **Cierre:** cada visor exporta su JSON; el facilitador los arrastra a `/debrief/`.
+4. **Cierre:** los registros llegan solos a la consola y se abren en el debrief con un botón. Sin consola, cada visor
+   exporta su JSON y el facilitador los arrastra a `/debrief/`.
 
 ## Copiloto de Continuidad
 

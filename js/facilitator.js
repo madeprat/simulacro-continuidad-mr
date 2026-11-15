@@ -9,9 +9,13 @@
 //   pause    el ejercicio se detiene en todos los visores
 //   resume   el ejercicio continúa donde estaba cada visor
 //   message  aviso libre del facilitador, para todos o para un rol
+//   collect  los visores envían a la consola su registro de evidencias (también lo envían solos al terminar)
+//
+// Los visores responden con mensajes «log»: el JSON exportado de su sesión, idéntico al que se descarga, para que el
+// debrief compruebe su cadena de integridad igual que con un fichero.
 
 export const FACILITATOR_ROLE = 'FAC';
-export const CONTROL_ACTIONS = ['start', 'goto', 'pause', 'resume', 'message'];
+export const CONTROL_ACTIONS = ['start', 'goto', 'pause', 'resume', 'message', 'collect'];
 export const MESSAGE_MAX = 400;
 
 // Nombre legible de un rol en la sala (el facilitador no es un rol del pack).
@@ -74,3 +78,30 @@ export function acceptControl(pack, msg, localRole) {
   }
   return { action: d.action };
 }
+
+// Datos de un mensaje «log» que envía un visor con su registro (Session.toJSON()).
+export function logMessage(session) {
+  const text = session.toJSON();
+  return {
+    file: session.fileBase() + '.json', text,
+    exercise_id: session.data.exercise.id, session_id: session.data.session_id,
+    completed: !!session.data.completed_at, events: session.data.events.length, head: session.head,
+  };
+}
+
+// Registro recibido en la consola: solo de un rol del pack, para este ejercicio y esta sesión, y que el rol del
+// registro sea el del visor que lo envía. Devuelve { role, file, text, completed, events, head } o null.
+export function acceptLog(pack, msg, sessionId) {
+  if (!msg || msg.type !== 'log' || !msg.data || typeof msg.data.text !== 'string') return null;
+  if (!pack.roles.some((r) => r.id === msg.from)) return null;
+  let data;
+  try { data = JSON.parse(msg.data.text); } catch { return null; }
+  const same = (a, b) => String(a || '').trim().toLowerCase() === String(b || '').trim().toLowerCase();
+  if (!data || data.exercise?.id !== pack.manifest.exercise_id || !same(data.session_id, sessionId) || data.local_role !== msg.from) return null;
+  const events = Array.isArray(data.events) ? data.events.length : 0;
+  const file = /^[\w.-]+\.json$/.test(msg.data.file || '') ? msg.data.file : `${data.exercise.id}_${data.session_id}_${msg.from}.json`.replace(/[^\w.-]+/g, '_');
+  return { role: msg.from, file, text: msg.data.text, completed: !!data.completed_at, events, head: data.integrity?.head || '' };
+}
+
+// Clave con la que la consola deja los registros al debrief (mismo origen, localStorage).
+export const HANDOFF_KEY = 'simulacro:registros-desde-consola';
