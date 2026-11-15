@@ -1,0 +1,34 @@
+.screen.wide { max-width: 1100px; }
+textarea { width: 100%; font: inherit; color: var(--text); background: #0b1224; border: 1px solid var(--border); border-radius: 10px; padding: 12px; resize: vertical; }
+.code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--lime); letter-spacing: .04em; }
+.console-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; }
+.clock-box { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 12px 18px; text-align: right; }
+.clock-box b { display: block; font-size: 30px; font-variant-numeric: tabular-nums; }
+.clock-box span { color: var(--muted); font-size: 14px; }
+.clock-box.paused { border-color: #fbbf24; }
+.clock-box.paused span { color: #fbbf24; }
+.row-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.check.small { font-size: 15px; margin: 0; }
+.check.small input { width: 18px; height: 18px; }
+.on { color: #4ade80; }
+.off { color: var(--muted); }
+
+.round { border: 1px solid var(--border); border-radius: 12px; margin: 12px 0; overflow: hidden; }
+.round.current { border-color: var(--lime); }
+.round-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px 14px; background: #0e1628; flex-wrap: wrap; }
+.round-head h3 { margin: 0; font-size: 17px; }
+.round-head .meta { color: var(--muted); font-size: 14px; }
+.items { list-style: none; margin: 0; padding: 0; }
+.items li { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 10px 14px; border-top: 1px solid var(--border); font-size: 15px; }
+.items .what { flex: 1; min-width: 0; }
+.items .what small { display: block; color: var(--muted); }
+.items button, .round-head button { min-height: 40px; padding: 8px 14px; font-size: 15px; }
+.answer { font-weight: 700; min-width: 7em; text-align: right; }
+.answer.pending { color: var(--muted); font-weight: 400; }
+.answer.match { color: #4ade80; }
+.answer.miss { color: #fbbf24; }
+.key { color: var(--muted); font-size: 13px; }
+
+.feed { list-style: none; margin: 0; padding: 0; max-height: 320px; overflow-y: auto; font-size: 15px; }
+.feed li { padding: 6px 0; border-bottom: 1px solid var(--border); }
+.feed time { color: var(--muted); font-variant-numeric: tabular-nums; margin-right: 10px; }

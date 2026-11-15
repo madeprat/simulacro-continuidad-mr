@@ -223,6 +223,18 @@ export function suggestFindings(decisions, labels = {}, actions = {}) {
   return out.sort((a, b) => order[a.severity] - order[b.severity]);
 }
 
+function describeCommand(e) {
+  const t = e.target || {};
+  const where = t.kind === 'round' ? `ronda ${t.round_id}` : t.kind === 'inject' ? `inject ${t.inject_id}` : t.kind === 'end' ? 'final' : `paso ${e.to_step}`;
+  switch (e.action) {
+    case 'goto': return `Facilitador: lanza ${where}`;
+    case 'pause': return 'Facilitador: pausa el ejercicio';
+    case 'resume': return 'Facilitador: reanuda el ejercicio';
+    case 'message': return `Facilitador: aviso${e.to && e.to !== 'ALL' ? ' a ' + e.to : ''} «${e.text}»`;
+    default: return `Facilitador: ${e.action}`;
+  }
+}
+
 function describe(e) {
   switch (e.type) {
     case 'session_started': return `Inicio de sesión (motor ${e.engine_version})`;
@@ -247,6 +259,7 @@ function describe(e) {
     case 'panel_comm_marked': return `Panel: comunicación ${e.comm_id} marcada como notificada`;
     case 'panel_committee_convened': return 'Panel: convocatoria al comité';
     case 'panel_sync': return `Panel actualizado por ${e.from} (${e.action})`;
+    case 'facilitator_command': return describeCommand(e);
     case 'sync_joined': return `${e.role} se conecta a la sala`;
     default: return e.type;
   }

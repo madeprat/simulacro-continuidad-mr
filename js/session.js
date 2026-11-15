@@ -9,6 +9,19 @@ export const SESSION_SCHEMA = 'crisis.session/1.0';
 const now = () => new Date().toISOString();
 const secondsBetween = (a, b) => Math.round((Date.parse(b) - Date.parse(a)) / 100) / 10;
 
+// Código de sesión: fecha + tres caracteres al azar (sin letras confusibles), para que dos equipos que ensayen
+// el mismo día no coincidan en la misma sala de sincronización. Lo genera el primer visor o la consola del
+// facilitador; los demás lo copian.
+export function newSessionId() {
+  const d = new Date();
+  const p = (n) => String(n).padStart(2, '0');
+  const ABC = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
+  const rnd = new Uint32Array(3);
+  (globalThis.crypto || { getRandomValues: (a) => a.map(() => Math.floor(Math.random() * 2 ** 32)) }).getRandomValues(rnd);
+  const suffix = [...rnd].map((n) => ABC[n % ABC.length]).join('');
+  return `${d.getFullYear()}${p(d.getMonth() + 1)}${p(d.getDate())}-${suffix}`;
+}
+
 export function checkpointKey(pack, sessionId, role) {
   return `simulacro:${pack.manifest.exercise_id}:${pack.manifest.version}:${sessionId}:${role}`;
 }

@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <link rel="icon" href="data:,">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Consola del facilitador · Simulacro de Continuidad MR</title>
+  <meta name="theme-color" content="#0b1020">
+  <link rel="stylesheet" href="../css/app.css">
+  <link rel="stylesheet" href="facilitador.css">
+</head>
+<body>
+  <!-- 1 · Preparar la sala -->
+  <main id="screen-setup" class="screen" hidden>
+    <header>
+      <p class="kicker">Simulacro ISO 22301 · Facilitador</p>
+      <h1>Consola del facilitador</h1>
+    </header>
+    <form id="setup-form" class="card">
+      <label class="field">
+        <span>Pack de ejercicio</span>
+        <select id="pack-select"></select>
+      </label>
+      <p id="pack-status" class="status"></p>
+
+      <label class="field">
+        <span>Código de sesión (los visores deben escribir exactamente este)</span>
+        <input id="session-id" autocomplete="off" required pattern="[A-Za-z0-9._\-]{1,40}">
+      </label>
+      <p class="hint">Si los visores ya han generado un código, escribe aquí el suyo. Si no, dicta este a los participantes.</p>
+
+      <p id="setup-error" class="error"></p>
+      <button id="btn-open" type="submit" class="primary">Abrir la sala</button>
+    </form>
+    <nav class="links">
+      <a href="../">Simulador (visores)</a>
+      <a href="../copiloto/?ejercicio">Copiloto en modo ejercicio</a>
+      <a href="../debrief/">Debrief</a>
+    </nav>
+  </main>
+
+  <!-- 2 · Consola -->
+  <main id="screen-console" class="screen wide" hidden>
+    <header class="console-head">
+      <div>
+        <p class="kicker" id="c-pack"></p>
+        <h1>Sesión <span id="c-session" class="code"></span></h1>
+        <p class="hint">🔗 <span id="c-sync">Sin sincronizar</span></p>
+      </div>
+      <div class="clock-box">
+        <b id="c-clock">00:00:00</b>
+        <span id="c-state">Esperando a los visores</span>
+      </div>
+    </header>
+
+    <section class="card">
+      <h2>Visores</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Rol</th><th>Conexión</th><th>Dónde está</th></tr></thead>
+          <tbody id="c-peers"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Mando</h2>
+      <div class="actions">
+        <button id="btn-start" type="button" class="primary">▶ Comenzar</button>
+        <button id="btn-pause" type="button">⏸ Pausar</button>
+        <button id="btn-resume" type="button">⏵ Reanudar</button>
+        <button id="btn-end" type="button">🏁 Finalizar</button>
+      </div>
+      <p class="hint">«Comenzar» arranca la cuenta atrás en todos los visores que esperan en «Preparado». Lanzar una ronda o
+        un inject lleva a todos los visores a ese punto, también a los que aún no habían empezado.</p>
+    </section>
+
+    <section class="card">
+      <div class="row-head">
+        <h2>Guion del ejercicio</h2>
+        <label class="check small"><input type="checkbox" id="opt-key"> Mostrar la clave de respuestas</label>
+      </div>
+      <div id="c-script"></div>
+    </section>
+
+    <section class="card">
+      <h2>Aviso a los participantes</h2>
+      <form id="msg-form">
+        <label class="field">
+          <span>Destino</span>
+          <select id="msg-to"></select>
+        </label>
+        <label class="field">
+          <span>Texto (aparece en las gafas y lo lee la voz narradora)</span>
+          <textarea id="msg-text" rows="3" maxlength="400" required></textarea>
+        </label>
+        <button type="submit" class="primary">Enviar aviso</button>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2>Actividad</h2>
+      <ol id="c-feed" class="feed"></ol>
+    </section>
+
+    <div class="actions">
+      <button id="btn-leave" type="button" class="link">← Cerrar la sala y cambiar de sesión</button>
+    </div>
+  </main>
+
+  <script src="../vendor/peerjs.min.js"></script>
+  <script type="module" src="facilitador.js"></script>
+</body>
+</html>
