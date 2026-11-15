@@ -78,7 +78,10 @@
     <section class="card">
       <div class="row-head">
         <h2>Guion del ejercicio</h2>
-        <label class="check small"><input type="checkbox" id="opt-key"> Mostrar la clave de respuestas</label>
+        <div class="row-tools">
+          <label class="check small"><input type="checkbox" id="opt-key"> Mostrar la clave de respuestas</label>
+          <button id="btn-print" type="button" class="small-btn">🖨 Imprimir guion</button>
+        </div>
       </div>
       <div id="c-script"></div>
     </section>
@@ -107,6 +110,9 @@
       <button id="btn-leave" type="button" class="link">← Cerrar la sala y cambiar de sesión</button>
     </div>
   </main>
+
+  <!-- Hoja imprimible del ejercicio (solo se ve al imprimir) -->
+  <article id="print-sheet" class="print-sheet" aria-hidden="true"></article>
 
   <script src="../vendor/peerjs.min.js"></script>
   <script type="module" src="facilitador.js"></script>

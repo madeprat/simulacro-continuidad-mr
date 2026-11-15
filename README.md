@@ -148,6 +148,12 @@ ella con el rol especial `FAC`, por el mismo canal que los visores.
   la voz narradora; sirve para injects improvisados, aclaraciones o límites de tiempo.
 - **Actividad:** quién entra, qué decide cada rol, las actuaciones relevantes en el Panel de Crisis y las órdenes
   enviadas.
+- **Imprimir guion:** hoja A4 del ejercicio generada desde el pack (roles, una página por ronda con injects,
+  actuaciones en el panel y decisiones, y una línea para anotar la hora y las observaciones). Lleva la clave de
+  respuestas solo si está marcada *Mostrar la clave de respuestas*.
+
+El [playbook del facilitador y la tarjeta para participantes](docs/) explican cómo conducir el ejercicio de principio a
+fin.
 
 La consola no guarda evidencias propias: cada visor anota en su registro las órdenes que recibe
 (`facilitator_command`, con origen y destino del salto) y el debrief las muestra en la cronología. Las órdenes solo se
@@ -324,7 +330,8 @@ copiloto/                       Copiloto de Continuidad para la TV
   js/data.js, ejercicio.js      Catálogo (JSON/Sheets) y barra de ejercicio
   data/, data/plantilla/        Catálogo ficticio y plantillas CSV
   docs/                         Documentos de ejemplo (plan, estrategias, directorio)
-facilitador/                    Consola del facilitador
+facilitador/                    Consola del facilitador (con el guion imprimible)
+docs/                           Playbook del facilitador y tarjeta para participantes (.docx)
 debrief/                        Consolidador, informe (informe.js) e histórico local (historico.js)
 packs/tramontana/               Pack de ejemplo (9 rondas): ciberataque, sede central con CPD propio
 packs/gregal/                   Pack corto (3 rondas): temporal e inundación, organización multisede con nube
@@ -343,7 +350,7 @@ tests/                          Pruebas del motor, del consolidador, de los pack
 
 ```
 npm test                              # motor, consolidador, packs, centro de mando, sincronización y consola
-node tools/comprobar-anonimato.mjs    # sin referencias a la organización real ni correos reales
+node tools/comprobar-anonimato.mjs    # sin referencias a la organización real ni correos reales (también dentro de los .docx/.pptx/.xlsx)
 ```
 
 La integración continua (`.github/workflows/comprobaciones.yml`) ejecuta ambas en cada push.

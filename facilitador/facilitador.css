@@ -32,3 +32,38 @@ textarea { width: 100%; font: inherit; color: var(--text); background: #0b1224; 
 .feed { list-style: none; margin: 0; padding: 0; max-height: 320px; overflow-y: auto; font-size: 15px; }
 .feed li { padding: 6px 0; border-bottom: 1px solid var(--border); }
 .feed time { color: var(--muted); font-variant-numeric: tabular-nums; margin-right: 10px; }
+
+.row-tools { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.small-btn { min-height: 40px; padding: 8px 14px; font-size: 15px; }
+
+/* ─────────────── Hoja imprimible del ejercicio ─────────────── */
+.print-sheet { display: none; }
+@media print {
+  @page { size: A4; margin: 14mm 12mm; }
+  body { background: #fff; color: #111; font: 10.5pt/1.4 Arial, Helvetica, sans-serif; }
+  .screen { display: none !important; }
+  .print-sheet { display: block; }
+  .print-sheet h1 { font-size: 20pt; margin: 0 0 2mm; color: #0f1b33; }
+  .print-sheet h2 { font-size: 13pt; margin: 6mm 0 2mm; color: #0f1b33; border-bottom: 1.5pt solid #4d7c0f; padding-bottom: 1mm; break-after: avoid; }
+  .print-sheet h3 { font-size: 11pt; margin: 4mm 0 1.5mm; color: #4d7c0f; break-after: avoid; }
+  .print-sheet .kicker { color: #4d7c0f; font-size: 8.5pt; letter-spacing: .12em; }
+  .print-sheet .muted { color: #555; }
+  .print-sheet .meta-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2mm; margin: 3mm 0; }
+  .print-sheet .meta-grid div { border: .6pt solid #c9d1de; padding: 1.5mm 2mm; }
+  .print-sheet .meta-grid b { display: block; font-size: 8pt; color: #555; font-weight: normal; }
+  .print-sheet .code { color: #0f1b33; font-weight: bold; font-family: "Courier New", monospace; }
+  .print-sheet table { width: 100%; border-collapse: collapse; margin: 1.5mm 0 3mm; font-size: 9.5pt; }
+  .print-sheet th, .print-sheet td { border: .6pt solid #c9d1de; padding: 1.2mm 1.8mm; text-align: left; vertical-align: top; white-space: normal; color: #111; }
+  .print-sheet th { background: #0f1b33; color: #fff; font-weight: bold; }
+  .print-sheet tr { break-inside: avoid; }
+  .print-sheet .round { border: 0; margin: 0; overflow: visible; break-before: page; }
+  .print-sheet .round.first { break-before: auto; }
+  .print-sheet .decision { border: .6pt solid #c9d1de; padding: 2mm 3mm; margin: 2mm 0 3mm; break-inside: avoid; }
+  .print-sheet .decision p { margin: 0 0 1.5mm; }
+  .print-sheet .options { margin: 0 0 1.5mm; padding-left: 0; list-style: none; }
+  .print-sheet .options li { padding: .6mm 0; }
+  .print-sheet .options li.ref { font-weight: bold; color: #3f6212; }
+  .print-sheet .why { font-size: 9pt; color: #333; background: #f3f5f9; padding: 1.5mm 2mm; margin: 0; }
+  .print-sheet .notes { color: #666; font-size: 9pt; margin: 1mm 0 3mm; }
+  .print-sheet .warn { border-left: 2pt solid #b45309; background: #fff6e0; padding: 1.5mm 2.5mm; margin: 2mm 0; font-size: 9.5pt; }
+}
